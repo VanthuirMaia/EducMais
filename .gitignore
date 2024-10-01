@@ -1,0 +1,25 @@
+# Ambiente virtual
+venv/
+  
+# Arquivos de cache do Python
+__pycache__/
+*.py[cod]
+
+# Configurações do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos do banco de dados SQLite (se estiver usando temporariamente)
+*.sqlite3
+
+# Arquivos de migração
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.swp
+*.swo
+
+# Arquivos específicos do VSCode
+.vscode/
