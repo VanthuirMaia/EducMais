@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planlab - Estilo Vercel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        .conteudo-principal {
+            margin-left: 0;
+            padding: 80px 1rem 1rem;
+            transition: margin-left 0.3s ease-in-out;
+        }
+        .botoes-acao {
+            margin-bottom: 1rem;
+        }
+        .botao {
+            border: 2px solid var(--accents-3);
+            padding: 0.7rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
+        }
+        .botao-primario {
+            background-color: var(--primary);
+            color: white;
+        }
+        .botao-primario:hover {
+            background-color: var(--primary-hover);
+        }
+        .botao-secundario {
+            border: 2px solid var(--accents-3);
+            background-color: var(--accents-1);
+            color: var(--foreground);
+        }
+        .botao-secundario:hover {
+            background-color: var(--accents-2);
+        }
+        .grade {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+        .cartao {
+            background-color: white;
+            border: 1px solid var(--accents-3);
+            border-radius: 5px;
+            padding: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.2s ease;
+        }
+        .cartao:hover {
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        .cartao-cabecalho {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        .indicador-disciplina {
+            width: 20px;
+            height: 12px;
+            border-radius: 50px;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+
+        .cartao-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+        .cartao-rotulo {
+            color: var(--accents-5);
+        }
+        @media (min-width: 768px) {
+            .barra-lateral {
+                left: 0;
+            }
+            .conteudo-principal {
+                margin-left: 250px;
+            }
+            .botao-menu {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="cabecalho">
+        <button class="botao-menu" onclick="toggleMenu()">☰</button>
+        <img class="logo" src="../img/planlab logo branco p.png" alt="">
+        <div>
+            <span class="botao-menu"><img src="../img/avatar-1.png" alt="Avatar" class="avatar-menu"></span>
+        </div>
+    </header>
+    
+    <nav class="barra-lateral">
+        <div class="perfil">
+            <img src="../img/avatar-1.png" alt="Avatar" class="avatar">
+            <h3>Lairson Alencar</h3>
+            <p>Prof. Cyber Security</p>
+        </div>
+        <ul class="menu">
+            <li class="menu-item ativo"><img src="../img/home.png" class="icon"> Início</li>
+            <li class="menu-item"><img src="../img/Plano.png" class="icon">Plano de Aula</li>
+            <li class="menu-item"><img src="../img/Caderneta.png" class="icon">Caderneta</li>
+            <li class="menu-item"><img src="../img/sair.png" class="icon">Sair</li>
+        </ul>
+    </nav>
+    
+    <main class="conteudo-principal">
+        <div class="botoes-acao">
+            <button class="botao botao-primario">Planos de aula</button>
+            <button class="botao botao-secundario">Caderneta</button>
+        </div>
+        <div class="grade" id="grade-planos">
+            <div class="cartao">
+                <div class="cartao-cabecalho">
+                    <h3>
+                        <span class="indicador-disciplina" style="background-color: #0070f3;"></span>
+                        Introdução à Álgebra
+                    </h3>
+                    <span>⋮</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Disciplina:</span>
+                    <span>Álgebra</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Data:</span>
+                    <span>06.09.2024</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Classe:</span>
+                    <span>11º ano</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Semestre:</span>
+                    <span>Terceiro</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Turno:</span>
+                    <span>Tarde</span>
+                </div>
+            </div>
+            <div class="cartao">
+                <div class="cartao-cabecalho">
+                    <h3>
+                        <span class="indicador-disciplina" style="background-color: #ff0080;"></span>
+                        Geometria Analítica
+                    </h3>
+                    <span>⋮</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Disciplina:</span>
+                    <span>Geometria</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Data:</span>
+                    <span>07.09.2024</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Classe:</span>
+                    <span>10º ano</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Semestre:</span>
+                    <span>Segundo</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Turno:</span>
+                    <span>Manhã</span>
+                </div>
+            </div>
+            <div class="cartao">
+                <div class="cartao-cabecalho">
+                    <h3>
+                        <span class="indicador-disciplina" style="background-color: #f5a623;"></span>
+                        Cálculo Diferencial
+                    </h3>
+                    <span>⋮</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Disciplina:</span>
+                    <span>Cálculo</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Data:</span>
+                    <span>08.09.2024</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Classe:</span>
+                    <span>12º ano</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Semestre:</span>
+                    <span>Primeiro</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Turno:</span>
+                    <span>Noite</span>
+                </div>
+            </div>
+            <div class="cartao">
+                <div class="cartao-cabecalho">
+                    <h3>
+                        <span class="indicador-disciplina" style="background-color: #7928ca;"></span>
+                        Estatística Básica
+                    </h3>
+                    <span>⋮</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Disciplina:</span>
+                    <span>Estatística</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Data:</span>
+                    <span>09.09.2024</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Classe:</span>
+                    <span>11º ano</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Semestre:</span>
+                    <span>Terceiro</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Turno:</span>
+                    <span>Tarde</span>
+                </div>
+            </div>
+            <div class="cartao">
+                <div class="cartao-cabecalho">
+                    <h3>
+                        <span class="indicador-disciplina" style="background-color: #50e3c2;"></span>
+                        Lógica Matemática
+                    </h3>
+                    <span>⋮</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Disciplina:</span>
+                    <span>Lógica</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Data:</span>
+                    <span>10.09.2024</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Classe:</span>
+                    <span>10º ano</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Semestre:</span>
+                    <span>Primeiro</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Turno:</span>
+                    <span>Manhã</span>
+                </div>
+            </div>
+            <div class="cartao">
+                <div class="cartao-cabecalho">
+                    <h3>
+                        <span class="indicador-disciplina" style="background-color: #0070f3;"></span>
+                        Trigonometria
+                    </h3>
+                    <span>⋮</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Disciplina:</span>
+                    <span>Trigonometria</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Data:</span>
+                    <span>11.09.2024</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Classe:</span>
+                    <span>11º ano</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Semestre:</span>
+                    <span>Segundo</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Turno:</span>
+                    <span>Tarde</span>
+                </div>
+            </div>
+            <div class="cartao">
+                <div class="cartao-cabecalho">
+                    <h3>
+                        <span class="indicador-disciplina" style="background-color: #ff0080;"></span>
+                        Matemática Financeira
+                    </h3>
+                    <span>⋮</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Disciplina:</span>
+                    <span>Finanças</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Data:</span>
+                    <span>12.09.2024</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Classe:</span>
+                    <span>12º ano</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Semestre:</span>
+                    <span>Terceiro</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Turno:</span>
+                    <span>Noite</span>
+                </div>
+            </div>
+            <div class="cartao">
+                <div class="cartao-cabecalho">
+                    <h3>
+                        <span class="indicador-disciplina" style="background-color: #f5a623;"></span>
+                        Probabilidade
+                    </h3>
+                    <span>⋮</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Disciplina:</span>
+                    <span>Probabilidade</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Data:</span>
+                    <span>13.09.2024</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Classe:</span>
+                    <span>11º ano</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Semestre:</span>
+                    <span>Primeiro</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Turno:</span>
+                    <span>Manhã</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function toggleMenu() {
+            document.querySelector('.barra-lateral').classList.toggle('aberta');
+        }
+
+        // Fechar o menu quando clicar fora dele
+        document.addEventListener('click', function(event) {
+            const barraLateral = document.querySelector('.barra-lateral');
+            const botaoMenu = document.querySelector('.botao-menu');
+            
+            if (!barraLateral.contains(event.target) && event.target !== botaoMenu) {
+                barraLateral.classList.remove('aberta');
+            }
+        });
+
+        // Adicionar evento de clique aos itens do menu
+        const menuItems = document.querySelectorAll('.menu-item');
+        menuItems.forEach(item => {
+            item.addEventListener('click', function() {
+                // Remover a classe 'ativo' de todos os itens
+                menuItems.forEach(i => i.classList.remove('ativo'));
+                
+                // Adicionar a classe 'ativo' ao item clicado
+                this.classList.add('ativo');
+                
+                // Fechar o menu se estiver no modo dropdown (tela pequena)
+                if (window.innerWidth < 768) {
+                    document.querySelector('.barra-lateral').classList.remove('aberta');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

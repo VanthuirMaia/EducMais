@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planlab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        .conteudo-principal {
+            margin-left: 0;
+            padding: 80px 1rem 1rem;
+            transition: margin-left 0.3s ease-in-out;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .formulario {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .grupo-campo {
+            margin-bottom: 1.5rem;
+        }
+        .rotulo {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--accents-6);
+        }
+        .campo {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--accents-2);
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .campo:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.1);
+        }
+        .campo-texto {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .botoes {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: auto;
+            padding-top: 2rem;
+        }
+        .botao {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+        .botao:active {
+            transform: translateY(1px);
+        }
+        .botao-primario {
+            background-color: var(--primary);
+            color: white;
+        }
+        .botao-primario:hover {
+            background-color: var(--primary-hover);
+        }
+        .botao-secundario {
+            background-color: var(--accents-1);
+            color: var(--foreground);
+        }
+        .botao-secundario:hover {
+            background-color: var(--accents-2);
+        }
+        .botao-discreto {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+        .botao-discreto:hover {
+            background-color: var(--accents-1);
+        }
+        .botao-perigo {
+            background-color: var(--danger);
+            color: white;
+        }
+        .botao-perigo:hover {
+            background-color: var(--danger-hover);
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        .cor-seletor {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .cor-opcao {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.2s ease;
+        }
+        .cor-opcao:hover, .cor-opcao.selecionada {
+            border-color: var(--foreground);
+        }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal.ativo {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-conteudo {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+        .modal-titulo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+        .modal-fechar {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--accents-5);
+        }
+        .disciplinas-lista {
+            margin-top: 1rem;
+            border-top: 1px solid var(--accents-2);
+            padding-top: 1rem;
+        }
+        .disciplina-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            border-bottom: 1px solid var(--accents-2);
+        }
+        .disciplina-item:last-child {
+            border-bottom: none;
+        }
+        .disciplina-cor {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+        @media (min-width: 768px) {
+            .conteudo-principal {
+                margin-left: 250px;
+            }
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (min-width: 1024px) {
+            .conteudo-principal {
+                padding: 2rem 4rem;
+            }
+            .formulario {
+                padding: 3rem;
+            }
+            .grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        @media (max-width: 767px) {
+            .conteudo-principal {
+                padding-top: 70px;
+            }
+            .botoes {
+                flex-direction: column-reverse;
+            }
+            .botao {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="cabecalho">
+        <button class="botao-menu" onclick="toggleMenu()">☰</button>
+        <img class="logo" src="../img/planlab logo branco p.png" alt="">
+        <div>
+            <span class="botao-menu"><img src="../img/avatar-1.png" alt="Avatar" class="avatar-menu"></span>
+        </div>
+    </header>
+    
+    <nav class="barra-lateral">
+        <div class="perfil">
+            <img src="../img/avatar-1.png" alt="Avatar" class="avatar">
+            <h3>Lairson Alencar</h3>
+            <p>Prof. Cyber Security</p>
+        </div>
+        <ul class="menu">
+            <li class="menu-item ativo"><img src="../img/home.png" class="icon"> Início</li>
+            <li class="menu-item"><img src="../img/Plano.png" class="icon">Plano de Aula</li>
+            <li class="menu-item"><img src="../img/Caderneta.png" class="icon">Caderneta</li>
+            <li class="menu-item"><img src="../img/sair.png" class="icon">Sair</li>
+        </ul>
+    </nav>
+    
+    <main class="conteudo-principal">
+        <h1 style="margin-bottom: 2rem; font-weight: 600; font-size: 2rem;">Plano de Aula</h1>
+        <button class="botao botao-discreto" style="margin-bottom: 1rem;" onclick="abrirModal()">Cadastrar Nova Disciplina</button>
+        <form class="formulario">
+            <div class="grid">
+                <div class="grupo-campo">
+                    <label class="rotulo" for="disciplina">Disciplina</label>
+                    <select class="campo" id="disciplina">
+                        <option value="">Selecione a disciplina</option>
+                        <option value="matematica">Matemática</option>
+                        <option value="portugues">Português</option>
+                        <option value="ciencias">Ciências</option>
+                    </select>
+                </div>
+                <div class="grupo-campo">
+                    <label class="rotulo" for="data">Data</label>
+                    <input type="date" class="campo" id="data">
+                </div>
+                <div class="grupo-campo">
+                    <label class="rotulo" for="serie">Série/Ano</label>
+                    <input type="text" class="campo" id="serie" placeholder="Ex: 9º ano">
+                </div>
+                <div class="grupo-campo">
+                    <label class="rotulo" for="semestre">Semestre</label>
+                    <select class="campo" id="semestre">
+                        <option value="">Selecione o semestre</option>
+                        <option value="1">1º Semestre</option>
+                        <option value="2">2º Semestre</option>
+                    </select>
+                </div>
+                <div class="grupo-campo">
+                    <label class="rotulo" for="titulo">Título da Aula</label>
+                    <input type="text" class="campo" id="titulo" placeholder="Digite o título da aula">
+                </div>
+                <div class="grupo-campo">
+                    <label class="rotulo" for="eventos">Eventos Extraordinários</label>
+                    <select class="campo" id="eventos">
+                        <option value="nao">Não</option>
+                        <option value="sim">Sim</option>
+                    </select>
+                </div>
+            </div>
+            <div class="grid">
+                <div class="grupo-campo">
+                    <label class="rotulo" for="conteudo">Conteúdo Curricular</label>
+                    <textarea class="campo campo-texto" id="conteudo" placeholder="Descreva o conteúdo curricular"></textarea>
+                </div>
+                <div class="grupo-campo">
+                    <label class="rotulo" for="metodologia">Metodologia</label>
+                    <textarea class="campo campo-texto" id="metodologia" placeholder="Descreva a metodologia"></textarea>
+                </div>
+                <div class="grupo-campo">
+                    <label class="rotulo" for="recursos">Recursos necessários</label>
+                    <textarea class="campo campo-texto" id="recursos" placeholder="Liste os recursos necessários"></textarea>
+                </div>
+            </div>
+            <div class="grid">
+                <div class="grupo-campo">
+                    <label class="rotulo" for="avaliacao">Avaliação</label>
+                    <textarea class="campo campo-texto" id="avaliacao" placeholder="Descreva o método de avaliação"></textarea>
+                </div>
+                <div class="grupo-campo">
+                    <label class="rotulo" for="observacao">Observação</label>
+                    <textarea class="campo campo-texto" id="observacao" placeholder="Adicione observações relevantes"></textarea>
+                </div>
+            </div>
+            <div class="botoes">
+                <button type="button" class="botao botao-secundario">Cancelar</button>
+                <button type="submit" class="botao botao-primario">Salvar Plano de Aula</button>
+            </div>
+        </form>
+    </main>
+
+    <div class="modal" id="modal-disciplina">
+        <div class="modal-conteudo">
+            <h2 class="modal-titulo">Cadastrar Nova Disciplina</h2>
+            <button class="modal-fechar" onclick="fecharModal()">&times;</button>
+            <form id="form-disciplina">
+                <div class="grupo-campo">
+                    <label class="rotulo" for="cadastro-disciplina">Nome da Disciplina</label>
+                    <input type="text" class="campo" id="cadastro-disciplina" placeholder="Digite o nome da disciplina">
+                </div>
+                <div class="grupo-campo">
+                    <label class="rotulo">Cor da Disciplina</label>
+                    <div class="cor-seletor">
+                        <div class="cor-opcao" style="background-color: #0070f3;" onclick="selecionarCor(this)"></div>
+                        <div class="cor-opcao" style="background-color: #ff0080;" onclick="selecionarCor(this)"></div>
+                        <div class="cor-opcao" style="background-color: #f5a623;" onclick="selecionarCor(this)"></div>
+                        <div class="cor-opcao" style="background-color: #7928ca;" onclick="selecionarCor(this)"></div>
+                        <div class="cor-opcao" style="background-color: #50e3c2;" onclick="selecionarCor(this)"></div>
+                    </div>
+                </div>
+                <div class="botoes">
+                    <button type="button" class="botao botao-secundario" onclick="fecharModal()">Cancelar</button>
+                    <button type="submit" class="botao botao-primario">Cadastrar Disciplina</button>
+                </div>
+            </form>
+            <div class="disciplinas-lista" id="disciplinas-lista">
+                <!-- Disciplinas cadastradas serão adicionadas aqui -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            document.querySelector('.barra-lateral').classList.toggle('aberta');
+        }
+
+        document.addEventListener('click', function(event) {
+            const barraLateral = document.querySelector('.barra-lateral');
+            const botaoMenu = document.querySelector('.botao-menu');
+            
+            if (!barraLateral.contains(event.target) && event.target !== botaoMenu) {
+                barraLateral.classList.remove('aberta');
+            }
+        });
+
+        const menuItems = document.querySelectorAll('.menu-item');
+        menuItems.forEach(item => {
+            item.addEventListener('click', function() {
+                menuItems.forEach(i => i.classList.remove('ativo'));
+                this.classList.add('ativo');
+                
+                if (window.innerWidth < 768) {
+                    document.querySelector('.barra-lateral').classList.remove('aberta');
+                }
+            });
+        });
+
+        function selecionarCor(elemento) {
+            document.querySelectorAll('.cor-opcao').forEach(opcao => {
+                opcao.classList.remove('selecionada');
+            });
+            elemento.classList.add('selecionada');
+        }
+
+        function abrirModal() {
+            document.getElementById('modal-disciplina').classList.add('ativo');
+        }
+
+        function fecharModal() {
+            document.getElementById('modal-disciplina').classList.remove('ativo');
+        }
+
+        let disciplinas = [];
+
+        document.getElementById('form-disciplina').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const nomeDisciplina = document.getElementById('cadastro-disciplina').value;
+            const corSelecionada = document.querySelector('.cor-opcao.selecionada');
+            
+            if (nomeDisciplina && corSelecionada) {
+                const novaDisciplina = {
+                    nome: nomeDisciplina,
+                    cor: corSelecionada.style.backgroundColor
+                };
+                disciplinas.push(novaDisciplina);
+                atualizarListaDisciplinas();
+                document.getElementById('cadastro-disciplina').value = '';
+                document.querySelectorAll('.cor-opcao').forEach(opcao => opcao.classList.remove('selecionada'));
+            } else {
+                alert('Por favor, preencha o nome da disciplina e selecione uma cor.');
+            }
+        });
+
+        function atualizarListaDisciplinas() {
+            const lista = document.getElementById('disciplinas-lista');
+            lista.innerHTML = '';
+            disciplinas.forEach((disciplina, index) => {
+                const item = document.createElement('div');
+                item.className = 'disciplina-item';
+                item.innerHTML = `
+                    <span>${disciplina.nome}</span>
+                    <div style="display: flex; align-items: center;">
+                        <div class="disciplina-cor" style="background-color: ${disciplina.cor};"></div>
+                        <button class="botao botao-perigo" onclick="excluirDisciplina(${index})">Excluir</button>
+                    </div>
+                `;
+                lista.appendChild(item);
+            });
+
+            // Atualizar o select de disciplinas no formulário principal
+            const selectDisciplina = document.getElementById('disciplina');
+            selectDisciplina.innerHTML = '<option value="">Selecione a disciplina</option>';
+            disciplinas.forEach(disciplina => {
+                const option = document.createElement('option');
+                option.value = disciplina.nome.toLowerCase();
+                option.textContent = disciplina.nome;
+                selectDisciplina.appendChild(option);
+            });
+        }
+
+        function excluirDisciplina(index) {
+            if (confirm('Tem certeza que deseja excluir esta disciplina?')) {
+                disciplinas.splice(index, 1);
+                atualizarListaDisciplinas();
+            }
+        }
+    </script>
+</body>
+</html>

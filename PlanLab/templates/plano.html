@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planlab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        .conteudo-principal {
+            margin-left: 0;
+            padding: 80px 1rem 1rem;
+            transition: margin-left 0.3s ease-in-out;
+        }
+ 
+        .plano-aula {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        .titulo-aula {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .subtitulo-aula {
+            font-size: 1.25rem;
+            color: var(--accents-5);
+            margin-bottom: 2rem;
+        }
+        .grade-aula {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 2rem;
+        }
+        .detalhes-aula {
+            border: 1px solid var(--accents-2);
+            grid-column: span 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            background-color: var(--accents-1);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        .item-detalhe {
+            display: flex;
+            flex-direction: column;
+        }
+        .rotulo-detalhe {
+            font-size: 0.875rem;
+            color: var(--accents-5);
+            margin-bottom: 0.25rem;
+        }
+        .valor-detalhe {
+            font-weight: 500;
+        }
+        .secao {
+            background-color: var(--background);
+            border: 1px solid var(--accents-2);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+        .titulo-secao {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        .titulo-secao svg {
+            margin-right: 0.5rem;
+        }
+        .lista-conteudo, .lista-materiais {
+            list-style-type: none;
+            padding-left: 1.5rem;
+        }
+        .lista-conteudo li, .lista-materiais li {
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+        .lista-conteudo li::before, .lista-materiais li::before {
+            content: "•";
+            color: var(--primary);
+            font-weight: bold;
+            position: absolute;
+            left: -1rem;
+        }
+        .grupo-botoes {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .botao {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .botao-primario {
+            background-color: var(--primary);
+            color: white;
+        }
+        .botao-primario:hover {
+            background-color: var(--primary-hover);
+        }
+        .botao-secundario {
+            background-color: var(--accents-2);
+            color: var(--foreground);
+        }
+        .botao-secundario:hover {
+            background-color: var(--accents-3);
+        }
+        @media (min-width: 768px) {
+            .conteudo-principal {
+                margin-left: 250px;
+            }
+            .grade-aula {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (min-width: 1024px) {
+            .grade-aula {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .detalhes-aula {
+                grid-column: span 3;
+            }
+        }
+        @media (min-width: 1440px) {
+            .plano-aula {
+                max-width: 1400px;
+            }
+            .titulo-aula {
+                font-size: 2.5rem;
+            }
+            .subtitulo-aula {
+                font-size: 1.5rem;
+            }
+            .titulo-secao {
+                font-size: 1.5rem;
+            }
+            .lista-conteudo, .lista-materiais, .secao p {
+                font-size: 1.125rem;
+            }
+        }
+        @media (min-width: 1920px) {
+            .plano-aula {
+                max-width: 1800px;
+            }
+            .grade-aula {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .detalhes-aula {
+                grid-column: span 4;
+            }
+            .titulo-aula {
+                font-size: 3rem;
+            }
+            .subtitulo-aula {
+                font-size: 1.75rem;
+            }
+            .titulo-secao {
+                font-size: 1.75rem;
+            }
+            .lista-conteudo, .lista-materiais, .secao p {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="cabecalho">
+        <button class="botao-menu" onclick="alternarMenu()">☰</button>
+        <img class="logo" src="../img/planlab logo branco p.png" alt="Logo Planlab">
+        <div>
+            <span class="botao-menu"><img src="../img/avatar-1.png" alt="Avatar" class="avatar-menu"></span>
+        </div>
+    </header>
+    
+    <nav class="barra-lateral">
+        <div class="perfil">
+            <img src="../img/avatar-1.png" alt="Avatar" class="avatar">
+            <h3>Lairson Alencar</h3>
+            <p>Prof. Segurança Cibernética</p>
+        </div>
+        <ul class="menu">
+            <li class="menu-item ativo"><img src="../img/home.png" class="icon"> Início</li>
+            <li class="menu-item"><img src="../img/Plano.png" class="icon">Plano de Aula</li>
+            <li class="menu-item"><img src="../img/Caderneta.png" class="icon">Caderneta</li>
+            <li class="menu-item"><img src="../img/sair.png" class="icon">Sair</li>
+        </ul>
+    </nav>
+    
+    <main class="conteudo-principal">
+        <div class="plano-aula">
+            <h2 class="titulo-aula">Plano de Aula</h2>
+            <p class="subtitulo-aula">Estatística para análise de dados</p>
+            <div class="detalhes-aula">
+                <div class="item-detalhe">
+                    <span class="rotulo-detalhe">Classe:</span>
+                    <span class="valor-detalhe">5º ano</span>
+                </div>
+                <div class="item-detalhe">
+                    <span class="rotulo-detalhe">Turno:</span>
+                    <span class="valor-detalhe">Noite</span>
+                </div>
+                <div class="item-detalhe">
+                    <span class="rotulo-detalhe">Assunto:</span>
+                    <span class="valor-detalhe">Análise de dados</span>
+                </div>
+                <div class="item-detalhe">
+                    <span class="rotulo-detalhe">Horário:</span>
+                    <span class="valor-detalhe">19:00 - 19:40</span>
+                </div>
+                <div class="item-detalhe">
+                    <span class="rotulo-detalhe">Data da lição:</span>
+                    <span class="valor-detalhe">15/10/24</span>
+                </div>
+                <div class="item-detalhe">
+                    <span class="rotulo-detalhe">Eventos extra.:</span>
+                    <span class="valor-detalhe">Não</span>
+                </div>
+            </div>
+            <div class="grade-aula">
+                <div class="secao">
+                    <h3 class="titulo-secao">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                        Conteúdo:
+                    </h3>
+                    <ul class="lista-conteudo">
+                        <li>Estatística Descritiva (Média, Mediana, Moda, Desvio Padrão)</li>
+                        <li>Probabilidade básica</li>
+                        <li>Distribuições de probabilidade</li>
+                        <li>Inferência estatística</li>
+                        <li>Teste de hipóteses</li>
+                    </ul>
+                </div>
+                <div class="secao">
+                    <h3 class="titulo-secao">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                        Materiais Utilizados:
+                    </h3>
+                    <ul class="lista-materiais">
+                        <li>Planilhas de dados</li>
+                        <li>Software Estatístico</li>
+                        <li>Slides ou PDFs</li>
+                        <li>Calculadora Científica</li>
+                        <li>Tutoriais e documentação on-line</li>
+                    </ul>
+                </div>
+                <div class="secao">
+                    <h3 class="titulo-secao">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        Atividade Prática:
+                    </h3>
+                    <p>Forneça um conjunto de dados do mundo real, como vendas ou notas dos alunos, e peça aos alunos que calculem as estatísticas descritivas (média, mediana, moda, desvio padrão). Em seguida, realizariam testes de hipóteses para verificar diferenças estatisticamente significativas entre os grupos, aplicando conceitos de probabilidade e inferência estatística.</p>
+                </div>
+                <div class="secao">
+                    <h3 class="titulo-secao">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                        Objetivo:
+                    </h3>
+                    <p>Fornecer aos alunos ferramentas para interpretar e analisar dados de forma quantitativa, permitindo que identifiquem padrões, façam previsões e tomem decisões informadas.</p>
+                </div>
+                <div class="secao">
+                    <h3 class="titulo-secao">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        Observações:
+                    </h3>
+                    <p>É importante considerar que conceitos abstratos como probabilidade e inferência estatística podem exigir exemplos práticos para melhor compreensão. Deve-se garantir a clareza nas explicações das fórmulas de medidas descritivas e testes de hipóteses.</p>
+                </div>
+            </div>
+            <div class="grupo-botoes">
+                <button class="botao botao-secundario">Duplicar</button>
+                <button class="botao botao-primario">Editar Plano de Aula</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function alternarMenu() {
+            document.querySelector('.barra-lateral').classList.toggle('aberta');
+        }
+
+        // Fechar o menu quando clicar fora dele
+        document.addEventListener('click', function(event) {
+            const barraLateral = document.querySelector('.barra-lateral');
+            const botaoMenu = document.querySelector('.botao-menu');
+            
+            if (!barraLateral.contains(event.target) && event.target !== botaoMenu) {
+                barraLateral.classList.remove('aberta');
+            }
+        });
+
+        // Adicionar evento de clique aos itens do menu
+        const itensMenu = document.querySelectorAll('.menu-item');
+        itensMenu.forEach(item => {
+            item.addEventListener('click', function() {
+                // Remover a classe 'ativo' de todos os itens
+                itensMenu.forEach(i => i.classList.remove('ativo'));
+                
+                // Adicionar a classe 'ativo' ao item clicado
+                this.classList.add('ativo');
+                
+                // Fechar o menu se estiver no modo dropdown (tela pequena)
+                if (window.innerWidth < 768) {
+                    document.querySelector('.barra-lateral').classList.remove('aberta');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planlab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background: #fafafa;
+            --background-2: #f6f6f9;
+            --foreground: #213147;
+            --primary: #1E5EFF;
+            --primary-hover: #1b50d4;
+            --accents-1: #fafafa;
+            --accents-2: #dbdceb;
+            --accents-3: #e3e3e9;
+            --accents-4: #888;
+            --accents-5: #666;
+            --accents-6: #444;
+            --accents-7: #333;
+            --accents-8: #111;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body, html {
+            height: 100%;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-2);
+            color: var(--foreground);
+            line-height: 1.5;
+        }
+        .conteudo {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            width: 100%;
+        }
+        .formulario {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--background);
+        }
+        .imagem {
+            display: none;
+            background: linear-gradient(135deg, #1E5EFF, #1b50d4);
+            min-height: 200px;
+        }
+        .logo {
+            width: 220px;
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 40px;
+        }
+        .formulario-conteudo {
+            width: 100%;
+            max-width: 400px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: var(--foreground);
+        }
+        p {
+            color: var(--accents-5);
+            margin-bottom: 32px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .campo {
+            margin-bottom: 16px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--foreground);
+            font-size: 14px;
+            font-weight: 600;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--accents-2);
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .senha-container {
+            position: relative;
+        }
+        .mostrar-senha {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--accents-4);
+        }
+        .botao-cadastrar {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 16px;
+            transition: background-color 0.3s;
+        }
+        .botao-cadastrar:hover {
+            background-color: var(--primary-hover);
+        }
+        .login {
+            margin-top: 32px;
+            text-align: center;
+            font-size: 14px;
+            color: var(--accents-5);
+        }
+        .login a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .erro {
+            color: #EF4444;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+        @media (min-width: 768px) {
+            .conteudo {
+                flex-direction: row;
+            }
+            .imagem {
+                display: block;
+                flex: 1;
+            }
+            .formulario {
+                flex: 1;
+                padding: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="conteudo">
+        <div class="formulario">
+            <img src="../img/planlab-logo-principal p.png" alt="Logo Planlab" class="logo">
+            <div class="formulario-conteudo">
+                <h1>Crie sua conta</h1>
+                <p>Preencha os campos abaixo para criar sua conta e começar a construir seus planos de aula.</p>
+                <form id="cadastroForm">
+                    <div class="campo">
+                        <label for="nome">Nome completo</label>
+                        <input type="text" id="nome" name="nome" placeholder="Digite seu nome completo" required>
+                        <div id="erro-nome" class="erro"></div>
+                    </div>
+                    <div class="campo">
+                        <label for="email">E-mail</label>
+                        <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
+                        <div id="erro-email" class="erro"></div>
+                    </div>
+                    <div class="campo">
+                        <label for="disciplina">Disciplina</label>
+                        <input id="disciplina" name="disciplina" placeholder="Digite sua disciplina " required>
+                        <div id="erro-disciplina" class="erro"></div>
+                    </div>
+                    <div class="campo">
+                        <label for="senha">Senha</label>
+                        <div class="senha-container">
+                            <input type="password" id="senha" name="senha" placeholder="Crie uma senha" required>
+                            <span class="mostrar-senha" onclick="toggleSenha('senha')"><img src="../img/visualizar.png" alt=""></span>
+                        </div>
+                        <div i d="erro-senha" class="erro"></div>
+                    </div>
+                    <div class="campo">
+                        <label for="confirmar-senha">Confirmar senha</label>
+                        <div class="senha-container">
+                            <input type="password" id="confirmar-senha" name="confirmar-senha" placeholder="Confirme sua senha" required>
+                            <span class="mostrar-senha" onclick="toggleSenha('confirmar-senha')"><img src="../img/visualizar.png" alt=""></span>
+                        </div>
+                        <div id="erro-confirmar-senha" class="erro"></div>
+                    </div>
+                    <button type="submit" class="botao-cadastrar">Criar conta</button>
+                </form>
+                <div class="login">
+                    Já tem uma conta? <a href="login.html">Faça login</a>
+                </div>
+            </div>
+        </div>
+        <div class="imagem"></div>
+    </div>
+
+    <script>
+        function toggleSenha(id) {
+            var senhaInput = document.getElementById(id);
+            if (senhaInput.type === "password") {
+                senhaInput.type = "text";
+            } else {
+                senhaInput.type = "password";
+            }
+        }
+
+        document.getElementById("cadastroForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            var nome = document.getElementById("nome").value;
+            var email = document.getElementById("email").value;
+            var disciplina = document.getElementById("disciplina").value;
+            var senha = document.getElementById("senha").value;
+            var confirmarSenha = document.getElementById("confirmar-senha").value;
+
+            // Limpar mensagens de erro anteriores
+            document.querySelectorAll('.erro').forEach(function(el) {
+                el.textContent = '';
+            });
+
+            // Validação básica
+            var isValid = true;
+
+            if (nome.length < 3) {
+                document.getElementById("erro-nome").textContent = "O nome deve ter pelo menos 3 caracteres.";
+                isValid = false;
+            }
+
+            if (!/^\S+@\S+\.\S+$/.test(email)) {
+                document.getElementById("erro-email").textContent = "Por favor, insira um e-mail válido.";
+                isValid = false;
+            }
+
+            if (disciplina === "") {
+                document.getElementById("erro-disciplina").textContent = "Por favor, selecione uma disciplina.";
+                isValid = false;
+            }
+
+            if (senha.length < 6) {
+                document.getElementById("erro-senha").textContent = "A senha deve ter pelo menos 6 caracteres.";
+                isValid = false;
+            }
+
+            if (senha !== confirmarSenha) {
+                document.getElementById("erro-confirmar-senha").textContent = "As senhas não coincidem.";
+                isValid = false;
+            }
+
+            if (isValid) {
+                console.log("Cadastro realizado com sucesso:", { nome, email, disciplina });
+                alert("Cadastro realizado com sucesso!");
+            }
+        });
+    </script>
+</body>
+</html>
