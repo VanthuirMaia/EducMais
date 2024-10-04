@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -5,113 +7,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Planlab - Estilo Vercel</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <style>
-        .conteudo-principal {
-            margin-left: 0;
-            padding: 80px 1rem 1rem;
-            transition: margin-left 0.3s ease-in-out;
-        }
-        .botoes-acao {
-            margin-bottom: 1rem;
-        }
-        .botao {
-            border: 2px solid var(--accents-3);
-            padding: 0.7rem 1rem;
-            margin-right: 0.5rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: background-color 0.2s ease;
-        }
-        .botao-primario {
-            background-color: var(--primary);
-            color: white;
-        }
-        .botao-primario:hover {
-            background-color: var(--primary-hover);
-        }
-        .botao-secundario {
-            border: 2px solid var(--accents-3);
-            background-color: var(--accents-1);
-            color: var(--foreground);
-        }
-        .botao-secundario:hover {
-            background-color: var(--accents-2);
-        }
-        .grade {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1rem;
-        }
-        .cartao {
-            background-color: white;
-            border: 1px solid var(--accents-3);
-            border-radius: 5px;
-            padding: 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.2s ease;
-        }
-        .cartao:hover {
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-        }
-        .cartao-cabecalho {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-            font-weight: 600;
-        }
-        .indicador-disciplina {
-            width: 20px;
-            height: 12px;
-            border-radius: 50px;
-            display: inline-block;
-            margin-right: 0.5rem;
-        }
-
-        .cartao-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-            font-size: 0.875rem;
-        }
-        .cartao-rotulo {
-            color: var(--accents-5);
-        }
-        @media (min-width: 768px) {
-            .barra-lateral {
-                left: 0;
-            }
-            .conteudo-principal {
-                margin-left: 250px;
-            }
-            .botao-menu {
-                display: none;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
     <header class="cabecalho">
         <button class="botao-menu" onclick="toggleMenu()">☰</button>
-        <img class="logo" src="../img/planlab logo branco p.png" alt="">
+        <img class="logo" src="{% static 'img/planlab_logo_branco_p.png' %}" alt="Logo">
         <div>
-            <span class="botao-menu"><img src="../img/avatar-1.png" alt="Avatar" class="avatar-menu"></span>
+            <span class="botao-menu"><img src="{% static 'img/avatar-1.png' %}"  alt="Avatar" class="avatar-menu"></span>
         </div>
     </header>
     
     <nav class="barra-lateral">
         <div class="perfil">
-            <img src="../img/avatar-1.png" alt="Avatar" class="avatar">
+            <img src="{% static 'img/avatar-1.png' %}" alt="Logo">
             <h3>Lairson Alencar</h3>
             <p>Prof. Cyber Security</p>
         </div>
         <ul class="menu">
-            <li class="menu-item ativo"><img src="../img/home.png" class="icon"> Início</li>
-            <li class="menu-item"><img src="../img/Plano.png" class="icon">Plano de Aula</li>
-            <li class="menu-item"><img src="../img/Caderneta.png" class="icon">Caderneta</li>
-            <li class="menu-item"><img src="../img/sair.png" class="icon">Sair</li>
+            <li class="menu-item ativo"><img src="{% static 'img/home.png' %}" alt="Home"> Início</li>
+            <li class="menu-item"><img src="{% static 'img/Plano.png' %}" alt="Plano">Plano de Aula</li>
+            <li class="menu-item"><img src="{% static 'img/Caderneta.png' %}" alt="Caderneta">Caderneta</li>
+            <li class="menu-item"><img src="{% static 'img/sair.png' %}" alt="sair">Sair</li>
         </ul>
     </nav>
     

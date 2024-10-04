@@ -1,3 +1,4 @@
+/* Estilos globais */
 :root {
     --background: #fafafa;
     --background-2: #f6f6f9;
@@ -15,11 +16,13 @@
     --danger: #ff4d4f;
     --danger-hover: #ff7875;
 }
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+
 body {
     font-family: 'Inter', sans-serif;
     background-color: var(--background-2);
@@ -39,12 +42,14 @@ body {
     top: 0;
     z-index: 1000;
 }
+
 .logo {
     height: 36px;
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--foreground);
 }
+
 .barra-lateral {
     width: 250px;
     background-color: var(--background);
@@ -57,13 +62,16 @@ body {
     z-index: 999;
     border-right: 2px solid var(--accents-2);
 }
+
 .barra-lateral.aberta {
     left: 0;
 }
+
 .perfil {
     text-align: center;
     padding: 1rem;
 }
+
 .avatar {
     width: 80px;
     height: 80px;
@@ -71,13 +79,16 @@ body {
     border: solid 2px var(--primary);
     margin-bottom: 0.5rem;
 }
+
 .avatar-menu {
     width: 36px;
     border-radius: 50%;
 }
+
 .menu {
     list-style-type: none;
 }
+
 .menu-item {
     display: flex;
     align-items: center;
@@ -87,20 +98,25 @@ body {
     margin: 8px 24px;
     transition: background-color 0.2s ease;
 }
-.menu-item.ativo:hover,.menu-item.ativo  {
+
+.menu-item.ativo:hover,
+.menu-item.ativo {
     background-color: var(--primary);
     color: #ffffff;
     margin: 8px 24px;
     border-radius: 8px;
 }
+
 .menu-item:hover {
     background-color: var(--accents-2);
     margin: 8px 24px;
     border-radius: 8px;
 }
+
 .menu-item.ativo .icon {
     filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7500%) hue-rotate(225deg) brightness(95%) contrast(110%);
 }
+
 .botao-menu {
     display: flex;
     align-items: center;
@@ -111,16 +127,644 @@ body {
     cursor: pointer;
 }
 
+/* Estilos da página home */
+.conteudo-principal {
+    margin-left: 0;
+    padding: 80px 1rem 1rem ;
+    transition: margin-left 0.3s ease-in-out;
+}
+.botoes-acao {
+    margin-bottom: 1rem;
+}
+.botao {
+    border: 2px solid var(--accents-3);
+    padding: 0.7rem 1rem;
+    margin-right: 0.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+.botao-primario {
+    background-color: var(--primary);
+    color: white;
+}
+.botao-primario:hover {
+    background-color: var(--primary-hover);
+}
+.botao-secundario {
+    border: 2px solid var(--accents-3);
+    background-color: var(--accents-1);
+    color: var(--foreground);
+}
+.botao-secundario:hover {
+    background-color: var(--accents-2);
+}
+.grade {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+}
+.cartao {
+    background-color: white;
+    border: 1px solid var(--accents-3);
+    border-radius: 5px;
+    padding: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.2s ease;
+}
+.cartao:hover {
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+.cartao-cabecalho {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+.indicador-disciplina {
+    width: 20px;
+    height: 12px;
+    border-radius: 50px;
+    display: inline-block;
+    margin-right: 0.5rem;
+}
+
+.cartao-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+}
+.cartao-rotulo {
+    color: var(--accents-5);
+}
+
+/* Estilos da página plano */
+.plano-aula {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
+
+.titulo-aula {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.subtitulo-aula {
+    font-size: 1.25rem;
+    color: var(--accents-5);
+    margin-bottom: 2rem;
+}
+
+.grade-aula {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 2rem;
+}
+
+.detalhes-aula {
+    border: 1px solid var(--accents-2);
+    grid-column: span 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    background-color: var(--accents-1);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+
+.item-detalhe {
+    display: flex;
+    flex-direction: column;
+}
+
+.rotulo-detalhe {
+    font-size: 0.875rem;
+    color: var(--accents-5);
+    margin-bottom: 0.25rem;
+}
+
+.valor-detalhe {
+    font-weight: 500;
+}
+
+.secao {
+    background-color: var(--background);
+    border: 1px solid var(--accents-2);
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.titulo-secao {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.titulo-secao svg {
+    margin-right: 0.5rem;
+}
+
+.lista-conteudo,
+.lista-materiais {
+    list-style-type: none;
+    padding-left: 1.5rem;
+}
+
+.lista-conteudo li,
+.lista-materiais li {
+    margin-bottom: 0.5rem;
+    position: relative;
+}
+
+.lista-conteudo li::before,
+.lista-materiais li::before {
+    content: "•";
+    color: var(--primary);
+    font-weight: bold;
+    position: absolute;
+    left: -1rem;
+}
+
+.grupo-botoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+/* Estilos da página caderneta */
+/* (Os estilos são os mesmos da página plano, então não é necessário repetir) */
+
+/* Estilos da página form */
+.conteudo-principal-form {
+    padding: 80px 1rem 1rem;
+    transition: margin-left 0.3s ease-in-out;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.titulo-form{
+    border-radius: 8px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.formulario {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.grupo-campo {
+    margin-bottom: 1.5rem;
+}
+
+.rotulo {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--accents-6);
+}
+
+.campo {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--accents-2);
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.campo:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.1);
+}
+
+.campo-texto {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.botao-discreto {
+    background-color: transparent;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    flex-grow: 1;
+   
+}
+
+.botao-discreto:hover {
+    background-color: var(--accents-1);
+}
+
+.botao-perigo {
+    background-color: var(--danger);
+    color: white;
+}
+
+.botao-perigo:hover {
+    background-color: var(--danger-hover);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+.cor-seletor {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.cor-opcao {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.2s ease;
+}
+
+.cor-opcao:hover,
+.cor-opcao.selecionada {
+    border-color: var(--foreground);
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1001;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal.ativo {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-conteudo {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 100%;
+}
+
+.modal-titulo {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.modal-fechar {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--accents-5);
+}
+
+.disciplinas-lista {
+    margin-top: 1rem;
+    border-top: 1px solid var(--accents-2);
+    padding-top: 1rem;
+}
+
+.disciplina-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--accents-2);
+}
+
+.disciplina-item:last-child {
+    border-bottom: none;
+}
+
+.disciplina-cor {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+/* Estilos para login e cadastro */
+.login-conteudo {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.login-formulario {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--background);
+}
+
+.login-imagem {
+    display: none;
+    background: linear-gradient(135deg, #1E5EFF, #1b50d4);
+    min-height: 200px;
+}
+
+.login-logo {
+    width: 220px;
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 40px;
+}
+
+.login-formulario-conteudo {
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-titulo {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: var(--foreground);
+}
+
+.login-descricao {
+    color: var(--accents-5);
+    margin-bottom: 32px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.login-campo {
+    margin-bottom: 16px;
+}
+
+.login-label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--foreground);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.login-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--accents-2);
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.login-senha-container {
+    position: relative;
+}
+
+.login-mostrar-senha {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: var(--accents-4);
+    background-color: transparent; 
+    border: none; 
+    padding: 0;
+}
+
+  .login-mostrar-senha img {
+    width: 24px; 
+    height: 24px;
+  }
+  
+  .login-mostrar-senha:focus {
+    outline: none;
+  }
+
+.login-esqueceu-senha {
+    text-align: right;
+    margin-top: 8px;
+}
+
+.login-esqueceu-senha a {
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.login-botao {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    width: 100%;
+    margin-top: 16px;
+    transition: background-color 0.3s;
+}
+
+.login-botao:hover {
+    background-color: var(--primary-hover);
+}
+
+.login-link {
+    margin-top: 32px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--accents-5);
+}
+
+.login-link a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-erro {
+    color: #EF4444;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+/* Media Queries */
 @media (min-width: 768px) {
+    .conteudo-principal {
+        margin-left: 250px;
+    }
+    .conteudo-principal-form {
+        margin-left: 250px;
+    }
+
     .barra-lateral {
         left: 0;
     }
+
     .botao-menu {
         display: none;
+    }
+
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .grade-aula {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .login-conteudo {
+        flex-direction: row;
+    }
+    .login-imagem {
+        display: block;
+        flex: 1;
+    }
+    .login-formulario {
+        flex: 1;
+        padding: 40px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .conteudo-principal {
+        padding: 80px 1rem;
+    }
+
+    .formulario {
+        padding: 3rem;
+    }
+
+    .grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .grade-aula {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .detalhes-aula {
+        grid-column: span 3;
+    }
+}
+
+@media (min-width: 1440px) {
+    .plano-aula {
+        max-width: 1400px;
+    }
+
+    .titulo-aula {
+        font-size: 2.5rem;
+    }
+
+    .subtitulo-aula {
+        font-size: 1.5rem;
+    }
+
+    .titulo-secao {
+        font-size: 1.5rem;
+    }
+
+    .lista-conteudo,
+    .lista-materiais,
+    .secao p {
+        font-size: 1.125rem;
+    }
+}
+
+@media (min-width: 1920px) {
+    .plano-aula {
+        max-width: 1800px;
+    }
+
+    .grade-aula {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .detalhes-aula {
+        grid-column: span 4;
+    }
+
+    .titulo-aula {
+        font-size: 3rem;
+    }
+
+    .subtitulo-aula {
+        font-size: 1.75rem;
+    }
+
+    .titulo-secao {
+        font-size: 1.75rem;
+    }
+
+    .lista-conteudo,
+    .lista-materiais,
+    .secao p {
+        font-size: 1.25rem;
     }
 }
 
 @media (max-width: 767px) {
+    .conteudo-principal {
+        padding-top: 80px;
+    }
+
+    .botoes {
+        flex-direction: column-reverse;
+    }
+
+    .botao {
+        width: 100%;
+    }
+
     .barra-lateral {
         top: 60px;
         height: calc(100vh - 60px);

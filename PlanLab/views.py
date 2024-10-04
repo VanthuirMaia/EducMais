@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 def home(request):
-    return render(request, 'planlab/home.html')
+    return render(request, 'home.html')
 
 def login_view(request):
     return render(request, 'planlab/login.html')
