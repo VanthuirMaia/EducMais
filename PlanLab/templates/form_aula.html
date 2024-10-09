@@ -18,27 +18,47 @@
     
     <nav class="barra-lateral">
         <div class="perfil">
-            <img src="../img/avatar-1.png" alt="Avatar" class="avatar">
+            <img class="avatar" src="{% static 'img/avatar-1.png' %}" alt="Logo">
             <h3>Lairson Alencar</h3>
             <p>Prof. Cyber Security</p>
         </div>
         <ul class="menu">
-            <li class="menu-item ativo"><img src="../img/home.png" class="icon"> Início</li>
-            <li class="menu-item"><img src="../img/Plano.png" class="icon">Plano de Aula</li>
-            <li class="menu-item"><img src="../img/Caderneta.png" class="icon">Caderneta</li>
-            <li class="menu-item"><img src="../img/sair.png" class="icon">Sair</li>
+            <li class="menu-item">
+                <img src="{% static 'img/home.png' %}" alt="Home"> Início
+            </li>
+
+            <li class="menu-item ativo">
+                <a href="{% url 'planos_de_aula' %}">
+                    <img src="{% static 'img/Plano.png' %}" alt="Plano">Planos de Aula
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="{% url 'pag_cadernetas' %}">
+                    <img src="{% static 'img/Caderneta.png' %}" alt="Plano">Cadernetas
+                </a>
+            </li>
+
+            <li class="menu-item">
+                <img src="{% static 'img/sair.png' %}" alt="sair">Sair
+            </li>
+
         </ul>
     </nav>
     
     <main class="conteudo-principal-form">
-        <div class="titulo-form"><h1 style="margin-bottom: 1rem; font-weight: 600; font-size: 2rem;">Formulario Plano de Aula</h1></div>
-        
+        <div class="titulo-form">
+            <h1 style="margin-bottom: 1rem; font-weight: 600; font-size: 2rem;">Formulario Plano de Aula</h1>
+        </div>
+
         <button class="botao botao-discreto" style="margin-bottom: 1rem; max-width: 1200px;" onclick="abrirModal()">Cadastrar Nova Disciplina</button>
-        <form class="formulario">
+        
+        <form class="formulario" method="POST" action="{% url 'form_aula' %}">
+            {% csrf_token %}
             <div class="grid">
                 <div class="grupo-campo">
                     <label class="rotulo" for="disciplina">Disciplina</label>
-                    <select class="campo" id="disciplina">
+                    <select class="campo" id="disciplina" name="disciplina" required>
                         <option value="">Selecione a disciplina</option>
                         <option value="matematica">Matemática</option>
                         <option value="portugues">Português</option>
@@ -47,15 +67,15 @@
                 </div>
                 <div class="grupo-campo">
                     <label class="rotulo" for="data">Data</label>
-                    <input type="date" class="campo" id="data">
+                    <input type="date" class="campo" id="data" name="data_aula" required>
                 </div>
                 <div class="grupo-campo">
                     <label class="rotulo" for="serie">Série/Ano</label>
-                    <input type="text" class="campo" id="serie" placeholder="Ex: 9º ano">
+                    <input type="text" class="campo" id="serie" name="turma" placeholder="Ex: 9º ano" required>
                 </div>
                 <div class="grupo-campo">
                     <label class="rotulo" for="semestre">Semestre</label>
-                    <select class="campo" id="semestre">
+                    <select class="campo" id="semestre" name="semestre" required>
                         <option value="">Selecione o semestre</option>
                         <option value="1">1º Semestre</option>
                         <option value="2">2º Semestre</option>
@@ -63,11 +83,11 @@
                 </div>
                 <div class="grupo-campo">
                     <label class="rotulo" for="titulo">Título da Aula</label>
-                    <input type="text" class="campo" id="titulo" placeholder="Digite o título da aula">
+                    <input type="text" class="campo" id="titulo" name="titulo" placeholder="Digite o título da aula" required>
                 </div>
                 <div class="grupo-campo">
                     <label class="rotulo" for="eventos">Eventos Extraordinários</label>
-                    <select class="campo" id="eventos">
+                    <select class="campo" id="eventos" name="eventos_extraordinarios">
                         <option value="nao">Não</option>
                         <option value="sim">Sim</option>
                     </select>
@@ -76,25 +96,25 @@
             <div class="grid">
                 <div class="grupo-campo">
                     <label class="rotulo" for="conteudo">Conteúdo Curricular</label>
-                    <textarea class="campo campo-texto" id="conteudo" placeholder="Descreva o conteúdo curricular"></textarea>
+                    <textarea class="campo campo-texto" id="conteudo" name="conteudo_programatico" placeholder="Descreva o conteúdo curricular" required></textarea>
                 </div>
                 <div class="grupo-campo">
                     <label class="rotulo" for="metodologia">Metodologia</label>
-                    <textarea class="campo campo-texto" id="metodologia" placeholder="Descreva a metodologia"></textarea>
+                    <textarea class="campo campo-texto" id="metodologia" name="metodologia" placeholder="Descreva a metodologia" required></textarea>
                 </div>
                 <div class="grupo-campo">
                     <label class="rotulo" for="recursos">Recursos necessários</label>
-                    <textarea class="campo campo-texto" id="recursos" placeholder="Liste os recursos necessários"></textarea>
+                    <textarea class="campo campo-texto" id="recursos" name="recursos_necessarios" placeholder="Liste os recursos necessários" required></textarea>
                 </div>
             </div>
             <div class="grid">
                 <div class="grupo-campo">
                     <label class="rotulo" for="avaliacao">Avaliação</label>
-                    <textarea class="campo campo-texto" id="avaliacao" placeholder="Descreva o método de avaliação"></textarea>
+                    <textarea class="campo campo-texto" id="avaliacao" name="avaliacao_observacoes" placeholder="Descreva o método de avaliação"></textarea>
                 </div>
                 <div class="grupo-campo">
                     <label class="rotulo" for="observacao">Observação</label>
-                    <textarea class="campo campo-texto" id="observacao" placeholder="Adicione observações relevantes"></textarea>
+                    <textarea class="campo campo-texto" id="observacao" name="observacoes" placeholder="Adicione observações relevantes"></textarea>
                 </div>
             </div>
             <div class="botoes">
@@ -227,6 +247,26 @@
             if (confirm('Tem certeza que deseja excluir esta disciplina?')) {
                 disciplinas.splice(index, 1);
                 atualizarListaDisciplinas();
+            }
+        }
+
+        function showSuccessModal() {
+            // Enviar o formulário
+            document.getElementById('formAula').submit();
+            // Exibir o modal
+            document.getElementById('successModal').style.display = "block";
+            return false; // Impede o envio padrão do formulário
+        }
+
+        function closeModal() {
+            document.getElementById('successModal').style.display = "none";
+        }
+
+        // Fecha o modal se o usuário clicar fora dele
+        window.onclick = function(event) {
+            const modal = document.getElementById('successModal');
+            if (event.target == modal) {
+                closeModal();
             }
         }
     </script>

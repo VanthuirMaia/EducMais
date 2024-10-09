@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planlab - Home</title>
+    <title>Planlab - Planos de Aula</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
@@ -25,16 +25,18 @@
             <p>Prof. Cyber Security</p>
         </div>
         <ul class="menu">
-            <li class="menu-item ativo">
-                <img src="{% static 'img/home.png' %}" alt="Home"> Início
-            </li>
-
             <li class="menu-item">
+                <a href="{% url 'home' %}">
+                    <img src="{% static 'img/home.png' %}" alt="Home"> Início
+                </a>
+            </li>
+            
+            <li class="menu-item ativo">
                 <a href="{% url 'planos_de_aula' %}">
                     <img src="{% static 'img/Plano.png' %}" alt="Plano">Planos de Aula
                 </a>
             </li>
-            
+
             <li class="menu-item">
                 <a href="{% url 'pag_cadernetas' %}">
                     <img src="{% static 'img/Caderneta.png' %}" alt="Plano">Cadernetas
@@ -44,57 +46,45 @@
             <li class="menu-item">
                 <img src="{% static 'img/sair.png' %}" alt="sair">Sair
             </li>
-
+            
         </ul>
     </nav>
     
     <main class="conteudo-principal">
         <div class="botoes-acao">
-            <h2>Bem-vindo de volta, Lairson Alencar!</h2>
-            <p>Veja abaixo um resumo dos seus planos de aula e atividades recentes.</p>
-
+            <button class="botao botao-primario">Planos de aula</button>
         </div>
         <div class="grade" id="grade-planos">
-            <div class="indicadores-rapidos">
-                <div class="card-indicador">
-                    <h3>Total de Planos</h3>
-                    <p>24</p>
+            <div class="cartao">
+                <div class="cartao-cabecalho">
+                    <h3>
+                        <span class="indicador-disciplina" style="background-color: #0070f3;"></span>
+                        Introdução à Álgebra
+                    </h3>
+                    <span>⋮</span>
                 </div>
-                <div class="card-indicador">
-                    <h3>Próxima Aula</h3>
-                    <p>Introdução à Álgebra <br> 06.09.2024</p>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Disciplina:</span>
+                    <span>Álgebra</span>
                 </div>
-                <div class="card-indicador">
-                    <h3>Atividades Pendentes</h3>
-                    <p>3 Correções</p>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Data:</span>
+                    <span>06.09.2024</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Classe:</span>
+                    <span>11º ano</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Semestre:</span>
+                    <span>Terceiro</span>
+                </div>
+                <div class="cartao-info">
+                    <span class="cartao-rotulo">Turno:</span>
+                    <span>Tarde</span>
                 </div>
             </div>
-        </div>
-
-        <div class="planos_de_aula_recentes">
-            <h3>Planos de Aula Recentes</h3>
-                <div class="grade">
-                    <div class="cartao">
-                        <h4>Introdução à Álgebra</h4>
-                        <p>Disciplina: Álgebra</p>
-                        <p>Data: 06.09.2024</p>
-                    </div>
-                    <div class="cartao">
-                        <h4>Geometria Espacial</h4>
-                        <p>Disciplina: Matemática</p>
-                        <p>Data: 07.09.2024</p>
-                    </div>
-                </div>
-
-        </div>
-
-        <div class="calendario">
-            <h3>Próximas Aulas</h3>
-                <div class="cartao">
-                    <h4>Geometria Espacial</h4>
-                    <p>Disciplina: Matemática</p>
-                    <p>Data: 07.09.2024</p>
-                </div>
+            
 
         </div>
     </main>
