@@ -1,14 +1,19 @@
 from django.urls import path
-from .views import home, login_view, cadastro, caderneta, form, plano, planos_de_aula, pag_cadernetas
+from . import views
+from django.contrib.auth import views as auth_views
+from django.contrib import admin
+from .views import pag_cadernetas, form_caderneta
 
 urlpatterns = [
-    path('', home, name='home'),               # URL para a página inicial
-    path('login/', login_view, name='login'),  # URL para a página de login
-    path('cadastro/', cadastro, name='cadastro'),
-    path('caderneta/', caderneta, name='caderneta'),
-    path('form/', form, name='form'),
-    path('plano/', plano, name='plano'),       # URL para a funcionalidade "plano"
-    path('planos_de_aula/', planos_de_aula, name='planos_de_aula'),  # URL para a página "Planos de Aula"
-    path('pag_cadernetas/', pag_cadernetas, name='pag_cadernetas'),  # URL para a página "Planos de Aula"
-
+    path('', views.home, name='home'),  # Página inicial
+    path('admin/', admin.site.urls),  # Painel de administração
+    path('accounts/login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),  # Login
+    path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),  # Logout
+    path('cadastro/', views.cadastro, name='cadastro'),  # Cadastro de usuário
+    path('caderneta/', views.caderneta, name='caderneta'),  # Caderneta
+    path('plano/', views.plano, name='plano'),  # Página do plano
+    path('pag_planos_de_aula/', views.pag_planos_de_aula, name='pag_planos_de_aula'),  # Página de planos de aula
+    path('form_aula/', views.form_aula, name='form_aula'),  # Formulário de nova aula
+    path('cadernetas/', pag_cadernetas, name='pag_cadernetas'),
+    path('caderneta/novo/', form_caderneta, name='form_caderneta'),
 ]

@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -5,26 +7,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Planlab</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
     <div class="login-conteudo">
         <div class="login-formulario">
-            <img src="../img/planlab-logo-principal p.png" alt="Logo Planlab" class="login-logo">
+            <img src="{% static 'img/planlab_logo_principal_p.png' %}" alt="Logo Planlab" class="login-logo">
             <div class="login-formulario-conteudo">
                 <h1 class="login-titulo">Acesse a plataforma</h1>
                 <p class="login-descricao">Faça login ou registre-se para começar a construir seus planos de aula ainda hoje.</p>
-                <form id="loginForm">
+                <form id="loginForm" method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
                     <div class="login-campo">
                         <label for="email" class="login-label">E-mail</label>
-                        <input type="email" id="email" class="login-input" placeholder="Digite seu e-mail" required>
+                        <input type="email" name="username" id="email" class="login-input" placeholder="Digite seu e-mail" required>
                     </div>
                     <div class="login-campo">
                         <label for="senha" class="login-label">Senha</label>
                         <div class="login-senha-container">
-                            <input type="password" id="senha" class="login-input" placeholder="Digite sua senha" required>
+                            <input type="password" name="password" id="senha" class="login-input" placeholder="Digite sua senha" required>
                             <button type="button" class="login-mostrar-senha" aria-label="Mostrar ou ocultar senha">
-                                <img src="../img/visualizar.png" alt="Ícone de olho" id="senhaIcon">
+                                <img src="{% static 'img/visualizar.png' %}" alt="Ícone de olho" id="senhaIcon">
                             </button>
                         </div>
                         <div class="login-esqueceu-senha">
@@ -34,7 +37,7 @@
                     <button type="submit" class="login-botao">Entrar</button>
                 </form>
                 <div class="login-link">
-                    Ainda não tem uma conta? <a href="cadastro.html">Inscreva-se</a>
+                    Ainda não tem uma conta? <a href="#">Inscreva-se</a>
                 </div>
             </div>
         </div>
@@ -57,14 +60,6 @@
                     senhaIcon.src = '../img/visualizar.png';
                     toggleSenhaBtn.setAttribute('aria-label', 'Mostrar senha');
                 }
-            });
-
-            document.getElementById('loginForm').addEventListener('submit', function(event) {
-                event.preventDefault();
-                const email = document.getElementById('email').value;
-                const senha = document.getElementById('senha').value;
-                console.log('Login tentado com:', email, senha);
-                alert('Tentativa de login realizada!');
             });
         });
     </script>

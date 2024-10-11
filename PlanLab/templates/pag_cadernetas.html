@@ -32,7 +32,7 @@
             </li>
 
             <li class="menu-item">
-                <a href="{% url 'planos_de_aula' %}">
+                <a href="{% url 'pag_planos_de_aula' %}">
                     <img src="{% static 'img/Plano.png' %}" alt="Plano">Planos de Aula
                 </a>
             </li>
@@ -52,7 +52,7 @@
     
     <main class="conteudo-principal">
         <div class="botoes-acao">
-            <button class="botao botao-secundario">Cadernetas</button>
+            <a href="{% url 'form_caderneta' %}" class="botao botao-primario">Nova Caderneta</a>
         </div>
         <div class="grade" id="grade-planos">
             <div class="cartao">

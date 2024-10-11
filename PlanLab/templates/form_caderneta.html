@@ -5,14 +5,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planlab</title>
+    <title>Planlab - Formulário de Caderneta</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
     <header class="cabecalho">
         <button class="botao-menu" onclick="toggleMenu()">☰</button>
-        <img class="logo" src="{% static 'img/planlab logo branco p.png' %}" alt="">
+        <img class="logo" src="{% static 'img/planlab_logo_branco_p.png' %}" alt="Logo">
         <div>
             <span class="botao-menu"><img src="{% static 'img/avatar-1.png' %}" alt="Avatar" class="avatar-menu"></span>
         </div>
@@ -20,41 +20,51 @@
     
     <nav class="barra-lateral">
         <div class="perfil">
-            <img class="avatar" src="{% static 'img/avatar-1.png' %}" alt="Logo">
+            <img src="{% static 'img/avatar-1.png' %}" alt="Avatar" class="avatar">
             <h3>Lairson Alencar</h3>
             <p>Prof. Cyber Security</p>
         </div>
         <ul class="menu">
-            <li class="menu-item">
+            <li class="menu-item ativo">
                 <img src="{% static 'img/home.png' %}" alt="Home"> Início
             </li>
-            <li class="menu-item ativo">
+            <li class="menu-item">
                 <a href="{% url 'pag_planos_de_aula' %}">
-                    <img src="{% static 'img/Plano.png' %}" alt="Plano">Planos de Aula
+                    <img src="{% static 'img/Plano.png' %}" alt="Plano"> Planos de Aula
                 </a>
             </li>
             <li class="menu-item">
                 <a href="{% url 'pag_cadernetas' %}">
-                    <img src="{% static 'img/Caderneta.png' %}" alt="Cadernetas">Cadernetas
+                    <img src="{% static 'img/Caderneta.png' %}" alt="Cadernetas"> Cadernetas
                 </a>
             </li>
             <li class="menu-item">
-                <img src="{% static 'img/sair.png' %}" alt="sair">Sair
+                <img src="{% static 'img/sair.png' %}" alt="sair"> Sair
             </li>
         </ul>
     </nav>
     
     <main class="conteudo-principal-form">
         <div class="titulo-form">
-            <h1 style="margin-bottom: 1rem; font-weight: 600; font-size: 2rem;">Formulário Plano de Aula</h1>
+            <h1 style="margin-bottom: 1rem; font-weight: 600; font-size: 2rem;">Formulário de Caderneta</h1>
         </div>
-
-        <form class="formulario" method="POST" action="{% url 'form_aula' %}">
+    
+        <form method="post" class="formulario" action="{% url 'form_caderneta' %}">
             {% csrf_token %}
             <div class="grid">
                 <div class="grupo-campo">
-                    <label class="rotulo" for="disciplina">Disciplina</label>
-                    <select class="campo" name="disciplina" id="disciplina" required>
+                    <label class="rotulo" for="id_aluno">Aluno</label>
+                    <input type="text" class="campo" name="aluno" id="id_aluno" placeholder="Digite o nome do aluno" required>
+                </div>
+
+                <div class="grupo-campo">
+                    <label class="rotulo" for="id_data_aula">Data da Aula</label>
+                    <input type="date" class="campo" name="data_aula" id="id_data_aula" required>
+                </div>
+
+                <div class="grupo-campo">
+                    <label class="rotulo" for="id_disciplina">Disciplina</label>
+                    <select class="campo" name="disciplina" id="id_disciplina" required>
                         <option value="">Selecione a disciplina</option>
                         <option value="matematica">Matemática</option>
                         <option value="portugues">Português</option>
@@ -64,13 +74,8 @@
                 </div>
 
                 <div class="grupo-campo">
-                    <label class="rotulo" for="data">Data</label>
-                    <input type="date" class="campo" name="data" id="data" required>
-                </div>
-
-                <div class="grupo-campo">
-                    <label class="rotulo" for="serie">Série</label>
-                    <select class="campo" name="serie" id="serie" required>
+                    <label class="rotulo" for="id_serie">Série/Ano</label>
+                    <select class="campo" name="serie" id="id_serie" required>
                         <option value="">Selecione a série</option>
                         <option value="1">1º Ano - Fundamental</option>
                         <option value="2">2º Ano - Fundamental</option>
@@ -80,8 +85,8 @@
                 </div>
 
                 <div class="grupo-campo">
-                    <label class="rotulo" for="semestre">Período</label>
-                    <select class="campo" name="semestre" id="semestre" required>
+                    <label class="rotulo" for="id_semestre">Semestre</label>
+                    <select class="campo" name="semestre" id="id_semestre" required>
                         <option value="">Selecione o semestre</option>
                         <option value="1">1º Semestre</option>
                         <option value="2">2º Semestre</option>
@@ -90,60 +95,45 @@
                 </div>
 
                 <div class="grupo-campo">
-                    <label class="rotulo" for="titulo">Título da Aula</label>
-                    <input type="text" class="campo" name="titulo" id="titulo" placeholder="Digite o título da aula" required>
+                    <label class="rotulo" for="id_titulo">Título da Aula</label>
+                    <input type="text" class="campo" name="titulo" id="id_titulo" placeholder="Digite o título da aula" required>
                 </div>
 
                 <div class="grupo-campo">
-                    <label class="rotulo" for="eventos">Eventos Extraordinários</label>
-                    <select class="campo" name="eventos" id="eventos" required>
-                        <option value="nao">Não</option>
-                        <option value="sim">Sim</option>
-                    </select>
+                    <label class="rotulo" for="id_eventos">Eventos Extraordinários</label>
+                    <textarea class="campo campo-texto" name="eventos" id="id_eventos" placeholder="Descreva eventos extraordinários (opcional)"></textarea>
                 </div>
             </div>
-
+    
             <div class="grid">
                 <div class="grupo-campo">
-                    <label class="rotulo" for="conteudo">Conteúdo Curricular</label>
-                    <textarea class="campo campo-texto" name="conteudo" id="conteudo" placeholder="Descreva o conteúdo curricular" required></textarea>
+                    <label class="rotulo" for="id_conteudo">Conteúdo da Caderneta</label>
+                    <textarea class="campo campo-texto" name="conteudo" id="id_conteudo" placeholder="Descreva o conteúdo da caderneta" required></textarea>
                 </div>
 
                 <div class="grupo-campo">
-                    <label class="rotulo" for="metodologia">Metodologia</label>
-                    <textarea class="campo campo-texto" name="metodologia" id="metodologia" placeholder="Descreva a metodologia" required></textarea>
+                    <label class="rotulo" for="id_materiais">Materiais Utilizados</label>
+                    <textarea class="campo campo-texto" name="materiais" id="id_materiais" placeholder="Liste os materiais utilizados (opcional)"></textarea>
                 </div>
 
                 <div class="grupo-campo">
-                    <label class="rotulo" for="recursos">Recursos necessários</label>
-                    <textarea class="campo campo-texto" name="recursos" id="recursos" placeholder="Liste os recursos necessários" required></textarea>
+                    <label class="rotulo" for="id_atividade">Atividade Prática</label>
+                    <textarea class="campo campo-texto" name="atividade" id="id_atividade" placeholder="Descreva a atividade prática (opcional)"></textarea>
                 </div>
             </div>
-            
-            <div class="grid">
-                <div class="grupo-campo">
-                    <label class="rotulo" for="avaliacao">Avaliação</label>
-                    <textarea class="campo campo-texto" name="avaliacao" id="avaliacao" placeholder="Descreva o método de avaliação" required></textarea>
-                </div>
 
-                <div class="grupo-campo">
-                    <label class="rotulo" for="observacao">Observação</label>
-                    <textarea class="campo campo-texto" name="observacao" id="observacao" placeholder="Adicione observações relevantes" required></textarea>
-                </div>
-            </div>
-            
             <div class="botoes">
                 <button type="button" class="botao botao-secundario" onclick="cancelarFormulario()">Cancelar</button>
-                <button type="submit" class="botao botao-primario">Salvar Plano de Aula</button>
+                <button type="submit" class="botao botao-primario">Salvar Caderneta</button>
             </div>
         </form>
     </main>
 
     <div class="modal" id="successModal" style="display:none;">
         <div class="modal-conteudo">
-            <h2>Plano de Aula Salvo com Sucesso!</h2>
+            <h2>Caderneta Salva com Sucesso!</h2>
             <button class="modal-fechar" onclick="closeModal()">&times;</button>
-            <p>Seu plano de aula foi cadastrado com sucesso.</p>
+            <p>Sua caderneta foi cadastrada com sucesso.</p>
             <button class="botao botao-primario" onclick="closeModal()">Fechar</button>
         </div>
     </div>
@@ -157,7 +147,7 @@
         function cancelarFormulario() {
             const confirmar = confirm("Tem certeza que deseja cancelar? Todos os dados serão perdidos.");
             if (confirmar) {
-                window.location.href = "{% url 'pag_planos_de_aula' %}";
+                window.location.href = "{% url 'pag_cadernetas' %}";
             }
         }
 
