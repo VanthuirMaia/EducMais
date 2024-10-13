@@ -55,39 +55,42 @@
             <a href="{% url 'form_caderneta' %}" class="botao botao-primario">Nova Caderneta</a>
         </div>
         <div class="grade" id="grade-planos">
-            <div class="cartao">
-                <div class="cartao-cabecalho">
-                    <h3>
-                        <span class="indicador-disciplina" style="background-color: #0070f3;"></span>
-                        Introdução à Álgebra
-                    </h3>
-                    <span>⋮</span>
+            {% for caderneta in cadernetas %}
+                <div class="cartao">
+                    <div class="cartao-cabecalho">
+                        <h3>
+                            <span class="indicador-disciplina" style="background-color: #0070f3;"></span>
+                            {{ caderneta.titulo }}  <!-- Título da caderneta -->
+                        </h3>
+                        <span>⋮</span>
+                    </div>
+                    <div class="cartao-info">
+                        <span class="cartao-rotulo">Disciplina:</span>
+                        <span>{{ caderneta.disciplina }}</span>
+                    </div>
+                    <div class="cartao-info">
+                        <span class="cartao-rotulo">Data:</span>
+                        <span>{{ caderneta.data }}</span>  <!-- Data da caderneta -->
+                    </div>
+                    <div class="cartao-info">
+                        <span class="cartao-rotulo">Classe:</span>
+                        <span>{{ caderneta.turma }}</span>  <!-- Classe da caderneta -->
+                    </div>
+                    <div class="cartao-info">
+                        <span class="cartao-rotulo">Semestre:</span>
+                        <span>{{ caderneta.semestre }}</span>  <!-- Semestre da caderneta -->
+                    </div>
+                    <div class="cartao-info">
+                        <span class="cartao-rotulo">Turno:</span>
+                        <span>{{ caderneta.turno }}</span>  <!-- Turno da caderneta -->
+                    </div>
                 </div>
-                <div class="cartao-info">
-                    <span class="cartao-rotulo">Disciplina:</span>
-                    <span>Álgebra</span>
-                </div>
-                <div class="cartao-info">
-                    <span class="cartao-rotulo">Data:</span>
-                    <span>06.09.2024</span>
-                </div>
-                <div class="cartao-info">
-                    <span class="cartao-rotulo">Classe:</span>
-                    <span>11º ano</span>
-                </div>
-                <div class="cartao-info">
-                    <span class="cartao-rotulo">Semestre:</span>
-                    <span>Terceiro</span>
-                </div>
-                <div class="cartao-info">
-                    <span class="cartao-rotulo">Turno:</span>
-                    <span>Tarde</span>
-                </div>
-            </div>
-            
-
+            {% empty %}
+                <p>Nenhuma caderneta encontrada.</p>
+            {% endfor %}
         </div>
     </main>
+    
 
     <script>
         function toggleMenu() {

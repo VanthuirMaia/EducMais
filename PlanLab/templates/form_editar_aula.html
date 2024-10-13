@@ -1,0 +1,24 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Plano - Planlab</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Editar Plano de Aula: {{ plano.titulo }}</h1>
+    </header>
+    <main>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}  <!-- Renderiza o formulário com todos os campos -->
+            <button type="submit" class="botao-salvar">Salvar Alterações</button> <!-- Classe para estilização, se necessário -->
+        </form>
+        <a href="{% url 'pag_planos_de_aula' %}" class="botao-cancelar">Cancelar</a> <!-- Botão para cancelar e voltar -->
+    </main>
+</body>
+</html>

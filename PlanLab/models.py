@@ -33,18 +33,39 @@ class Aula(models.Model):
         verbose_name_plural = 'Aulas'
         ordering = ['data_aula']  # Ordenar as aulas pela data da aula
 
+
 class Caderneta(models.Model):
-    aluno = models.CharField(max_length=100)
-    data_aula = models.DateField()
-    disciplina = models.CharField(max_length=100)
-    serie = models.CharField(max_length=50)  # Campo para Série/Ano
-    semestre = models.CharField(max_length=50)  # Campo para Semestre
-    titulo = models.CharField(max_length=100)  # Campo para Título da Aula
-    eventos = models.TextField(blank=True, null=True)  # Campo para Eventos Extraordinários
-    conteudo = models.TextField()  # Campo para Conteúdo
-    materiais = models.TextField(blank=True, null=True)  # Campo para Materiais Utilizados
-    atividade = models.TextField(blank=True, null=True)  # Campo para Atividade Prática
+    # Campos do modelo Caderneta
+    data_aula = models.DateField(verbose_name='Data da Aula')
+    disciplina = models.CharField(max_length=100, verbose_name='Disciplina')
+    serie = models.CharField(max_length=50, verbose_name='Série')
+    semestre = models.IntegerField(verbose_name='Semestre')
+    titulo = models.CharField(max_length=200, verbose_name='Título')
+    eventos = models.TextField(blank=True, null=True, verbose_name='Eventos')
+    conteudo = models.TextField(verbose_name='Conteúdo')
+    materiais = models.TextField(blank=True, null=True, verbose_name='Materiais')
+    atividade = models.TextField(blank=True, null=True, verbose_name='Atividade')
+
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Usuário')
+
+    def __str__(self):
+        return f'{self.titulo} - {self.disciplina}'
+
+    class Meta:
+        verbose_name = 'Caderneta'
+        verbose_name_plural = 'Cadernetas'
+        ordering = ['data_aula']  # Ordenar as cadernetas pela data da aula
+
+class Plano(models.Model):
+    titulo = models.CharField(max_length=200)
+    descricao = models.TextField()
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.aluno} - {self.disciplina} ({self.data_aula})'
+        return self.titulo
+
+    class Meta:
+        verbose_name = 'Plano'
+        verbose_name_plural = 'Planos'
+
+

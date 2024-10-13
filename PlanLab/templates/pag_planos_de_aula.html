@@ -56,7 +56,7 @@
         </div>
         <div class="grade" id="grade-planos">
             {% for aula in aulas %}
-            <div class="cartao">
+            <a href="{% url 'plano' aula.id %}" class="cartao">  <!-- Link que leva à página do plano -->
                 <div class="cartao-cabecalho">
                     <h3>
                         <span class="indicador-disciplina" style="background-color: #0070f3;"></span>
@@ -84,10 +84,11 @@
                     <span class="cartao-rotulo">Turno:</span>
                     <span>{{ aula.turno }}</span>  <!-- Adicione a propriedade de turno se necessário -->
                 </div>
-            </div>
+            </a>  <!-- Fecha o link do card -->
             {% endfor %}
         </div>
     </main>
+    
     
 
     <script>

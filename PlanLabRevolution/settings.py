@@ -71,7 +71,7 @@ DATABASES = {
         'USER': 'planlab_user',
         'PASSWORD': 'acdvPL2846#',
         'HOST': 'localhost',
-        'PORT': '',
+        'PORT': '5432',
     }
 }
 

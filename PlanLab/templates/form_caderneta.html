@@ -53,18 +53,8 @@
             {% csrf_token %}
             <div class="grid">
                 <div class="grupo-campo">
-                    <label class="rotulo" for="id_aluno">Aluno</label>
-                    <input type="text" class="campo" name="aluno" id="id_aluno" placeholder="Digite o nome do aluno" required>
-                </div>
-
-                <div class="grupo-campo">
-                    <label class="rotulo" for="id_data_aula">Data da Aula</label>
-                    <input type="date" class="campo" name="data_aula" id="id_data_aula" required>
-                </div>
-
-                <div class="grupo-campo">
                     <label class="rotulo" for="id_disciplina">Disciplina</label>
-                    <select class="campo" name="disciplina" id="id_disciplina" required>
+                    <select class="campo" name="disciplina" id="disciplina" required>
                         <option value="">Selecione a disciplina</option>
                         <option value="matematica">Matemática</option>
                         <option value="portugues">Português</option>
@@ -74,8 +64,13 @@
                 </div>
 
                 <div class="grupo-campo">
+                    <label class="rotulo" for="id_data_aula">Data da Aula</label>
+                    <input type="date" class="campo" name="data_aula" id="id_data_aula" required>
+                </div>
+
+                <div class="grupo-campo">
                     <label class="rotulo" for="id_serie">Série/Ano</label>
-                    <select class="campo" name="serie" id="id_serie" required>
+                    <select class="campo" name="serie" id="serie" required>
                         <option value="">Selecione a série</option>
                         <option value="1">1º Ano - Fundamental</option>
                         <option value="2">2º Ano - Fundamental</option>
@@ -85,8 +80,8 @@
                 </div>
 
                 <div class="grupo-campo">
-                    <label class="rotulo" for="id_semestre">Semestre</label>
-                    <select class="campo" name="semestre" id="id_semestre" required>
+                    <label class="rotulo" for="id_semestre">Período</label>
+                    <select class="campo" name="semestre" id="semestre" required>
                         <option value="">Selecione o semestre</option>
                         <option value="1">1º Semestre</option>
                         <option value="2">2º Semestre</option>

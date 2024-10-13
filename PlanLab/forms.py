@@ -55,7 +55,6 @@ class CadernetaForm(forms.ModelForm):
     class Meta:
         model = Caderneta
         fields = [
-            'aluno',
             'data_aula',
             'disciplina',
             'serie',
@@ -66,3 +65,38 @@ class CadernetaForm(forms.ModelForm):
             'materiais',
             'atividade',
         ]
+
+        # Labels personalizados (opcional)
+        labels = {
+            'data_aula': 'Data da Aula',
+            'disciplina': 'Disciplina',
+            'serie': 'Série',
+            'semestre': 'Semestre',
+            'titulo': 'Título',
+            'eventos': 'Eventos',
+            'conteudo': 'Conteúdo',
+            'materiais': 'Materiais',
+            'atividade': 'Atividade',
+        }
+
+        # Textos de ajuda (opcional)
+        help_texts = {
+            'data_aula': 'Selecione a data da aula.',
+            'disciplina': 'Informe a disciplina.',
+            'serie': 'Informe a série.',
+            'semestre': 'Informe o semestre.',
+            'titulo': 'Informe o título da aula.',
+            'eventos': 'Descreva os eventos relacionados à aula.',
+            'conteudo': 'Descreva o conteúdo abordado na aula.',
+            'materiais': 'Liste os materiais utilizados.',
+            'atividade': 'Descreva as atividades realizadas.',
+        }
+
+        # Personalização de widgets
+        widgets = {
+            'data_aula': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),  # Campo de data com o widget HTML5 apropriado
+            'conteudo': forms.Textarea(attrs={'rows': 4, 'class': 'form-control'}),
+            'materiais': forms.Textarea(attrs={'rows': 4, 'class': 'form-control'}),
+            'eventos': forms.Textarea(attrs={'rows': 4, 'class': 'form-control'}),
+            'atividade': forms.Textarea(attrs={'rows': 4, 'class': 'form-control'}),
+        }
