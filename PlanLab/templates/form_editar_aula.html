@@ -5,20 +5,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Plano - Planlab</title>
+    <title>Planlab - Editar Plano de Aula</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <header>
-        <h1>Editar Plano de Aula: {{ plano.titulo }}</h1>
+    <header class="cabecalho">
+        <button class="botao-menu" onclick="toggleMenu()">☰</button>
+        <img class="logo" src="{% static 'img/planlab logo branco p.png' %}" alt="Logo Planlab">
+        <div>
+            <span class="botao-menu">
+                <img src="{% static 'img/avatar-1.png' %}" alt="Avatar" class="avatar-menu">
+            </span>
+        </div>
     </header>
-    <main>
-        <form method="post">
+    
+    <nav class="barra-lateral">
+        <div class="perfil">
+            <img class="avatar" src="{% static 'img/avatar-1.png' %}" alt="Avatar">
+            <h3>Lairson Alencar</h3>
+            <p>Prof. Cyber Security</p>
+        </div>
+        <ul class="menu">
+            <li class="menu-item">
+                <img src="{% static 'img/home.png' %}" alt="Home"> Início
+            </li>
+            <li class="menu-item ativo">
+                <a href="{% url 'pag_planos_de_aula' %}">
+                    <img src="{% static 'img/Plano.png' %}" alt="Plano">Planos de Aula
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="{% url 'pag_cadernetas' %}">
+                    <img src="{% static 'img/Caderneta.png' %}" alt="Cadernetas">Cadernetas
+                </a>
+            </li>
+            <li class="menu-item">
+                <img src="{% static 'img/sair.png' %}" alt="Sair">Sair
+            </li>
+        </ul>
+    </nav>
+    
+    <main class="conteudo-principal-form">
+        <div class="titulo-form">
+            <h1 style="margin-bottom: 1rem; font-weight: 600; font-size: 2rem;">Editar Plano de Aula</h1>
+        </div>
+
+        <form class="formulario" method="POST" action="{% url 'form_editar_aula' plano.id %}">
             {% csrf_token %}
-            {{ form.as_p }}  <!-- Renderiza o formulário com todos os campos -->
-            <button type="submit" class="botao-salvar">Salvar Alterações</button> <!-- Classe para estilização, se necessário -->
+            <div class="grid">
+                <div class="grupo-campo">
+                    <label class="rotulo" for="disciplina">Disciplina</label>
+                    <select class="campo" name="disciplina" id="disciplina" required>
+                        <option value="">Selecione a disciplina</option>
+                        <option value="matematica" {% if plano.disciplina == 'matematica' %}selected{% endif %}>Matemática</option>
+                        <option value="portugues" {% if plano.disciplina == 'portugues' %}selected{% endif %}>Português</option>
+                        <option value="ciencias" {% if plano.disciplina == 'ciencias' %}selected{% endif %}>Ciências</option>
+                        <option value="fisica" {% if plano.disciplina == 'fisica' %}selected{% endif %}>Física</option>
+                    </select>
+                </div>
+        
+                <div class="grupo-campo">
+                    <label class="rotulo" for="data">Data</label>
+                    <input type="date" class="campo" name="data" id="data" value="{{ plano.data_aula|date:'Y-m-d' }}" required>
+                </div>
+        
+                <div class="grupo-campo">
+                    <label class="rotulo" for="serie">Turma</label>
+                    <select class="campo" name="serie" id="serie" required>
+                        <option value="">Selecione a série</option>
+                        <option value="1" {% if plano.turma == '1' %}selected{% endif %}>1º Ano - Fundamental</option>
+                        <option value="2" {% if plano.turma == '2' %}selected{% endif %}>2º Ano - Fundamental</option>
+                        <option value="3" {% if plano.turma == '3' %}selected{% endif %}>3º Ano - Fundamental</option>
+                        <option value="4" {% if plano.turma == '4' %}selected{% endif %}>1º Ano - Médio</option>
+                    </select>
+                </div>
+        
+                <div class="grupo-campo">
+                    <label class="rotulo" for="semestre">Período</label>
+                    <select class="campo" name="semestre" id="semestre" required>
+                        <option value="">Selecione o semestre</option>
+                        <option value="1" {% if plano.semestre == '1' %}selected{% endif %}>1º Semestre</option>
+                        <option value="2" {% if plano.semestre == '2' %}selected{% endif %}>2º Semestre</option>
+                        <option value="3" {% if plano.semestre == '3' %}selected{% endif %}>3º Semestre</option>
+                    </select>
+                </div>
+        
+                <div class="grupo-campo">
+                    <label class="rotulo" for="titulo">Título da Aula</label>
+                    <input type="text" class="campo" name="titulo" id="titulo" value="{{ plano.titulo }}" placeholder="Digite o título da aula" required>
+                </div>
+        
+                <div class="grupo-campo">
+                    <label class="rotulo" for="eventos">Eventos Extraordinários</label>
+                    <select class="campo" name="eventos" id="eventos" required>
+                        <option value="nao" {% if plano.eventos_extraordinarios == 'nao' %}selected{% endif %}>Não</option>
+                        <option value="sim" {% if plano.eventos_extraordinarios == 'sim' %}selected{% endif %}>Sim</option>
+                    </select>
+                </div>
+            </div>
+        
+            <div class="grid">
+                <div class="grupo-campo">
+                    <label class="rotulo" for="conteudo">Conteúdo Programático</label>
+                    <textarea class="campo campo-texto" name="conteudo" id="conteudo" placeholder="Descreva o conteúdo curricular" required>{{ plano.conteudo_programatico }}</textarea>
+                </div>
+        
+                <div class="grupo-campo">
+                    <label class="rotulo" for="metodologia">Metodologia</label>
+                    <textarea class="campo campo-texto" name="metodologia" id="metodologia" placeholder="Descreva a metodologia" required>{{ plano.metodologia }}</textarea>
+                </div>
+        
+                <div class="grupo-campo">
+                    <label class="rotulo" for="recursos">Recursos necessários</label>
+                    <textarea class="campo campo-texto" name="recursos" id="recursos" placeholder="Liste os recursos necessários" required>{{ plano.recursos_necessarios }}</textarea>
+                </div>
+            </div>
+
+            <div class="container-botoes">
+                <button class="botao botao-primario" type="submit">Salvar</button>
+                <button type="button" class="botao botao-secundario" onclick="location.href='{% url 'pag_planos_de_aula' %}'">Voltar</button>
+            </div>
         </form>
-        <a href="{% url 'pag_planos_de_aula' %}" class="botao-cancelar">Cancelar</a> <!-- Botão para cancelar e voltar -->
+
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
     </main>
+
+    <script src="{% static 'js/script.js' %}"></script>
 </body>
 </html>

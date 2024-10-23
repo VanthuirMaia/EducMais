@@ -45,7 +45,7 @@ ROOT_URLCONF = 'PlanLabRevolution.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'PlanLab', 'templates')], 
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

@@ -23,6 +23,8 @@ class Aula(models.Model):
         verbose_name='Avaliação e Observações'
     )
     observacoes = models.TextField(blank=True, null=True, verbose_name='Observações')
+    
+    # Chave estrangeira para o usuário
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Usuário')
 
     def __str__(self):
@@ -32,7 +34,6 @@ class Aula(models.Model):
         verbose_name = 'Aula'
         verbose_name_plural = 'Aulas'
         ordering = ['data_aula']  # Ordenar as aulas pela data da aula
-
 
 class Caderneta(models.Model):
     # Campos do modelo Caderneta
@@ -55,17 +56,5 @@ class Caderneta(models.Model):
         verbose_name = 'Caderneta'
         verbose_name_plural = 'Cadernetas'
         ordering = ['data_aula']  # Ordenar as cadernetas pela data da aula
-
-class Plano(models.Model):
-    titulo = models.CharField(max_length=200)
-    descricao = models.TextField()
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.titulo
-
-    class Meta:
-        verbose_name = 'Plano'
-        verbose_name_plural = 'Planos'
 
 

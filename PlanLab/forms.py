@@ -100,3 +100,10 @@ class CadernetaForm(forms.ModelForm):
             'eventos': forms.Textarea(attrs={'rows': 4, 'class': 'form-control'}),
             'atividade': forms.Textarea(attrs={'rows': 4, 'class': 'form-control'}),
         }
+
+class PlanoAula(forms.ModelForm):
+    class Meta:
+        model = Aula  # Certifique-se de que está usando o modelo correto
+        fields = '__all__'  # Isso irá incluir todos os campos do modelo Aula
+
+

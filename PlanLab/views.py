@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Aula, Caderneta
-from .forms import CadernetaForm
+from .forms import CadernetaForm, PlanoAula
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
@@ -19,7 +19,6 @@ def pag_planos_de_aula(request):
 @login_required
 def form_aula(request):
     if request.method == 'POST':
-        # Coletando dados do formulário
         form_data = {
             'disciplina': request.POST['disciplina'],
             'data_aula': request.POST['data'],
@@ -35,13 +34,32 @@ def form_aula(request):
             'usuario': request.user  # Adicionando o usuário logado
         }
         
-        # Cria a instância do modelo e salva no banco de dados
         Aula.objects.create(**form_data)
 
         messages.success(request, 'Plano de aula salvo com sucesso!')
         return redirect('pag_planos_de_aula')
 
     return render(request, 'form_aula.html')
+
+
+@login_required
+def form_editar_aula(request, id):
+    # Obtém o plano de aula existente com base no ID
+    plano = Aula.objects.get(id=id)  # Muda para .get() porque queremos tratar a exceção manualmente
+
+    if request.method == 'POST':
+        # Preenche o formulário com os dados do POST
+        form = PlanoAula(request.POST, instance=plano)  # instance=plano preenche o formulário com os dados existentes
+        if form.is_valid():
+            form.save()  # Salva as alterações no banco de dados
+            messages.success(request, 'Plano de aula editado com sucesso!')
+            return redirect('pag_planos_de_aula')  # Redireciona para a lista de planos de aula
+    else:
+        # Se não for POST, cria o formulário com os dados existentes
+        form = PlanoAula(instance=plano)
+
+    return render(request, 'form_editar_aula.html', {'form': form, 'plano': plano})
+
 
 
 @login_required
@@ -60,10 +78,10 @@ def form_caderneta(request):
         form = CadernetaForm(request.POST)
         if form.is_valid():
             caderneta = form.save(commit=False)
-            caderneta.usuario = request.user  # Preenchendo o campo usuário
+            caderneta.usuario = request.user 
             caderneta.save()
             messages.success(request, 'Caderneta salva com sucesso!')
-            return redirect('pag_cadernetas')  # Redirecionar para a lista de cadernetas
+            return redirect('pag_cadernetas')
     else:
         form = CadernetaForm()
 
@@ -74,10 +92,12 @@ def form_caderneta(request):
         'periodos': periodos
     })
 
-
+@login_required
 def plano(request, id):
-    aula = get_object_or_404(Aula, id=id)  # Busca a aula com base no ID
-    return render(request, 'plano.html', {'plano': aula})  # Alterado para 'plano'
+    plano = get_object_or_404(Aula, id=id) 
+    return render(request, 'plano.html', {'plano': plano})
+
+
 
 
 

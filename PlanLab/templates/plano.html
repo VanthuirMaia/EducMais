@@ -58,6 +58,10 @@
                     <span class="valor-detalhe">{{ plano.disciplina }}</span>
                 </div>
                 <div class="item-detalhe">
+                    <span class="rotulo-detalhe">Data da Aula:</span>
+                    <span class="valor-detalhe">{{ plano.data_aula|date:"d/m/Y" }}</span>
+                </div>
+                <div class="item-detalhe">
                     <span class="rotulo-detalhe">Turma:</span>
                     <span class="valor-detalhe">{{ plano.turma }}</span>
                 </div>
@@ -69,10 +73,7 @@
                     <span class="rotulo-detalhe">Eventos Extraordinários:</span>
                     <span class="valor-detalhe">{{ plano.eventos_extraordinarios }}</span>
                 </div>
-                <div class="item-detalhe">
-                    <span class="rotulo-detalhe">Data da Aula:</span>
-                    <span class="valor-detalhe">{{ plano.data_aula|date:"d/m/Y" }}</span>
-                </div>
+
             </div>
             <div class="grade-aula">
                 <div class="secao">
@@ -95,6 +96,12 @@
                     <h3 class="titulo-secao">Observações:</h3>
                     <p class="observacoes">{{ plano.observacoes }}</p>
                 </div>
+            </div>
+           <br>
+           <br>
+           <br>
+            <div>
+                <a href="{% url 'form_editar_aula' plano.id %}" class="botao botao-primario">Editar Plano de Aula</a>
             </div>
         </div>
     </main>
