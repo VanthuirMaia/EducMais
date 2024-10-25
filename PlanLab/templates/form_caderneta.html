@@ -21,7 +21,7 @@
     <nav class="barra-lateral">
         <div class="perfil">
             <img src="{% static 'img/avatar-1.png' %}" alt="Avatar" class="avatar">
-            <h3>Lairson Alencar</h3>
+            <h3>{{ user.username }}</h3>  <!-- Nome do usuário dinâmico -->
             <p>Prof. Cyber Security</p>
         </div>
         <ul class="menu">

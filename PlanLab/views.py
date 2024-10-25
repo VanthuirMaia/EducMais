@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Aula, Caderneta
-from .forms import CadernetaForm, PlanoAula
+from .forms import CadernetaForm, AulaForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
@@ -43,22 +43,21 @@ def form_aula(request):
 
 
 @login_required
-def form_editar_aula(request, id):
-    # Obtém o plano de aula existente com base no ID
-    plano = Aula.objects.get(id=id)  # Muda para .get() porque queremos tratar a exceção manualmente
+def form_editar_aula(request, plano_id):
+    # Buscar o plano existente pelo ID ou retornar 404 se não existir
+    plano = get_object_or_404(Aula, id=plano_id)
 
     if request.method == 'POST':
-        # Preenche o formulário com os dados do POST
-        form = PlanoAula(request.POST, instance=plano)  # instance=plano preenche o formulário com os dados existentes
+        form = AulaForm(request.POST, instance=plano)  # Atualizar o plano existente
         if form.is_valid():
-            form.save()  # Salva as alterações no banco de dados
-            messages.success(request, 'Plano de aula editado com sucesso!')
-            return redirect('pag_planos_de_aula')  # Redireciona para a lista de planos de aula
+            form.save()
+            messages.success(request, 'Plano de aula atualizado com sucesso!')
+            return redirect('plano', id=plano_id)  # Redirecionar após salvar
     else:
-        # Se não for POST, cria o formulário com os dados existentes
-        form = PlanoAula(instance=plano)
+        form = AulaForm(instance=plano)  # Carregar dados existentes no formulário
 
     return render(request, 'form_editar_aula.html', {'form': form, 'plano': plano})
+
 
 
 
@@ -96,9 +95,6 @@ def form_caderneta(request):
 def plano(request, id):
     plano = get_object_or_404(Aula, id=id) 
     return render(request, 'plano.html', {'plano': plano})
-
-
-
 
 
 @login_required
