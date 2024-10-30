@@ -102,6 +102,10 @@
            <br>
             <div>
                 <a href="{% url 'form_editar_aula' plano.id %}" class="botao botao-primario">Editar Plano de Aula</a>
+                <form action="{% url 'excluir_plano' plano.id %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="botao botao-perigo" onclick="return confirm('Tem certeza que deseja excluir este Plano de Aula?');">Excluir Plano de Aula</button>
+                </form>
             </div>
         </div>
     </main>

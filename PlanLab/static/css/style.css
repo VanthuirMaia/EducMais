@@ -225,6 +225,7 @@ body {
 .botao-primario:hover {
     background-color: var(--primary-hover);
 }
+
 .botao-secundario {
     border: 2px solid var(--accents-3);
     background-color: var(--accents-1);

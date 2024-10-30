@@ -5,22 +5,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planlab - Formulário de Caderneta</title>
+    <title>Planlab - Editar Plano de Aula</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
     <header class="cabecalho">
         <button class="botao-menu" onclick="toggleMenu()">☰</button>
-        <img class="logo" src="{% static 'img/planlab_logo_branco_p.png' %}" alt="Logo">
+        <img class="logo" src="{% static 'img/planlab_logo_branco_p.png' %}" alt="Logo Planlab">
         <div>
-            <span class="botao-menu"><img src="{% static 'img/avatar-1.png' %}" alt="Avatar" class="avatar-menu"></span>
+            <span class="botao-menu">
+                <img src="{% static 'img/avatar-1.png' %}" alt="Avatar" class="avatar-menu">
+            </span>
         </div>
     </header>
     
     <nav class="barra-lateral">
         <div class="perfil">
-            <img src="{% static 'img/avatar-1.png' %}" alt="Avatar" class="avatar">
+            <img class="avatar" src="{% static 'img/avatar-1.png' %}" alt="Avatar">
             <h3>{{ user.username }}</h3>  <!-- Nome do usuário dinâmico -->
             <p>Prof. Cyber Security</p>
         </div>
@@ -35,23 +37,23 @@
             </li>
             <li class="menu-item ativo">
                 <a href="{% url 'pag_cadernetas' %}">
-                    <img src="{% static 'img/Caderneta.png' %}" alt="Cadernetas"> Cadernetas
+                    <img src="{% static 'img/Caderneta.png' %}" alt="Cadernetas">Cadernetas
                 </a>
             </li>
             <li class="menu-item">
-                <img src="{% static 'img/sair.png' %}" alt="sair"> Sair
+                <img src="{% static 'img/sair.png' %}" alt="Sair">Sair
             </li>
         </ul>
     </nav>
     
     <main class="conteudo-principal-form">
         <div class="titulo-form">
-            <h1 style="margin-bottom: 1rem; font-weight: 600; font-size: 2rem;">Formulário de Caderneta</h1>
+            <h1 style="margin-bottom: 1rem; font-weight: 600; font-size: 2rem;">Editar Caderneta</h1>
         </div>
     
-        <form method="post" class="formulario" action="{% url 'form_caderneta' %}">
+        <form class="formulario" method="POST" action="{% url 'form_editar_caderneta' caderneta.id %}">
             {% csrf_token %}
-
+    
             <div class="grid">
                 <div class="grupo-campo">
                     <label class="rotulo" for="disciplina">Disciplina</label>
@@ -63,23 +65,23 @@
                         <option value="fisica" {% if caderneta.disciplina == 'fisica' %}selected{% endif %}>Física</option>
                     </select>
                 </div>
-
+    
                 <div class="grupo-campo">
-                    <label class="rotulo" for="id_data_aula">Data</label>
-                    <input type="date" class="campo" name="data_aula" id="id_data_aula" required>
+                    <label class="rotulo" for="data_aula">Data</label>
+                    <input type="date" class="campo" name="data_aula" id="data_aula" value="{{ caderneta.data_aula|date:'Y-m-d' }}" required>
                 </div>
-
+    
                 <div class="grupo-campo">
-                    <label class="rotulo" for="id_turma">Turma</label>
+                    <label class="rotulo" for="turma">Turma</label>
                     <select class="campo" name="turma" id="turma" required>
-                        <option value="">Selecione a turma</option>
+                        <option value="">Selecione a série</option>
                         <option value="1" {% if caderneta.turma == '1' %}selected{% endif %}>1º Ano - Fundamental</option>
                         <option value="2" {% if caderneta.turma == '2' %}selected{% endif %}>2º Ano - Fundamental</option>
                         <option value="3" {% if caderneta.turma == '3' %}selected{% endif %}>3º Ano - Fundamental</option>
                         <option value="4" {% if caderneta.turma == '4' %}selected{% endif %}>1º Ano - Médio</option>
                     </select>
                 </div>
-
+    
                 <div class="grupo-campo">
                     <label class="rotulo" for="semestre">Período</label>
                     <select class="campo" name="semestre" id="semestre" required>
@@ -89,73 +91,48 @@
                         <option value="3" {% if caderneta.semestre|stringformat:"s" == '3' %}selected{% endif %}>3º Semestre</option>
                     </select>
                 </div>
-
+    
                 <div class="grupo-campo">
                     <label class="rotulo" for="eventos">Eventos Extraordinários</label>
                     <select class="campo" name="eventos" id="eventos" required>
-                        <option value="nao">Não</option>
-                        <option value="sim">Sim</option>
+                        <option value="nao" {% if caderneta.eventos == 'nao' %}selected{% endif %}>Não</option>
+                        <option value="sim" {% if caderneta.eventos == 'sim' %}selected{% endif %}>Sim</option>
                     </select>
                 </div>
-
+    
                 <div class="grupo-campo">
-                    <label class="rotulo" for="id_titulo">Título da Aula</label>
-                    <input type="text" class="campo" name="titulo" id="id_titulo" placeholder="Digite o título da aula" required>
+                    <label class="rotulo" for="titulo">Título da Aula</label>
+                    <input type="text" class="campo" name="titulo" id="titulo" value="{{ caderneta.titulo }}" placeholder="Digite o título da aula" required>
                 </div>
-
-
             </div>
     
             <div class="grid">
                 <div class="grupo-campo">
-                    <label class="rotulo" for="id_conteudo">Conteúdo da Caderneta</label>
-                    <textarea class="campo campo-texto" name="conteudo" id="id_conteudo" placeholder="Descreva o conteúdo da caderneta" required></textarea>
+                    <label class="rotulo" for="conteudo">Conteúdo da Caderneta</label>
+                    <textarea class="campo campo-texto" name="conteudo" id="conteudo" placeholder="Descreva o conteúdo da caderneta" required>{{ caderneta.conteudo }}</textarea>
                 </div>
-
+    
                 <div class="grupo-campo">
-                    <label class="rotulo" for="id_materiais">Materiais Utilizados</label>
-                    <textarea class="campo campo-texto" name="materiais" id="id_materiais" placeholder="Liste os materiais utilizados (opcional)"></textarea>
+                    <label class="rotulo" for="materiais">Materiais Utilizados</label>
+                    <textarea class="campo campo-texto" name="materiais" id="materiais" placeholder="Liste os materiais utilizados (opcional)">{{ caderneta.materiais }}</textarea>
                 </div>
-
+    
                 <div class="grupo-campo">
-                    <label class="rotulo" for="id_atividade">Atividade Prática</label>
-                    <textarea class="campo campo-texto" name="atividade" id="id_atividade" placeholder="Descreva a atividade prática (opcional)"></textarea>
+                    <label class="rotulo" for="atividade">Atividade Prática</label>
+                    <textarea class="campo campo-texto" name="atividade" id="atividade" placeholder="Descreva a atividade prática (opcional)">{{ caderneta.atividade }}</textarea>
                 </div>
             </div>
-
+    
             <div class="botoes">
-                <button type="button" class="botao botao-secundario" onclick="cancelarFormulario()">Cancelar</button>
+                <button type="button" class="botao botao-secundario" onclick="location.href='{% url 'pag_cadernetas' %}'">Cancelar</button>
                 <button type="submit" class="botao botao-primario">Salvar Caderneta</button>
             </div>
         </form>
     </main>
+    
+    
+    
+    
 
-    <div class="modal" id="successModal" style="display:none;">
-        <div class="modal-conteudo">
-            <h2>Caderneta Salva com Sucesso!</h2>
-            <button class="modal-fechar" onclick="closeModal()">&times;</button>
-            <p>Sua caderneta foi cadastrada com sucesso.</p>
-            <button class="botao botao-primario" onclick="closeModal()">Fechar</button>
-        </div>
-    </div>
-
-    <script>
-        function toggleMenu() {
-            const menu = document.querySelector('.barra-lateral');
-            menu.classList.toggle('active');
-        }
-
-        function cancelarFormulario() {
-            const confirmar = confirm("Tem certeza que deseja cancelar? Todos os dados serão perdidos.");
-            if (confirmar) {
-                window.location.href = "{% url 'pag_cadernetas' %}";
-            }
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('successModal');
-            modal.style.display = 'none';
-        }
-    </script>
 </body>
 </html>

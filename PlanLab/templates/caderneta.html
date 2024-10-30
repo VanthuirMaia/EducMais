@@ -2,103 +2,113 @@
 
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planlab</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Planlab - Cadernetas</title>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    </head>
 <body>
     <header class="cabecalho">
-        <button class="botao-menu" onclick="alternarMenu()">☰</button>
-        <img class="logo" src="../img/planlab logo branco p.png" alt="Logo Planlab">
+        <button class="botao-menu" onclick="toggleMenu()">☰</button>
+        <img class="logo" src="{% static 'img/planlab_logo_branco_p.png' %}" alt="Logo">
         <div>
-            <span class="botao-menu"><img src="../img/avatar-1.png" alt="Avatar" class="avatar-menu"></span>
+            <span class="botao-menu"><img src="{% static 'img/avatar-1.png' %}" alt="Avatar" class="avatar-menu"></span>
         </div>
     </header>
     
     <nav class="barra-lateral">
         <div class="perfil">
-            <img src="../img/avatar-1.png" alt="Avatar" class="avatar">
+            <img class="avatar" src="{% static 'img/avatar-1.png' %}" alt="Logo">
             <h3>{{ user.username }}</h3>  <!-- Nome do usuário dinâmico -->
             <p>Prof. Cyber Security</p>
         </div>
         <ul class="menu">
-            <li class="menu-item"><img src="../img/home.png" class="icon"> Início</li>
-            <li class="menu-item"><img src="../img/Plano.png" class="icon">Plano de Aula</li>
-            <li class="menu-item ativo"><img src="../img/Caderneta.png" class="icon">Caderneta</li>
-            <li class="menu-item"><img src="../img/sair.png" class="icon">Sair</li>
+            <li class="menu-item">
+                <a href="{% url 'home' %}">
+                    <img src="{% static 'img/home.png' %}" alt="Home"> Início
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="{% url 'pag_planos_de_aula' %}">
+                    <img src="{% static 'img/Plano.png' %}" alt="Plano">Planos de Aula
+                </a>
+            </li>
+
+            <li class="menu-item ativo">
+                <a href="{% url 'pag_cadernetas' %}">
+                    <img src="{% static 'img/Caderneta.png' %}" alt="Plano">Cadernetas
+                </a>
+            </li>
+
+            <li class="menu-item">
+                <img src="{% static 'img/sair.png' %}" alt="sair">Sair
+            </li>
+            
         </ul>
     </nav>
     
     <main class="conteudo-principal">
         <div class="plano-aula">
-            <h2 class="titulo-aula">Minha Caderneta</h2>
-            <p class="subtitulo-aula">Estatística para análise de dados</p>
+            <h2 class="subtitulo-aula">{{ caderneta.titulo }}</h2>
             <div class="detalhes-aula">
                 <div class="item-detalhe">
-                    <span class="rotulo-detalhe">Classe:</span>
-                    <span class="valor-detalhe">5º ano</span>
+                    <span class="rotulo-detalhe">Disciplina:</span>
+                    <span class="valor-detalhe">{{ caderneta.disciplina }}</span>
                 </div>
                 <div class="item-detalhe">
-                    <span class="rotulo-detalhe">Turno:</span>
-                    <span class="valor-detalhe">Noite</span>
+                    <span class="rotulo-detalhe">Data:</span>
+                    <span class="valor-detalhe">{{ caderneta.data_aula|date:"d/m/Y" }}</span>
                 </div>
                 <div class="item-detalhe">
-                    <span class="rotulo-detalhe">Assunto:</span>
-                    <span class="valor-detalhe">Análise de dados</span>
+                    <span class="rotulo-detalhe">Turma:</span>
+                    <span class="valor-detalhe">{{ caderneta.turma }}</span>
                 </div>
                 <div class="item-detalhe">
-                    <span class="rotulo-detalhe">Horário:</span>
-                    <span class="valor-detalhe">19:00 - 19:40</span>
+                    <span class="rotulo-detalhe">Período:</span>
+                    <span class="valor-detalhe">{{ caderneta.semestre }}</span>
                 </div>
                 <div class="item-detalhe">
-                    <span class="rotulo-detalhe">Data da lição:</span>
-                    <span class="valor-detalhe">15/10/24</span>
-                </div>
-                <div class="item-detalhe">
-                    <span class="rotulo-detalhe">Eventos extra.:</span>
-                    <span class="valor-detalhe">Não</span>
+                    <span class="rotulo-detalhe">Eventos Extraordinários:</span>
+                    <span class="valor-detalhe">{{ caderneta.eventos|yesno:"Sim,Não" }}</span>
                 </div>
             </div>
             <div class="grade-aula">
                 <div class="secao">
                     <h3 class="titulo-secao">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
                         Conteúdo:
                     </h3>
-                    <ul class="lista-conteudo">
-                        <li>Estatística Descritiva (Média, Mediana, Moda, Desvio Padrão)</li>
-                        <li>Probabilidade básica</li>
-                        <li>Distribuições de probabilidade</li>
-                        <li>Inferência estatística</li>
-                        <li>Teste de hipóteses</li>
-                    </ul>
+                    <p>{{ caderneta.conteudo }}</p>
                 </div>
                 <div class="secao">
                     <h3 class="titulo-secao">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
                         Materiais Utilizados:
                     </h3>
-                    <ul class="lista-materiais">
-                        <li>Planilhas de dados</li>
-                        <li>Software Estatístico</li>
-                        <li>Slides ou PDFs</li>
-                        <li>Calculadora Científica</li>
-                        <li>Tutoriais e documentação on-line</li>
-                    </ul>
+                    <p>{{ caderneta.materiais }}</p>
                 </div>
                 <div class="secao">
                     <h3 class="titulo-secao">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                         Atividade Prática:
                     </h3>
-                    <p>Forneça um conjunto de dados do mundo real, como vendas ou notas dos alunos, e peça aos alunos que calculem as estatísticas descritivas (média, mediana, moda, desvio padrão). Em seguida, realizariam testes de hipóteses para verificar diferenças estatisticamente significativas entre os grupos, aplicando conceitos de probabilidade e inferência estatística.</p>
+                    <p>{{ caderneta.atividade }}</p>
                 </div>
+            </div>
+            <br>
+            <br>
+            <br>
+            <div>
+                <a href="{% url 'form_editar_caderneta' caderneta.id %}" class="botao botao-primario">Editar Caderneta</a>
+                <form action="{% url 'excluir_caderneta' caderneta.id %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="botao botao-perigo" onclick="return confirm('Tem certeza que deseja excluir esta caderneta?');">Excluir Caderneta</button>
+                </form>
             </div>
         </div>
     </main>
+    
+    
 
     <script>
         function alternarMenu() {

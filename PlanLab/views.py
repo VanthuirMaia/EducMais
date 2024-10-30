@@ -15,6 +15,11 @@ def pag_planos_de_aula(request):
     aulas = Aula.objects.all()
     return render(request, 'pag_planos_de_aula.html', {'aulas': aulas})
 
+@login_required
+def plano(request, id):
+    plano = get_object_or_404(Aula, id=id) 
+    return render(request, 'plano.html', {'plano': plano})
+
 
 @login_required
 def form_aula(request):
@@ -44,7 +49,6 @@ def form_aula(request):
 
 @login_required
 def form_editar_aula(request, plano_id):
-    # Buscar o plano existente pelo ID ou retornar 404 se não existir
     plano = get_object_or_404(Aula, id=plano_id)
 
     if request.method == 'POST':
@@ -58,6 +62,26 @@ def form_editar_aula(request, plano_id):
 
     return render(request, 'form_editar_aula.html', {'form': form, 'plano': plano})
 
+@login_required
+def excluir_plano(request, plano_id):
+    plano = get_object_or_404(Aula, id=plano_id)
+    
+    if request.method == 'POST':
+        plano.delete()
+        return redirect('pag_planos_de_aula')  # Redireciona para a página pag_planos
+    else:
+        # Se não for um POST, você pode redirecionar ou lidar de outra forma.
+        return redirect('pag_planos_de_aula')  # Você pode adicionar uma mensagem de erro aqui, se desejar.
+    
+
+
+
+    
+
+@login_required
+def caderneta(request, id):
+    caderneta = get_object_or_404(Caderneta, id=id)
+    return render(request, 'caderneta.html', {'caderneta': caderneta})
 
 
 
@@ -92,9 +116,33 @@ def form_caderneta(request):
     })
 
 @login_required
-def plano(request, id):
-    plano = get_object_or_404(Aula, id=id) 
-    return render(request, 'plano.html', {'plano': plano})
+def form_editar_caderneta(request, caderneta_id):
+    caderneta = get_object_or_404(Caderneta, id=caderneta_id)
+
+    if request.method == 'POST':
+        form = CadernetaForm(request.POST, instance=caderneta)  # Atualizar a caderneta existente
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Caderneta atualizada com sucesso!')
+            return redirect('caderneta', id=caderneta_id)  # Redirecionar após salvar
+    else:
+        form = CadernetaForm(instance=caderneta)  # Carregar dados existentes no formulário
+
+    return render(request, 'form_editar_caderneta.html', {'form': form, 'caderneta': caderneta})
+
+
+
+@login_required
+def excluir_caderneta(request, id):
+    caderneta = get_object_or_404(Caderneta, id=id)
+    if request.method == 'POST':
+        caderneta.delete()
+        return redirect('pag_cadernetas')  # Redireciona para a página pag_cadernetas
+    else:
+        # Se não for um POST, você pode redirecionar ou lidar de outra forma.
+        return redirect('pag_cadernetas')  # Você pode adicionar uma mensagem de erro aqui, se desejar.
+
+
 
 
 @login_required
@@ -106,8 +154,4 @@ def login_view(request):
 def cadastro(request):
     return render(request, 'cadastro.html')
 
-
-@login_required
-def caderneta(request):
-    return render(request, 'caderneta.html')
 

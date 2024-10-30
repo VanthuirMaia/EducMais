@@ -39,7 +39,7 @@ class Caderneta(models.Model):
     # Campos do modelo Caderneta
     data_aula = models.DateField(verbose_name='Data da Aula')
     disciplina = models.CharField(max_length=100, verbose_name='Disciplina')
-    serie = models.CharField(max_length=50, verbose_name='Série')
+    turma = models.CharField(max_length=50, verbose_name='Turma')
     semestre = models.IntegerField(verbose_name='Semestre')
     titulo = models.CharField(max_length=200, verbose_name='Título')
     eventos = models.TextField(blank=True, null=True, verbose_name='Eventos')

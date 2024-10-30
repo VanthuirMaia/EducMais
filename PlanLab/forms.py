@@ -57,7 +57,7 @@ class CadernetaForm(forms.ModelForm):
         fields = [
             'data_aula',
             'disciplina',
-            'serie',
+            'turma',
             'semestre',
             'titulo',
             'eventos',
@@ -70,7 +70,7 @@ class CadernetaForm(forms.ModelForm):
         labels = {
             'data_aula': 'Data da Aula',
             'disciplina': 'Disciplina',
-            'serie': 'Série',
+            'turma': 'Turma',
             'semestre': 'Semestre',
             'titulo': 'Título',
             'eventos': 'Eventos',
@@ -83,7 +83,7 @@ class CadernetaForm(forms.ModelForm):
         help_texts = {
             'data_aula': 'Selecione a data da aula.',
             'disciplina': 'Informe a disciplina.',
-            'serie': 'Informe a série.',
+            'turma': 'Informe a turma.',
             'semestre': 'Informe o semestre.',
             'titulo': 'Informe o título da aula.',
             'eventos': 'Descreva os eventos relacionados à aula.',
@@ -105,5 +105,6 @@ class PlanoAula(forms.ModelForm):
     class Meta:
         model = Aula  # Certifique-se de que está usando o modelo correto
         fields = '__all__'  # Isso irá incluir todos os campos do modelo Aula
+
 
 
