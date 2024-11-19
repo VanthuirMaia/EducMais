@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Aula, Caderneta
+from .models import Aula, Caderneta, Disciplina, Turma, Semestre
 from .forms import CadernetaForm, AulaForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -25,26 +25,34 @@ def plano(request, id):
 def form_aula(request):
     if request.method == 'POST':
         form_data = {
-            'disciplina': request.POST['disciplina'],
+            'disciplina': Disciplina.objects.get(id=request.POST['disciplina']),
             'data_aula': request.POST['data'],
-            'turma': request.POST['serie'],
-            'semestre': request.POST['semestre'],
+            'turma': Turma.objects.get(id=request.POST['serie']),
+            'semestre': Semestre.objects.get(id=request.POST['semestre']),
             'titulo': request.POST['titulo'],
             'eventos_extraordinarios': request.POST.get('eventos', ''),
-            'conteudo_programatico': request.POST['conteudo'],
+            'conteudo_programatico': request.POST['conteudo_programatico'],
             'metodologia': request.POST['metodologia'],
-            'recursos_necessarios': request.POST['recursos'],
-            'avaliacao_observacoes': request.POST.get('avaliacao', ''),
+            'recursos_necessarios': request.POST['recursos_necessarios'],
+            'avaliacao_observacoes': request.POST.get('avaliacao_observacoes', ''),
             'observacoes': request.POST.get('observacao', ''),
             'usuario': request.user  # Adicionando o usuário logado
         }
-        
+
         Aula.objects.create(**form_data)
 
         messages.success(request, 'Plano de aula salvo com sucesso!')
         return redirect('pag_planos_de_aula')
 
-    return render(request, 'form_aula.html')
+    disciplinas = Disciplina.objects.all()
+    turmas = Turma.objects.all()
+    semestres = Semestre.objects.all()
+
+    return render(request, 'form_aula.html', {
+        'disciplinas': disciplinas,
+        'turmas': turmas,
+        'semestres': semestres,
+    })
 
 
 @login_required

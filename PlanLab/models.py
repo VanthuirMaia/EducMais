@@ -6,7 +6,7 @@ class Aula(models.Model):
     disciplina = models.CharField(max_length=100, verbose_name='Disciplina')
     data_aula = models.DateField(verbose_name='Data da Aula')
     turma = models.CharField(max_length=100, verbose_name='Turma')
-    semestre = models.IntegerField(verbose_name='Semestre')
+    semestre = models.CharField(max_length=100, verbose_name='Semestre')
     titulo = models.CharField(max_length=200, verbose_name='Título')
     eventos_extraordinarios = models.CharField(
         max_length=255, 
@@ -58,3 +58,22 @@ class Caderneta(models.Model):
         ordering = ['data_aula']  # Ordenar as cadernetas pela data da aula
 
 
+class Disciplina(models.Model):
+    nome = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.nome
+
+
+class Turma(models.Model):
+    nome = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.nome
+
+
+class Semestre(models.Model):
+    descricao = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.descricao

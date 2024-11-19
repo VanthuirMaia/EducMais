@@ -56,10 +56,9 @@
                     <label class="rotulo" for="disciplina">Disciplina</label>
                     <select class="campo" name="disciplina" id="disciplina" required>
                         <option value="">Selecione a disciplina</option>
-                        <option value="matematica">Matemática</option>
-                        <option value="portugues">Português</option>
-                        <option value="ciencias">Ciências</option>
-                        <option value="fisica">Física</option>
+                        {% for disciplina in disciplinas %}
+                            <option value="{{ disciplina.id }}">{{ disciplina.nome }}</option>
+                        {% endfor %}
                     </select>
                 </div>
 
@@ -71,11 +70,10 @@
                 <div class="grupo-campo">
                     <label class="rotulo" for="serie">Turma</label>
                     <select class="campo" name="serie" id="serie" required>
-                        <option value="">Selecione a série</option>
-                        <option value="1">1º Ano - Fundamental</option>
-                        <option value="2">2º Ano - Fundamental</option>
-                        <option value="3">3º Ano - Fundamental</option>
-                        <option value="4">1º Ano - Médio</option>
+                        <option value="">Selecione a turma</option>
+                        {% for turma in turmas %}
+                            <option value="{{ turma.id }}">{{ turma.nome }}</option>
+                        {% endfor %}
                     </select>
                 </div>
 
@@ -83,15 +81,15 @@
                     <label class="rotulo" for="semestre">Período</label>
                     <select class="campo" name="semestre" id="semestre" required>
                         <option value="">Selecione o semestre</option>
-                        <option value="1">1º Semestre</option>
-                        <option value="2">2º Semestre</option>
-                        <option value="3">3º Semestre</option>
+                        {% for semestre in semestres %}
+                            <option value="{{ semestre.id }}">{{ semestre.descricao }}</option>
+                        {% endfor %}
                     </select>
                 </div>
 
                 <div class="grupo-campo">
-                    <label class="rotulo" for="eventos">Eventos Extraordinários</label>
-                    <select class="campo" name="eventos" id="eventos" required>
+                    <label class="rotulo" for="eventos_extraordinarios">Eventos Extraordinários</label>
+                    <select class="campo" name="eventos_extraordinarios" id="eventos_extraordinarios" required>
                         <option value="nao">Não</option>
                         <option value="sim">Sim</option>
                     </select>
@@ -107,8 +105,8 @@
 
             <div class="grid">
                 <div class="grupo-campo">
-                    <label class="rotulo" for="conteudo">Conteúdo Programático</label>
-                    <textarea class="campo campo-texto" name="conteudo" id="conteudo" placeholder="Descreva o conteúdo curricular" required></textarea>
+                    <label class="rotulo" for="conteudo_programatico">Conteúdo Programático</label>
+                    <textarea class="campo campo-texto" name="conteudo_programatico" id="conteudo_programatico" placeholder="Descreva o conteúdo curricular" required></textarea>
                 </div>
 
                 <div class="grupo-campo">
@@ -117,15 +115,15 @@
                 </div>
 
                 <div class="grupo-campo">
-                    <label class="rotulo" for="recursos">Recursos necessários</label>
-                    <textarea class="campo campo-texto" name="recursos" id="recursos" placeholder="Liste os recursos necessários" required></textarea>
+                    <label class="rotulo" for="recursos_necessarios">Recursos necessários</label>
+                    <textarea class="campo campo-texto" name="recursos_necessarios" id="recursos_necessarios" placeholder="Liste os recursos necessários" required></textarea>
                 </div>
             </div>
             
             <div class="grid">
                 <div class="grupo-campo">
-                    <label class="rotulo" for="avaliacao">Avaliação</label>
-                    <textarea class="campo campo-texto" name="avaliacao" id="avaliacao" placeholder="Descreva o método de avaliação" required></textarea>
+                    <label class="rotulo" for="avaliacao_observacoes">Avaliação</label>
+                    <textarea class="campo campo-texto" name="avaliacao_observacoes" id="avaliacao_observacoes" placeholder="Descreva o método de avaliação" required></textarea>
                 </div>
 
                 <div class="grupo-campo">

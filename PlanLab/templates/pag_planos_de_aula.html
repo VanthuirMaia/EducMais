@@ -73,17 +73,14 @@
                     <span>{{ aula.data_aula|date:"d.m.Y" }}</span>  <!-- Exibe a data formatada -->
                 </div>
                 <div class="cartao-info">
-                    <span class="cartao-rotulo">Classe:</span>
+                    <span class="cartao-rotulo">Turma:</span>
                     <span>{{ aula.turma }}</span>  <!-- Exibe a classe -->
                 </div>
                 <div class="cartao-info">
-                    <span class="cartao-rotulo">Semestre:</span>
+                    <span class="cartao-rotulo">Período:</span>
                     <span>{{ aula.semestre }}</span>  <!-- Exibe o semestre -->
                 </div>
-                <div class="cartao-info">
-                    <span class="cartao-rotulo">Turno:</span>
-                    <span>{{ aula.turno }}</span>  <!-- Adicione a propriedade de turno se necessário -->
-                </div>
+
             </a>  <!-- Fecha o link do card -->
             {% endfor %}
         </div>
