@@ -28,7 +28,9 @@
         </div>
         <ul class="menu">
             <li class="menu-item">
-                <img src="{% static 'img/home.png' %}" alt="Home"> Início
+                <a href="{% url 'home' %}">
+                    <img src="{% static 'img/home.png' %}" alt="Home"> Início
+                </a>
             </li>
             <li class="menu-item">
                 <a href="{% url 'pag_planos_de_aula' %}">

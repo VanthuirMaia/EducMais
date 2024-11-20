@@ -58,13 +58,13 @@
                 <div class="grupo-campo">
                     <label class="rotulo" for="disciplina">Disciplina</label>
                     <select class="campo" name="disciplina" id="disciplina" required>
-                        <option value="">Selecione a disciplina</option>
                         <option value="matematica" {% if plano.disciplina == 'matematica' %}selected{% endif %}>Matemática</option>
                         <option value="portugues" {% if plano.disciplina == 'portugues' %}selected{% endif %}>Português</option>
                         <option value="ciencias" {% if plano.disciplina == 'ciencias' %}selected{% endif %}>Ciências</option>
                         <option value="fisica" {% if plano.disciplina == 'fisica' %}selected{% endif %}>Física</option>
                     </select>
                 </div>
+                
         
                 <div class="grupo-campo">
                     <label class="rotulo" for="data_aula">Data</label>
@@ -75,22 +75,26 @@
                     <label class="rotulo" for="turma">Turma</label>
                     <select class="campo" name="turma" id="turma" required>
                         <option value="">Selecione a turma</option>
-                        <option value="1" {% if plano.turma == '1' %}selected{% endif %}>1º Ano - Fundamental</option>
-                        <option value="2" {% if plano.turma == '2' %}selected{% endif %}>2º Ano - Fundamental</option>
-                        <option value="3" {% if plano.turma == '3' %}selected{% endif %}>3º Ano - Fundamental</option>
-                        <option value="4" {% if plano.turma == '4' %}selected{% endif %}>1º Ano - Médio</option>
+                        <option value="1º Ano - Fundamental" {% if plano.turma == '1º Ano - Fundamental' %}selected{% endif %}>1º Ano - Fundamental</option>
+                        <option value="2º Ano - Fundamental" {% if plano.turma == '2º Ano - Fundamental' %}selected{% endif %}>2º Ano - Fundamental</option>
+                        <option value="3º Ano - Fundamental" {% if plano.turma == '3º Ano - Fundamental' %}selected{% endif %}>3º Ano - Fundamental</option>
+                        <option value="1º Ano - Médio" {% if plano.turma == '1º Ano - Médio' %}selected{% endif %}>1º Ano - Médio</option>
                     </select>
                 </div>
-        
+                
+                
                 <div class="grupo-campo">
                     <label class="rotulo" for="semestre">Período</label>
                     <select class="campo" name="semestre" id="semestre" required>
                         <option value="">Selecione o semestre</option>
-                        <option value="1" {% if plano.semestre|stringformat:"s" == '1' %}selected{% endif %}>1º Semestre</option>
-                        <option value="2" {% if plano.semestre|stringformat:"s" == '2' %}selected{% endif %}>2º Semestre</option>
-                        <option value="3" {% if plano.semestre|stringformat:"s" == '3' %}selected{% endif %}>3º Semestre</option>
+                        <option value="1º Semestre" {% if plano.semestre == '1º Semestre' %}selected{% endif %}>1º Semestre</option>
+                        <option value="2º Semestre" {% if plano.semestre == '2º Semestre' %}selected{% endif %}>2º Semestre</option>
+                        <option value="3º Semestre" {% if plano.semestre == '3º Semestre' %}selected{% endif %}>3º Semestre</option>
                     </select>
                 </div>
+                
+                
+                
                 
                 <div class="grupo-campo">
                     <label class="rotulo" for="eventos_extraordinarios">Eventos Extraordinários</label>

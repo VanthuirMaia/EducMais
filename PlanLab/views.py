@@ -70,6 +70,13 @@ def form_editar_aula(request, plano_id):
 
     return render(request, 'form_editar_aula.html', {'form': form, 'plano': plano})
 
+
+
+
+
+
+
+
 @login_required
 def excluir_plano(request, plano_id):
     plano = get_object_or_404(Aula, id=plano_id)
