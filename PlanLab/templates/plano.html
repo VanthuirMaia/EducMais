@@ -55,7 +55,7 @@
             <div class="detalhes-aula">
                 <div class="item-detalhe">
                     <span class="rotulo-detalhe">Disciplina:</span>
-                    <span class="valor-detalhe">{{ plano.disciplina }}</span>
+                    <span class="valor-detalhe">{{ plano.disciplina.nome }}</span>
                 </div>
                 <div class="item-detalhe">
                     <span class="rotulo-detalhe">Data da Aula:</span>
@@ -63,11 +63,11 @@
                 </div>
                 <div class="item-detalhe">
                     <span class="rotulo-detalhe">Turma:</span>
-                    <span class="valor-detalhe">{{ plano.turma }}</span>
+                    <span class="valor-detalhe">{{ plano.turma.nome }}</span>
                 </div>
                 <div class="item-detalhe">
                     <span class="rotulo-detalhe">Período:</span>
-                    <span class="valor-detalhe">{{ plano.semestre }}</span>
+                    <span class="valor-detalhe">{{ plano.semestre.descricao }}</span>
                 </div>
                 <div class="item-detalhe">
                     <span class="rotulo-detalhe">Eventos Extraordinários:</span>

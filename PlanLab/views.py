@@ -57,18 +57,23 @@ def form_aula(request):
 
 @login_required
 def form_editar_aula(request, plano_id):
-    plano = get_object_or_404(Aula, id=plano_id)
+    plano = get_object_or_404(Aula, id=plano_id)  # Obtém o plano de aula existente
 
     if request.method == 'POST':
-        form = AulaForm(request.POST, instance=plano)  # Atualizar o plano existente
+        form = AulaForm(request.POST, instance=plano)  # Atualiza os dados com a instância do plano
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Plano de aula atualizado com sucesso!')
-            return redirect('plano', id=plano_id)  # Redirecionar após salvar
+            form.save()  # Salva as alterações no banco de dados
+            messages.success(request, 'Plano de aula atualizado com sucesso!')  # Mensagem de sucesso
+            return redirect('plano', id=plano_id)  # Redireciona para a página de detalhes do plano de aula
+        else:
+            # Se o formulário não for válido, exibe mensagens de erro
+            messages.error(request, 'Erro ao atualizar o plano de aula. Verifique os campos e tente novamente.')
     else:
-        form = AulaForm(instance=plano)  # Carregar dados existentes no formulário
+        form = AulaForm(instance=plano)  # Pré-preenche o formulário com os dados do plano existente
 
     return render(request, 'form_editar_aula.html', {'form': form, 'plano': plano})
+
+
 
 @login_required
 def excluir_plano(request, plano_id):

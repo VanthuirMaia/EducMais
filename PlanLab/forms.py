@@ -1,6 +1,9 @@
 from django import forms
 from .models import Aula, Caderneta
 
+from django import forms
+from .models import Aula, Disciplina, Turma, Semestre
+
 class AulaForm(forms.ModelForm):
     class Meta:
         model = Aula  # O modelo associado ao formulário
@@ -38,6 +41,13 @@ class AulaForm(forms.ModelForm):
             'disciplina': 'Informe a disciplina referente à aula.',
             'data_aula': 'Selecione a data em que a aula será realizada.',
             'semestre': 'Digite o semestre correspondente à turma.',
+            'titulo': 'Informe o título da aula.',
+            'eventos_extraordinarios': 'Descreva eventos extraordinários (se houver).',
+            'conteudo_programatico': 'Informe o conteúdo programático da aula.',
+            'metodologia': 'Descreva a metodologia utilizada na aula.',
+            'recursos_necessarios': 'Liste os recursos necessários para a aula.',
+            'avaliacao_observacoes': 'Comentários sobre a avaliação da aula.',
+            'observacoes': 'Observações gerais sobre a aula.',
         }
 
         # Personalização de widgets
@@ -48,7 +58,15 @@ class AulaForm(forms.ModelForm):
             'recursos_necessarios': forms.Textarea(attrs={'rows': 4, 'class': 'form-control'}),
             'avaliacao_observacoes': forms.Textarea(attrs={'rows': 4, 'class': 'form-control'}),
             'observacoes': forms.Textarea(attrs={'rows': 4, 'class': 'form-control'}),
+            'titulo': forms.TextInput(attrs={'class': 'form-control'}),
+            'eventos_extraordinarios': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
         }
+
+    # Personalização dos campos relacionados a outros modelos
+    disciplina = forms.ModelChoiceField(queryset=Disciplina.objects.all(), empty_label="Selecione a disciplina", required=True)
+    turma = forms.ModelChoiceField(queryset=Turma.objects.all(), empty_label="Selecione a turma", required=True)
+    semestre = forms.ModelChoiceField(queryset=Semestre.objects.all(), empty_label="Selecione o semestre", required=True)
+
 
 
 class CadernetaForm(forms.ModelForm):

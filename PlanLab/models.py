@@ -1,12 +1,22 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
+class Disciplina(models.Model):
+    nome = models.CharField(max_length=100)
+
+class Turma(models.Model):
+    nome = models.CharField(max_length=100)
+
+class Semestre(models.Model):
+    descricao = models.CharField(max_length=50)
+
 class Aula(models.Model):
     # Campos do modelo Aula
-    disciplina = models.CharField(max_length=100, verbose_name='Disciplina')
+    disciplina = models.ForeignKey(Disciplina, on_delete=models.CASCADE)
     data_aula = models.DateField(verbose_name='Data da Aula')
-    turma = models.CharField(max_length=100, verbose_name='Turma')
-    semestre = models.CharField(max_length=100, verbose_name='Semestre')
+    turma = models.ForeignKey(Turma, on_delete=models.CASCADE)
+    semestre = models.ForeignKey(Semestre, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=200, verbose_name='Título')
     eventos_extraordinarios = models.CharField(
         max_length=255, 
@@ -26,9 +36,6 @@ class Aula(models.Model):
     
     # Chave estrangeira para o usuário
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Usuário')
-
-    def __str__(self):
-        return f'{self.titulo} - {self.disciplina}'
 
     class Meta:
         verbose_name = 'Aula'
@@ -58,22 +65,3 @@ class Caderneta(models.Model):
         ordering = ['data_aula']  # Ordenar as cadernetas pela data da aula
 
 
-class Disciplina(models.Model):
-    nome = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.nome
-
-
-class Turma(models.Model):
-    nome = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.nome
-
-
-class Semestre(models.Model):
-    descricao = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.descricao
