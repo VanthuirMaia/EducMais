@@ -88,9 +88,6 @@ def excluir_plano(request, plano_id):
     
 
 
-
-    
-
 @login_required
 def caderneta(request, id):
     caderneta = get_object_or_404(Caderneta, id=id)
