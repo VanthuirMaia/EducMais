@@ -5,11 +5,20 @@ from django.contrib.auth.models import User
 class Disciplina(models.Model):
     nome = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.nome
+
 class Turma(models.Model):
     nome = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.nome
+
 class Semestre(models.Model):
     descricao = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.descricao
 
 class Aula(models.Model):
     # Campos do modelo Aula
@@ -45,11 +54,16 @@ class Aula(models.Model):
 class Caderneta(models.Model):
     # Campos do modelo Caderneta
     data_aula = models.DateField(verbose_name='Data da Aula')
-    disciplina = models.CharField(max_length=100, verbose_name='Disciplina')
-    turma = models.CharField(max_length=50, verbose_name='Turma')
-    semestre = models.IntegerField(verbose_name='Semestre')
+    disciplina = models.ForeignKey(Disciplina, on_delete=models.CASCADE)
+    turma = models.ForeignKey(Turma, on_delete=models.CASCADE)
+    semestre = models.ForeignKey(Semestre, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=200, verbose_name='Título')
-    eventos = models.TextField(blank=True, null=True, verbose_name='Eventos')
+    eventos = models.CharField(
+        max_length=255, 
+        blank=True, 
+        null=True, 
+        verbose_name='Eventos'
+    )
     conteudo = models.TextField(verbose_name='Conteúdo')
     materiais = models.TextField(blank=True, null=True, verbose_name='Materiais')
     atividade = models.TextField(blank=True, null=True, verbose_name='Atividade')

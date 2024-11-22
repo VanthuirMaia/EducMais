@@ -51,84 +51,96 @@
     
         <form method="post" class="formulario" action="{% url 'form_caderneta' %}">
             {% csrf_token %}
-
+    
             <div class="grid">
+                <!-- Campo Disciplina -->
                 <div class="grupo-campo">
                     <label class="rotulo" for="disciplina">Disciplina</label>
                     <select class="campo" name="disciplina" id="disciplina" required>
                         <option value="">Selecione a disciplina</option>
-                        <option value="matematica" {% if caderneta.disciplina == 'matematica' %}selected{% endif %}>Matemática</option>
-                        <option value="portugues" {% if caderneta.disciplina == 'portugues' %}selected{% endif %}>Português</option>
-                        <option value="ciencias" {% if caderneta.disciplina == 'ciencias' %}selected{% endif %}>Ciências</option>
-                        <option value="fisica" {% if caderneta.disciplina == 'fisica' %}selected{% endif %}>Física</option>
+                        {% for disciplina in disciplinas %}
+                        <option value="{{ disciplina.id }}" {% if caderneta.disciplina.id == disciplina.id %}selected{% endif %}>
+                            {{ disciplina.nome }}
+                        </option>
+                        {% endfor %}
                     </select>
                 </div>
-
+    
+                <!-- Campo Data -->
                 <div class="grupo-campo">
-                    <label class="rotulo" for="id_data_aula">Data</label>
-                    <input type="date" class="campo" name="data_aula" id="id_data_aula" required>
+                    <label class="rotulo" for="data_aula">Data</label>
+                    <input type="date" class="campo" name="data_aula" id="data_aula" value="{{ caderneta.data_aula|date:'Y-m-d' }}" required>
                 </div>
-
+    
+                <!-- Campo Turma -->
                 <div class="grupo-campo">
-                    <label class="rotulo" for="id_turma">Turma</label>
+                    <label class="rotulo" for="turma">Turma</label>
                     <select class="campo" name="turma" id="turma" required>
                         <option value="">Selecione a turma</option>
-                        <option value="1" {% if caderneta.turma == '1' %}selected{% endif %}>1º Ano - Fundamental</option>
-                        <option value="2" {% if caderneta.turma == '2' %}selected{% endif %}>2º Ano - Fundamental</option>
-                        <option value="3" {% if caderneta.turma == '3' %}selected{% endif %}>3º Ano - Fundamental</option>
-                        <option value="4" {% if caderneta.turma == '4' %}selected{% endif %}>1º Ano - Médio</option>
+                        {% for turma in turmas %}
+                        <option value="{{ turma.id }}" {% if caderneta.turma.id == turma.id %}selected{% endif %}>
+                            {{ turma.nome }}
+                        </option>
+                        {% endfor %}
                     </select>
                 </div>
-
+    
+                <!-- Campo Semestre -->
                 <div class="grupo-campo">
                     <label class="rotulo" for="semestre">Período</label>
                     <select class="campo" name="semestre" id="semestre" required>
                         <option value="">Selecione o semestre</option>
-                        <option value="1" {% if caderneta.semestre|stringformat:"s" == '1' %}selected{% endif %}>1º Semestre</option>
-                        <option value="2" {% if caderneta.semestre|stringformat:"s" == '2' %}selected{% endif %}>2º Semestre</option>
-                        <option value="3" {% if caderneta.semestre|stringformat:"s" == '3' %}selected{% endif %}>3º Semestre</option>
+                        {% for semestre in semestres %}
+                        <option value="{{ semestre.id }}" {% if caderneta.semestre.id == semestre.id %}selected{% endif %}>
+                            {{ semestre.descricao }}
+                        </option>
+                        {% endfor %}
                     </select>
                 </div>
-
+    
+                <!-- Campo Eventos Extraordinários -->
                 <div class="grupo-campo">
                     <label class="rotulo" for="eventos">Eventos Extraordinários</label>
                     <select class="campo" name="eventos" id="eventos" required>
-                        <option value="nao">Não</option>
-                        <option value="sim">Sim</option>
+                        <option value="nao" {% if caderneta.eventos == 'nao' %}selected{% endif %}>Não</option>
+                        <option value="sim" {% if caderneta.eventos == 'sim' %}selected{% endif %}>Sim</option>
                     </select>
                 </div>
-
+    
+                <!-- Campo Título -->
                 <div class="grupo-campo">
-                    <label class="rotulo" for="id_titulo">Título da Aula</label>
-                    <input type="text" class="campo" name="titulo" id="id_titulo" placeholder="Digite o título da aula" required>
+                    <label class="rotulo" for="titulo">Título da Aula</label>
+                    <input type="text" class="campo" name="titulo" id="titulo" placeholder="Digite o título da aula" value="{{ caderneta.titulo }}" required>
                 </div>
-
-
             </div>
     
             <div class="grid">
+                <!-- Campo Conteúdo -->
                 <div class="grupo-campo">
-                    <label class="rotulo" for="id_conteudo">Conteúdo da Caderneta</label>
-                    <textarea class="campo campo-texto" name="conteudo" id="id_conteudo" placeholder="Descreva o conteúdo da caderneta" required></textarea>
+                    <label class="rotulo" for="conteudo">Conteúdo da Caderneta</label>
+                    <textarea class="campo campo-texto" name="conteudo" id="conteudo" placeholder="Descreva o conteúdo da caderneta" required>{{ caderneta.conteudo }}</textarea>
                 </div>
-
+    
+                <!-- Campo Materiais -->
                 <div class="grupo-campo">
-                    <label class="rotulo" for="id_materiais">Materiais Utilizados</label>
-                    <textarea class="campo campo-texto" name="materiais" id="id_materiais" placeholder="Liste os materiais utilizados (opcional)"></textarea>
+                    <label class="rotulo" for="materiais">Materiais Utilizados</label>
+                    <textarea class="campo campo-texto" name="materiais" id="materiais" placeholder="Liste os materiais utilizados (opcional)">{{ caderneta.materiais }}</textarea>
                 </div>
-
+    
+                <!-- Campo Atividade Prática -->
                 <div class="grupo-campo">
-                    <label class="rotulo" for="id_atividade">Atividade Prática</label>
-                    <textarea class="campo campo-texto" name="atividade" id="id_atividade" placeholder="Descreva a atividade prática (opcional)"></textarea>
+                    <label class="rotulo" for="atividade">Atividade Prática</label>
+                    <textarea class="campo campo-texto" name="atividade" id="atividade" placeholder="Descreva a atividade prática (opcional)">{{ caderneta.atividade }}</textarea>
                 </div>
             </div>
-
+    
             <div class="botoes">
                 <button type="button" class="botao botao-secundario" onclick="cancelarFormulario()">Cancelar</button>
                 <button type="submit" class="botao botao-primario">Salvar Caderneta</button>
             </div>
         </form>
     </main>
+    
 
     <div class="modal" id="successModal" style="display:none;">
         <div class="modal-conteudo">

@@ -70,19 +70,15 @@
                 </div>
                 <div class="cartao-info">
                     <span class="cartao-rotulo">Data:</span>
-                    <span>{{ caderneta.data }}</span>  <!-- Data da caderneta -->
+                    <span>{{ caderneta.data_aula|date:"d.m.Y"  }}</span>  <!-- Data da caderneta -->
                 </div>
                 <div class="cartao-info">
-                    <span class="cartao-rotulo">Classe:</span>
+                    <span class="cartao-rotulo">Turma:</span>
                     <span>{{ caderneta.turma }}</span>  <!-- Classe da caderneta -->
                 </div>
                 <div class="cartao-info">
-                    <span class="cartao-rotulo">Semestre:</span>
+                    <span class="cartao-rotulo">Período:</span>
                     <span>{{ caderneta.semestre }}</span>  <!-- Semestre da caderneta -->
-                </div>
-                <div class="cartao-info">
-                    <span class="cartao-rotulo">Turno:</span>
-                    <span>{{ caderneta.turno }}</span>  <!-- Turno da caderneta -->
                 </div>
             </a>
             {% endfor %}

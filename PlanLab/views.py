@@ -102,28 +102,46 @@ def pag_cadernetas(request):
 
 
 @login_required
-def form_caderneta(request):
-    disciplinas = ['Matemática', 'Português', 'Ciências', 'Física']
-    series = ['1º Ano - Fundamental', '2º Ano - Fundamental', '3º Ano - Fundamental', '1º Ano - Médio']
-    periodos = ['1º Semestre', '2º Semestre', '3º Semestre']
+def form_caderneta(request, id=None):
+    if id:
+        caderneta = get_object_or_404(Caderneta, id=id)  # Editar
+    else:
+        caderneta = None  # Criar nova caderneta
 
     if request.method == 'POST':
-        form = CadernetaForm(request.POST)
-        if form.is_valid():
-            caderneta = form.save(commit=False)
-            caderneta.usuario = request.user 
-            caderneta.save()
-            messages.success(request, 'Caderneta salva com sucesso!')
-            return redirect('pag_cadernetas')
-    else:
-        form = CadernetaForm()
+        form_data = {
+            'disciplina': Disciplina.objects.get(id=request.POST['disciplina']),
+            'data_aula': request.POST['data_aula'],
+            'turma': Turma.objects.get(id=request.POST['turma']),
+            'semestre': Semestre.objects.get(id=request.POST['semestre']),
+            'titulo': request.POST['titulo'],
+            'eventos': request.POST.get('eventos', ''),  # Verifique se eventos é um campo de escolha
+            'conteudo': request.POST['conteudo'],
+            'materiais': request.POST.get('materiais', ''),
+            'atividade': request.POST.get('atividade', ''),
+            'usuario': request.user  # Usuário logado
+        }
 
-    return render(request, 'form_caderneta.html', {
-        'form': form,
-        'disciplinas': disciplinas,
-        'series': series,
-        'periodos': periodos
-    })
+        if caderneta:  # Se for para editar a caderneta
+            for field, value in form_data.items():
+                setattr(caderneta, field, value)
+            caderneta.save()
+            messages.success(request, 'Caderneta atualizada com sucesso!')
+        else:  # Se for para criar uma nova caderneta
+            Caderneta.objects.create(**form_data)
+            messages.success(request, 'Caderneta salva com sucesso!')
+
+        return redirect('pag_cadernetas')  # Substitua pelo nome correto da sua URL de listagem
+
+    context = {
+        'caderneta': caderneta,
+        'disciplinas': Disciplina.objects.all(),
+        'turmas': Turma.objects.all(),
+        'semestres': Semestre.objects.all(),
+    }
+
+    return render(request, 'form_caderneta.html', context)
+
 
 @login_required
 def form_editar_caderneta(request, caderneta_id):
