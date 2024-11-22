@@ -50,54 +50,69 @@
     
     <main class="conteudo-principal">
         <div class="botoes-acao">
-            <h2>Bem-vindo de volta, Lairson Alencar!</h2>
-            <p>Veja abaixo um resumo dos seus planos de aula e atividades recentes.</p>
-
+            <h2>Bem-vindo de volta, {{ user.username }}!</h2>
         </div>
+
+        <div>
+            <h3>Veja abaixo um resumo das suas atividades recentes.</h3>
+        </div>
+        <br>
+        <br>        
         <div class="grade" id="grade-planos">
             <div class="indicadores-rapidos">
                 <div class="card-indicador">
-                    <h3>Total de Planos</h3>
-                    <p>24</p>
+                    <h3>Total de Planos de Aulas</h3>
+                    <p>{{ total_aulas }}</p>
                 </div>
                 <div class="card-indicador">
-                    <h3>Próxima Aula</h3>
-                    <p>Introdução à Álgebra <br> 06.09.2024</p>
-                </div>
-                <div class="card-indicador">
-                    <h3>Atividades Pendentes</h3>
-                    <p>3 Correções</p>
+                    <h3>Total de Cadernetas</h3>
+                    <p>{{ total_cadernetas }}</p>
                 </div>
             </div>
         </div>
-
+    
+        <!-- Últimas Aulas -->
         <div class="pag_planos_de_aula_recentes">
-            <h3>Planos de Aula Recentes</h3>
-                <div class="grade">
+            <h3>Últimos Planos de Aulas</h3>
+            <div class="grade">
+                {% for aula in ultimas_aulas %}
                     <div class="cartao">
-                        <h4>Introdução à Álgebra</h4>
-                        <p>Disciplina: Álgebra</p>
-                        <p>Data: 06.09.2024</p>
+                        <h4>{{ aula.titulo }}</h4>
+                        <p><strong>Disciplina:</strong> {{ aula.disciplina }}</p>
+                        <p><strong>Data da Aula:</strong> {{ aula.data_aula }}</p>
+                        <p><strong>Turma:</strong> {{ aula.turma }}</p>
+                        <p><strong>Periodo:</strong> {{ aula.semestre }}</p>
                     </div>
-                    <div class="cartao">
-                        <h4>Geometria Espacial</h4>
-                        <p>Disciplina: Matemática</p>
-                        <p>Data: 07.09.2024</p>
-                    </div>
-                </div>
-
+                {% empty %}
+                    <p>Você ainda não tem aulas registradas.</p>
+                {% endfor %}
+            </div>
         </div>
-
+    
+        <!-- Últimas Cadernetas -->
         <div class="calendario">
-            <h3>Próximas Aulas</h3>
-                <div class="cartao">
-                    <h4>Geometria Espacial</h4>
-                    <p>Disciplina: Matemática</p>
-                    <p>Data: 07.09.2024</p>
-                </div>
-
+            <h3>Últimas Cadernetas</h3>
+            <div class="grade">
+                {% for caderneta in ultimas_cadernetas %}
+                    <div class="cartao">
+                        <h4>{{ caderneta.titulo }}</h4>
+                        <p><strong>Disciplina:</strong> {{ caderneta.disciplina }}</p>
+                        <p><strong>Data da Aula:</strong> {{ caderneta.data_aula }}</p>
+                        <p><strong>Turma:</strong> {{ caderneta.turma }}</p>
+                        <p><strong>Periodo:</strong> {{ caderneta.semestre }}</p>
+                    </div>
+                {% empty %}
+                    <p>Você ainda não tem cadernetas registradas.</p>
+                {% endfor %}
+            </div>
         </div>
     </main>
+    
+    
+    
+    
+    
+    
 
     <script>
         function toggleMenu() {

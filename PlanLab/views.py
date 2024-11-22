@@ -226,14 +226,26 @@ def copiar_caderneta(request, id):
     messages.success(request, 'Caderneta copiada com sucesso! Você pode agora editar os campos necessários.')
     return redirect('form_editar_caderneta', caderneta_id=caderneta_copiada.id)
 
-
 @login_required
-def login_view(request):
-    return render(request, 'login.html')
+def home(request):
+    planos = Aula.objects.filter(usuario=request.user)  # Assume que você tem um campo 'usuario' nos modelos
+    cadernetas = Caderneta.objects.filter(usuario=request.user)
+    
+    # Dados dinâmicos
+    total_aulas = planos.count()  # Corrigido para planos ao invés de aulas
+    total_cadernetas = cadernetas.count()  # Contagem de cadernetas
+    
+    ultimas_aulas = Aula.objects.filter(usuario=request.user).order_by('-data_aula')[:5]
+    ultimas_cadernetas = cadernetas.order_by('-data_aula')[:5]  # Alterado para 'data_aula' em vez de 'data_criacao'
+    
+    contexto = {
+        'total_aulas': total_aulas,
+        'total_cadernetas': total_cadernetas,
+        'ultimas_aulas': ultimas_aulas,
+        'ultimas_cadernetas': ultimas_cadernetas,
+    }
+    return render(request, 'home.html', contexto)
 
 
-@login_required
-def cadastro(request):
-    return render(request, 'cadastro.html')
 
 
