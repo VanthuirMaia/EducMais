@@ -22,29 +22,29 @@
         <div class="perfil">
             <img class="avatar" src="{% static 'img/avatar-1.png' %}" alt="Logo">
             <h3>{{ user.username }}</h3>  <!-- Nome do usuário dinâmico -->
-            <p>Prof. Cyber Security</p>
         </div>
         <ul class="menu">
             <li class="menu-item ativo">
                 <img src="{% static 'img/home.png' %}" alt="Home"> Início
             </li>
-
             <li class="menu-item">
                 <a href="{% url 'pag_planos_de_aula' %}">
                     <img src="{% static 'img/Plano.png' %}" alt="Plano">Planos de Aula
                 </a>
             </li>
-            
             <li class="menu-item">
                 <a href="{% url 'pag_cadernetas' %}">
-                    <img src="{% static 'img/Caderneta.png' %}" alt="Plano">Cadernetas
+                    <img src="{% static 'img/Caderneta.png' %}" alt="Cadernetas">Cadernetas
                 </a>
             </li>
-
             <li class="menu-item">
-                <img src="{% static 'img/sair.png' %}" alt="sair">Sair
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit">
+                        <img src="{% static 'img/sair.png' %}" alt="sair">Sair
+                    </button>
+                </form>
             </li>
-
         </ul>
     </nav>
     

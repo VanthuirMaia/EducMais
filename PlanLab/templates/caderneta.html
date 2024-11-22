@@ -22,7 +22,6 @@
         <div class="perfil">
             <img class="avatar" src="{% static 'img/avatar-1.png' %}" alt="Logo">
             <h3>{{ user.username }}</h3>  <!-- Nome do usuário dinâmico -->
-            <p>Prof. Cyber Security</p>
         </div>
         <ul class="menu">
             <li class="menu-item">
@@ -44,7 +43,12 @@
             </li>
 
             <li class="menu-item">
-                <img src="{% static 'img/sair.png' %}" alt="sair">Sair
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit">
+                        <img src="{% static 'img/sair.png' %}" alt="sair">Sair
+                    </button>
+                </form>
             </li>
             
         </ul>
@@ -56,7 +60,7 @@
             <div class="detalhes-aula">
                 <div class="item-detalhe">
                     <span class="rotulo-detalhe">Disciplina:</span>
-                    <span class="valor-detalhe">{{ caderneta.disciplina }}</span>
+                    <span class="valor-detalhe">{{ caderneta.disciplina.nome }}</span>
                 </div>
                 <div class="item-detalhe">
                     <span class="rotulo-detalhe">Data:</span>
@@ -64,11 +68,11 @@
                 </div>
                 <div class="item-detalhe">
                     <span class="rotulo-detalhe">Turma:</span>
-                    <span class="valor-detalhe">{{ caderneta.turma }}</span>
+                    <span class="valor-detalhe">{{ caderneta.turma.nome }}</span>
                 </div>
                 <div class="item-detalhe">
                     <span class="rotulo-detalhe">Período:</span>
-                    <span class="valor-detalhe">{{ caderneta.semestre }}</span>
+                    <span class="valor-detalhe">{{ caderneta.semestre.descricao }}</span>
                 </div>
                 <div class="item-detalhe">
                     <span class="rotulo-detalhe">Eventos Extraordinários:</span>
@@ -99,11 +103,12 @@
             <br>
             <br>
             <div>
-                <a href="{% url 'form_editar_caderneta' caderneta.id %}" class="botao botao-primario">Editar Caderneta</a>
+                <a href="{% url 'form_editar_caderneta' caderneta.id %}" class="botao botao-primario">Editar</a>
                 <form action="{% url 'excluir_caderneta' caderneta.id %}" method="post" style="display:inline;">
                     {% csrf_token %}
-                    <button type="submit" class="botao botao-perigo" onclick="return confirm('Tem certeza que deseja excluir esta caderneta?');">Excluir Caderneta</button>
+                    <button type="submit" class="botao botao-perigo" onclick="return confirm('Tem certeza que deseja excluir esta caderneta?');">Excluir</button>
                 </form>
+                <a href="{% url 'copiar_caderneta' id=caderneta.id %}" class="botao botao-secundario">Copiar</a>
             </div>
         </div>
     </main>

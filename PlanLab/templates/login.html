@@ -19,9 +19,10 @@
                 <form id="loginForm" method="post" action="{% url 'login' %}">
                     {% csrf_token %}
                     <div class="login-campo">
-                        <label for="email" class="login-label">E-mail</label>
-                        <input type="email" name="username" id="email" class="login-input" placeholder="Digite seu e-mail" required>
+                        <label for="username" class="login-label">Nome de usuário</label>
+                        <input type="text" name="username" id="username" class="login-input" placeholder="Digite seu nome de usuário" required>
                     </div>
+                    
                     <div class="login-campo">
                         <label for="senha" class="login-label">Senha</label>
                         <div class="login-senha-container">
@@ -37,7 +38,7 @@
                     <button type="submit" class="login-botao">Entrar</button>
                 </form>
                 <div class="login-link">
-                    Ainda não tem uma conta? <a href="#">Inscreva-se</a>
+                    Ainda não tem uma conta? <a href="#">Solicite ao seu gestor</a>
                 </div>
             </div>
         </div>

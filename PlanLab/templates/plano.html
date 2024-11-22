@@ -22,7 +22,6 @@
         <div class="perfil">
             <img class="avatar" src="{% static 'img/avatar-1.png' %}" alt="Logo">
             <h3>{{ user.username }}</h3>  <!-- Nome do usuário dinâmico -->
-            <p>Prof. Cyber Security</p>
         </div>
         <ul class="menu">
             <li class="menu-item">
@@ -44,7 +43,12 @@
             </li>
 
             <li class="menu-item">
-                <img src="{% static 'img/sair.png' %}" alt="sair">Sair
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit">
+                        <img src="{% static 'img/sair.png' %}" alt="sair">Sair
+                    </button>
+                </form>
             </li>
         </ul>
     </nav>
@@ -101,11 +105,12 @@
            <br>
            <br>
             <div>
-                <a href="{% url 'form_editar_aula' plano.id %}" class="botao botao-primario">Editar Plano de Aula</a>
+                <a href="{% url 'form_editar_aula' plano.id %}" class="botao botao-primario">Editar</a>
                 <form action="{% url 'excluir_plano' plano.id %}" method="post" style="display:inline;">
                     {% csrf_token %}
-                    <button type="submit" class="botao botao-perigo" onclick="return confirm('Tem certeza que deseja excluir este Plano de Aula?');">Excluir Plano de Aula</button>
+                    <button type="submit" class="botao botao-perigo" onclick="return confirm('Tem certeza que deseja excluir este Plano de Aula?');">Excluir</button>
                 </form>
+                <a href="{% url 'copiar_plano' plano.id %}" class="botao botao-secundario">Copiar</a>
             </div>
         </div>
     </main>

@@ -119,6 +119,9 @@ class CadernetaForm(forms.ModelForm):
             'atividade': forms.Textarea(attrs={'rows': 4, 'class': 'form-control'}),
         }
 
+
+        
+
 class PlanoAula(forms.ModelForm):
     class Meta:
         model = Aula  # Certifique-se de que está usando o modelo correto

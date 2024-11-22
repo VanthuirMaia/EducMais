@@ -22,7 +22,6 @@
         <div class="perfil">
             <img src="{% static 'img/avatar-1.png' %}" alt="Avatar" class="avatar">
             <h3>{{ user.username }}</h3>  <!-- Nome do usuário dinâmico -->
-            <p>Prof. Cyber Security</p>
         </div>
         <ul class="menu">
             <li class="menu-item">
@@ -39,7 +38,12 @@
                 </a>
             </li>
             <li class="menu-item">
-                <img src="{% static 'img/sair.png' %}" alt="sair"> Sair
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit">
+                        <img src="{% static 'img/sair.png' %}" alt="sair">Sair
+                    </button>
+                </form>
             </li>
         </ul>
     </nav>

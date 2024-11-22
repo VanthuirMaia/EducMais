@@ -129,3 +129,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Configurações de autenticação
 LOGIN_URL = 'login'  # URL da página de login
 LOGIN_REDIRECT_URL = 'home'  # URL para onde redirecionar após o login
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # Backend padrão (caso queira usar username em algum lugar)
+    'PlanLab.backends.EmailBackend',  # Substitua pelo caminho correto para o seu backend
+]
+
+LOGOUT_REDIRECT_URL = 'login'  # Página de login após o logout
+
+

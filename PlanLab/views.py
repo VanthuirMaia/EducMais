@@ -89,6 +89,36 @@ def excluir_plano(request, plano_id):
 
 
 @login_required
+def copiar_plano(request, id):
+    aula_original = get_object_or_404(Aula, id=id)
+    
+    # Criação de uma cópia do plano de aula
+    aula_copiada = Aula.objects.create(
+        disciplina=aula_original.disciplina,
+        data_aula=aula_original.data_aula,
+        turma=aula_original.turma,
+        semestre=aula_original.semestre,
+        titulo=aula_original.titulo,
+        eventos_extraordinarios=aula_original.eventos_extraordinarios,
+        conteudo_programatico=aula_original.conteudo_programatico,
+        metodologia=aula_original.metodologia,
+        recursos_necessarios=aula_original.recursos_necessarios,
+        avaliacao_observacoes=aula_original.avaliacao_observacoes,
+        observacoes=aula_original.observacoes,
+        usuario=request.user  # Garantir que a cópia seja associada ao usuário logado
+    )
+    
+    messages.success(request, 'Plano de aula copiado com sucesso! Você pode agora editar os campos necessários.')
+    return redirect('form_editar_aula', plano_id=aula_copiada.id)
+
+
+
+
+
+
+
+
+@login_required
 def caderneta(request, id):
     caderneta = get_object_or_404(Caderneta, id=id)
     return render(request, 'caderneta.html', {'caderneta': caderneta})
@@ -145,18 +175,22 @@ def form_caderneta(request, id=None):
 
 @login_required
 def form_editar_caderneta(request, caderneta_id):
-    caderneta = get_object_or_404(Caderneta, id=caderneta_id)
+    caderneta = get_object_or_404(Caderneta, id=caderneta_id)  # Obtém a caderneta existente
 
     if request.method == 'POST':
-        form = CadernetaForm(request.POST, instance=caderneta)  # Atualizar a caderneta existente
+        form = CadernetaForm(request.POST, instance=caderneta)  # Atualiza os dados com a instância da caderneta
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Caderneta atualizada com sucesso!')
-            return redirect('caderneta', id=caderneta_id)  # Redirecionar após salvar
+            form.save()  # Salva as alterações no banco de dados
+            messages.success(request, 'Caderneta atualizada com sucesso!')  # Mensagem de sucesso
+            return redirect('caderneta', id=caderneta_id)  # Redireciona para a página de detalhes da caderneta
+        else:
+            # Se o formulário não for válido, exibe mensagens de erro
+            messages.error(request, 'Erro ao atualizar a caderneta. Verifique os campos e tente novamente.')
     else:
-        form = CadernetaForm(instance=caderneta)  # Carregar dados existentes no formulário
+        form = CadernetaForm(instance=caderneta)  # Pré-preenche o formulário com os dados da caderneta existente
 
     return render(request, 'form_editar_caderneta.html', {'form': form, 'caderneta': caderneta})
+
 
 
 
@@ -171,6 +205,26 @@ def excluir_caderneta(request, id):
         return redirect('pag_cadernetas')  # Você pode adicionar uma mensagem de erro aqui, se desejar.
 
 
+@login_required
+def copiar_caderneta(request, id):
+    caderneta = get_object_or_404(Caderneta, id=id)  # Obtém a caderneta existente
+
+    # Cria uma cópia da caderneta
+    caderneta_copiada = Caderneta.objects.create(
+        data_aula=caderneta.data_aula,
+        disciplina=caderneta.disciplina,
+        turma=caderneta.turma,
+        semestre=caderneta.semestre,
+        titulo=f'Cópia - {caderneta.titulo}',
+        eventos=caderneta.eventos,
+        conteudo=caderneta.conteudo,
+        materiais=caderneta.materiais,
+        atividade=caderneta.atividade,
+        usuario=request.user  # A caderneta será associada ao usuário logado
+    )
+
+    messages.success(request, 'Caderneta copiada com sucesso! Você pode agora editar os campos necessários.')
+    return redirect('form_editar_caderneta', caderneta_id=caderneta_copiada.id)
 
 
 @login_required
