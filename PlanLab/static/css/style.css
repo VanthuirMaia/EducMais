@@ -993,10 +993,6 @@ body {
         flex-direction: column-reverse;
     }
 
-    .botao {
-        /* S */
-    }
-
     .barra-lateral {
         top: 60px;
         height: calc(100vh - 60px);
