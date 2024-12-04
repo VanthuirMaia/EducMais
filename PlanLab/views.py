@@ -12,8 +12,19 @@ def home(request):
 
 @login_required
 def pag_planos_de_aula(request):
-    aulas = Aula.objects.all()
-    return render(request, 'pag_planos_de_aula.html', {'aulas': aulas})
+    query = request.GET.get('q', '')  # Pega o parâmetro 'q' da URL (se houver)
+    
+    if query:
+        # Se houver uma busca, filtra os planos de aula com base no título
+        aulas = Aula.objects.filter(titulo__icontains=query)
+    else:
+        # Se não houver busca, retorna todos os planos de aula
+        aulas = Aula.objects.all()
+
+    return render(request, 'pag_planos_de_aula.html', {
+        'aulas': aulas,  # Passa os planos de aula para o template
+        'query': query   # Passa o termo de busca para manter o campo preenchido
+    })
 
 @login_required
 def plano(request, id):
@@ -112,9 +123,17 @@ def copiar_plano(request, id):
     return redirect('form_editar_aula', plano_id=aula_copiada.id)
 
 
+def buscar_planos(request):
+    query = request.GET.get('q', '')  # Pega o parâmetro de busca da URL
+    planos = Aula.objects.all()  # Recupera todos os planos de aula
 
+    if query:  # Se houver um termo de busca
+        planos = planos.filter(titulo__icontains=query)  # Filtra os planos de aula pelo título
 
-
+    return render(request, 'planlab/pag_planos_de_aula.html', {  # Corrija para o caminho correto
+        'planos': planos,
+        'query': query
+    })
 
 
 
@@ -225,6 +244,19 @@ def copiar_caderneta(request, id):
 
     messages.success(request, 'Caderneta copiada com sucesso! Você pode agora editar os campos necessários.')
     return redirect('form_editar_caderneta', caderneta_id=caderneta_copiada.id)
+
+@login_required
+def buscar_cadernetas(request):
+    query = request.GET.get('q', '')  # Pega o parâmetro de busca da URL
+    cadernetas = Caderneta.objects.all()  # Recupera todos os planos de aula
+
+    if query:  # Se houver um termo de busca
+        cadernetas = cadernetas.filter(titulo__icontains=query)  # Filtra os planos de aula pelo título
+
+    return render(request, 'planlab/pag_cadernetas.html', {  # Corrija para o caminho correto
+        'cadernetas': cadernetas,
+        'query': query
+    })
 
 @login_required
 def home(request):

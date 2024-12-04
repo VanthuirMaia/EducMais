@@ -17,8 +17,7 @@ urlpatterns = [
     path('plano/<int:plano_id>/editar/', views.form_editar_aula, name='form_editar_aula'),
     path('plano/<int:plano_id>/excluir/', views.excluir_plano, name='excluir_plano'),
     path('copiar_plano/<int:id>/', views.copiar_plano, name='copiar_plano'),
-
-
+    path('buscar_planos/', views.buscar_planos, name='buscar_planos'),
 
     path('caderneta/<int:id>/', views.caderneta, name='caderneta'),  # Caderneta
     path('pag_cadernetas/', views.pag_cadernetas, name='pag_cadernetas'),
@@ -26,6 +25,8 @@ urlpatterns = [
     path('caderneta/<int:caderneta_id>/editar/', views.form_editar_caderneta, name='form_editar_caderneta'),
     path('caderneta/excluir/<int:id>/', views.excluir_caderneta, name='excluir_caderneta'),
     path('copiar_caderneta/<int:id>/', views.copiar_caderneta, name='copiar_caderneta'),
+    path('buscar_cadernetas/', views.buscar_cadernetas, name='buscar_cadernetas'),
+
 
 
 

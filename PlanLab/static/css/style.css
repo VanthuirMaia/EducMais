@@ -998,3 +998,39 @@ body {
         height: calc(100vh - 60px);
     }
 }
+
+/* Estilos gerais para os botões */
+.botoes-acao {
+    display: flex;
+    justify-content: space-between;  /* Alinha os botões de forma que fiquem nas extremidades */
+    margin-bottom: 20px;  /* Adiciona um espaço entre os botões e o conteúdo abaixo */
+}
+
+/* Estilos para o campo de busca */
+.campo-busca form {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;  /* Alinha o formulário de busca à direita */
+    width: 100%;
+}
+
+.campo-busca input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px;  /* Espaço entre o campo de input e o botão */
+    width: 250px;  /* Largura do campo de pesquisa */
+}
+
+.campo-busca button {
+    padding: 10px 15px;
+    background-color: #007bff;  /* Cor de fundo do botão */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.campo-busca button:hover {
+    background-color: #0056b3;  /* Efeito ao passar o mouse */
+}

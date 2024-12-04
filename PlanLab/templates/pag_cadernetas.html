@@ -62,6 +62,19 @@
         <div class="botoes-acao">
             <a href="{% url 'form_caderneta' %}" class="botao botao-primario">Nova Caderneta</a>
         </div>
+        <div class="campo-busca">
+            <!-- Alinhamento dos Botões com Flexbox -->
+            <div class="campo-busca-wrapper">
+                <form method="get" action="{% url 'pag_cadernetas' %}">
+                    <input type="text" name="q" placeholder="Digite o Titulo da Caderneta" value="{{ query }}">
+                    <button type="submit" class="botao botao-primario">Buscar</button>
+                </form>
+                <!-- Botão Limpar -->
+            </div>
+            <div class="botoes-acao">
+                <a href="{% url 'pag_cadernetas' %}" class="botao botao-secundario">Limpar</a>
+            </div>
+        </div>
         <div class="grade" id="grade-planos">
             {% for caderneta in cadernetas %}
             <a href="{% url 'caderneta' caderneta.id %}" class="cartao"> <!-- Link que leva à página da caderneta -->

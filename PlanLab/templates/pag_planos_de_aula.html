@@ -60,40 +60,52 @@
     
     <main class="conteudo-principal">
         <div class="botoes-acao">
+            <!-- Botão de Criar Plano de Aula -->
             <a href="{% url 'form_aula' %}" class="botao botao-primario">Novo Plano de Aula</a>
+        </div>
+        <div class="campo-busca">
+            <!-- Alinhamento dos Botões com Flexbox -->
+            <div class="campo-busca-wrapper">
+                <form method="get" action="{% url 'pag_planos_de_aula' %}">
+                    <input type="text" name="q" placeholder="Digite o Titulo da Aula" value="{{ query }}">
+                    <button type="submit" class="botao botao-primario">Buscar</button>
+                </form>
+                <!-- Botão Limpar -->
+            </div>
+            <div class="botoes-acao">
+                <a href="{% url 'pag_planos_de_aula' %}" class="botao botao-secundario">Limpar</a>
+            </div>
         </div>
         <div class="grade" id="grade-planos">
             {% for aula in aulas %}
-            <a href="{% url 'plano' aula.id %}" class="cartao">  <!-- Link que leva à página do plano -->
+            <a href="{% url 'plano' aula.id %}" class="cartao">
                 <div class="cartao-cabecalho">
                     <h3>
                         <span class="indicador-disciplina" style="background-color: #0070f3;"></span>
-                        {{ aula.titulo }}  <!-- Exibe o título da aula -->
+                        {{ aula.titulo }}
                     </h3>
                     <span>⋮</span>
                 </div>
                 <div class="cartao-info">
                     <span class="cartao-rotulo">Disciplina:</span>
-                    <span>{{ aula.disciplina.nome }}</span>  <!-- Exibe a disciplina da aula -->
+                    <span>{{ aula.disciplina.nome }}</span>
                 </div>
                 <div class="cartao-info">
                     <span class="cartao-rotulo">Data:</span>
-                    <span>{{ aula.data_aula|date:"d.m.Y" }}</span>  <!-- Exibe a data formatada -->
+                    <span>{{ aula.data_aula|date:"d.m.Y" }}</span>
                 </div>
                 <div class="cartao-info">
                     <span class="cartao-rotulo">Turma:</span>
-                    <span>{{ aula.turma.nome }}</span>  <!-- Exibe a classe -->
+                    <span>{{ aula.turma.nome }}</span>
                 </div>
                 <div class="cartao-info">
                     <span class="cartao-rotulo">Período:</span>
-                    <span>{{ aula.semestre.descricao }}</span>  <!-- Exibe o semestre -->
+                    <span>{{ aula.semestre.descricao }}</span>
                 </div>
-
-            </a>  <!-- Fecha o link do card -->
+            </a>
             {% endfor %}
         </div>
     </main>
-    
     
 
     <script>
