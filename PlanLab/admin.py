@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Aula, Caderneta, Disciplina, Turma, Semestre
+from .models import Aula, Caderneta, Disciplina, Turma, Semestre, Profile
 
 @admin.register(Aula)
 class AulaAdmin(admin.ModelAdmin):
@@ -19,3 +19,8 @@ class CadernetaAdmin(admin.ModelAdmin):
 admin.site.register(Disciplina)
 admin.site.register(Turma)
 admin.site.register(Semestre)
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'profile_picture')  # Exibe o nome do usuário e a imagem do perfil
+    search_fields = ('user__username',)  # Permite buscar pelo nome de usuário

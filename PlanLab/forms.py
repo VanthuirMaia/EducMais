@@ -1,5 +1,5 @@
 from django import forms
-from .models import Aula, Caderneta
+from .models import Aula, Caderneta, Profile
 
 from django import forms
 from .models import Aula, Disciplina, Turma, Semestre
@@ -118,9 +118,7 @@ class CadernetaForm(forms.ModelForm):
             'eventos': forms.Textarea(attrs={'rows': 4, 'class': 'form-control'}),
             'atividade': forms.Textarea(attrs={'rows': 4, 'class': 'form-control'}),
         }
-
-
-        
+  
 
 class PlanoAula(forms.ModelForm):
     class Meta:
@@ -128,4 +126,7 @@ class PlanoAula(forms.ModelForm):
         fields = '__all__'  # Isso irá incluir todos os campos do modelo Aula
 
 
-
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['profile_picture']

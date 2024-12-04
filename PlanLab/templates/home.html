@@ -20,9 +20,14 @@
     
     <nav class="barra-lateral">
         <div class="perfil">
-            <img class="avatar" src="{% static 'img/avatar-1.png' %}" alt="Logo">
+            {% if user.profile.profile_picture %}
+                <img class="avatar" src="{{ user.profile.profile_picture.url }}" alt="Profile Picture">
+            {% else %}
+                <img class="avatar" src="{% static 'img/avatar-1.png' %}" alt="Default Profile Picture">
+            {% endif %}
             <h3>{{ user.username }}</h3>  <!-- Nome do usuário dinâmico -->
         </div>
+        
         <ul class="menu">
             <li class="menu-item ativo">
                 <img src="{% static 'img/home.png' %}" alt="Home"> Início
