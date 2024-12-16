@@ -5,16 +5,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planlab - Detalhes da Aula</title>
+    <title>EducMais - Detalhes da Aula</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
     <header class="cabecalho">
-        <button class="botao-menu" onclick="alternarMenu()">☰</button>
-        <img class="logo" src="{% static 'img/planlab_logo_branco_p.png' %}" alt="Logo">
-        <div>
-            <span class="botao-menu"><img src="{% static 'img/avatar-1.png' %}" alt="Avatar" class="avatar-menu"></span>
+        <button class="botao-menu" onclick="toggleMenu()">☰</button>
+        <img class="logo" src="{% static 'img/logo_educmais_branco.svg' %}" alt="Logo">
+        <div class="avatar-container">
+            <img src="{% static 'img/avatar-1.png' %}" alt="Avatar" class="avatar-menu">
         </div>
     </header>
     
@@ -25,32 +25,33 @@
             {% else %}
                 <img class="avatar" src="{% static 'img/avatar-1.png' %}" alt="Default Profile Picture">
             {% endif %}
-            <h3>{{ user.username }}</h3>  <!-- Nome do usuário dinâmico -->
+            <h3>{{ user.username }}</h3>
         </div>
         <ul class="menu">
             <li class="menu-item">
                 <a href="{% url 'home' %}">
-                    <img src="{% static 'img/home.png' %}" alt="Home"> Início
+                    <img src="{% static 'img/home.png' %}" alt="Home" class="icon">
+                    <span>Início</span>
                 </a>
             </li>
-            
             <li class="menu-item ativo">
                 <a href="{% url 'pag_planos_de_aula' %}">
-                    <img src="{% static 'img/Plano.png' %}" alt="Plano">Planos de Aula
+                    <img src="{% static 'img/Plano.png' %}" alt="Plano" class="icon">
+                    <span>Planos de Aula</span>
                 </a>
             </li>
-
             <li class="menu-item">
                 <a href="{% url 'pag_cadernetas' %}">
-                    <img src="{% static 'img/Caderneta.png' %}" alt="Plano">Cadernetas
+                    <img src="{% static 'img/Caderneta.png' %}" alt="Cadernetas" class="icon">
+                    <span>Cadernetas</span>
                 </a>
             </li>
-
             <li class="menu-item">
                 <form action="{% url 'logout' %}" method="post">
                     {% csrf_token %}
-                    <button type="submit">
-                        <img src="{% static 'img/sair.png' %}" alt="sair">Sair
+                    <button type="submit" class="botao-sair">
+                        <img src="{% static 'img/sair.png' %}" alt="Sair" class="icon">
+                        <span>Sair</span>
                     </button>
                 </form>
             </li>
@@ -81,43 +82,79 @@
                     <span class="rotulo-detalhe">Eventos Extraordinários:</span>
                     <span class="valor-detalhe">{{ plano.eventos_extraordinarios }}</span>
                 </div>
-
             </div>
             <div class="grade-aula">
                 <div class="secao">
                     <h3 class="titulo-secao">Conteúdo Programático:</h3>
-                    <p class="conteudo-programatico">{{ plano.conteudo_programatico }}</p>
+                    <div class="conteudo-scrollable">
+                        <p>{{ plano.conteudo_programatico }}</p>
+                    </div>
                 </div>
                 <div class="secao">
                     <h3 class="titulo-secao">Metodologia:</h3>
-                    <p class="metodologia">{{ plano.metodologia }}</p>
+                    <div class="conteudo-scrollable">
+                        <p>{{ plano.metodologia }}</p>
+                    </div>
                 </div>
                 <div class="secao">
                     <h3 class="titulo-secao">Recursos Necessários:</h3>
-                    <p class="recursos-necessarios">{{ plano.recursos_necessarios }}</p>
+                    <div class="conteudo-scrollable">
+                        <p>{{ plano.recursos_necessarios }}</p>
+                    </div>
                 </div>
                 <div class="secao">
                     <h3 class="titulo-secao">Avaliação:</h3>
-                    <p class="avaliacao-observacoes">{{ plano.avaliacao_observacoes }}</p>
+                    <div class="conteudo-scrollable">
+                        <p>{{ plano.avaliacao_observacoes }}</p>
+                    </div>
                 </div>
                 <div class="secao">
                     <h3 class="titulo-secao">Observações:</h3>
-                    <p class="observacoes">{{ plano.observacoes }}</p>
+                    <div class="conteudo-scrollable">
+                        <p>{{ plano.observacoes }}</p>
+                    </div>
                 </div>
             </div>
-           <br>
-           <br>
-           <br>
-            <div>
-                <a href="{% url 'form_editar_aula' plano.id %}" class="botao botao-primario">Editar</a>
+            <div class="acoes-plano">
+                <a href="{% url 'form_editar_aula' plano.id %}" class="botao-acao botao-editar">Editar</a>
                 <form action="{% url 'excluir_plano' plano.id %}" method="post" style="display:inline;">
                     {% csrf_token %}
-                    <button type="submit" class="botao botao-perigo" onclick="return confirm('Tem certeza que deseja excluir este Plano de Aula?');">Excluir</button>
+                    <button type="submit" class="botao-acao botao-excluir" onclick="return confirm('Tem certeza que deseja excluir este Plano de Aula?');">Excluir</button>
                 </form>
-                <a href="{% url 'copiar_plano' plano.id %}" class="botao botao-secundario">Copiar</a>
+                <a href="{% url 'copiar_plano' plano.id %}" class="botao-acao botao-copiar">Copiar</a>
             </div>
         </div>
     </main>
 
+    <footer class="footer">
+        <p>&copy; 2024 EducMais. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            document.querySelector('.barra-lateral').classList.toggle('aberta');
+        }
+
+        document.addEventListener('click', function(event) {
+            const barraLateral = document.querySelector('.barra-lateral');
+            const botaoMenu = document.querySelector('.botao-menu');
+            
+            if (!barraLateral.contains(event.target) && event.target !== botaoMenu) {
+                barraLateral.classList.remove('aberta');
+            }
+        });
+
+        const menuItems = document.querySelectorAll('.menu-item');
+        menuItems.forEach(item => {
+            item.addEventListener('click', function() {
+                menuItems.forEach(i => i.classList.remove('ativo'));
+                this.classList.add('ativo');
+                
+                if (window.innerWidth < 768) {
+                    document.querySelector('.barra-lateral').classList.remove('aberta');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

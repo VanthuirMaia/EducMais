@@ -5,16 +5,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planlab - Cadernetas</title>
+    <title>EducMais - Cadernetas</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
     <header class="cabecalho">
         <button class="botao-menu" onclick="toggleMenu()">☰</button>
-        <img class="logo" src="{% static 'img/planlab_logo_branco_p.png' %}" alt="Logo">
-        <div>
-            <span class="botao-menu"><img src="{% static 'img/avatar-1.png' %}"  alt="Avatar" class="avatar-menu"></span>
+        <img class="logo" src="{% static 'img/logo_educmais_branco.svg' %}" alt="Logo">
+        <div class="avatar-container">
+            <img src="{% static 'img/avatar-1.png' %}" alt="Avatar" class="avatar-menu">
         </div>
     </header>
     
@@ -25,63 +25,62 @@
             {% else %}
                 <img class="avatar" src="{% static 'img/avatar-1.png' %}" alt="Default Profile Picture">
             {% endif %}
-            <h3>{{ user.username }}</h3>  <!-- Nome do usuário dinâmico -->
+            <h3>{{ user.username }}</h3>
         </div>
         <ul class="menu">
             <li class="menu-item">
                 <a href="{% url 'home' %}">
-                    <img src="{% static 'img/home.png' %}" alt="Home"> Início
+                    <img src="{% static 'img/home.png' %}" alt="Home" class="icon">
+                    <span>Início</span>
                 </a>
             </li>
-
             <li class="menu-item">
                 <a href="{% url 'pag_planos_de_aula' %}">
-                    <img src="{% static 'img/Plano.png' %}" alt="Plano">Planos de Aula
+                    <img src="{% static 'img/Plano.png' %}" alt="Plano" class="icon">
+                    <span>Planos de Aula</span>
                 </a>
             </li>
-            
             <li class="menu-item ativo">
                 <a href="{% url 'pag_cadernetas' %}">
-                    <img src="{% static 'img/Caderneta.png' %}" alt="Plano">Cadernetas
+                    <img src="{% static 'img/Caderneta.png' %}" alt="Cadernetas" class="icon">
+                    <span>Cadernetas</span>
                 </a>
             </li>
-
             <li class="menu-item">
                 <form action="{% url 'logout' %}" method="post">
                     {% csrf_token %}
-                    <button type="submit">
-                        <img src="{% static 'img/sair.png' %}" alt="sair">Sair
+                    <button type="submit" class="botao-sair">
+                        <img src="{% static 'img/sair.png' %}" alt="Sair" class="icon">
+                        <span>Sair</span>
                     </button>
                 </form>
             </li>
-
         </ul>
     </nav>
     
     <main class="conteudo-principal">
-        <div class="botoes-acao">
-            <a href="{% url 'form_caderneta' %}" class="botao botao-primario">Nova Caderneta</a>
-        </div>
-        <div class="campo-busca">
-            <!-- Alinhamento dos Botões com Flexbox -->
-            <div class="campo-busca-wrapper">
-                <form method="get" action="{% url 'pag_cadernetas' %}">
-                    <input type="text" name="q" placeholder="Digite o Titulo da Caderneta" value="{{ query }}">
+        <div class="cabecalho-pagina">
+            <h1 class="titulo-pagina">Cadernetas</h1>
+            <div class="acoes-pagina">
+                <form method="get" action="{% url 'pag_cadernetas' %}" class="formulario-busca" id="formulario-busca-cadernetas">
+                    <div class="campo-busca-container">
+                        <input type="text" name="q" placeholder="Buscar caderneta" value="{{ query }}" class="campo-busca" id="campo-busca-cadernetas">
+                        <button type="button" class="icone-limpar" id="icone-limpar-cadernetas" aria-label="Limpar busca">
+                            <img src="{% static 'img/fechar.svg' %}" alt="Limpar">
+                        </button>
+                    </div>
                     <button type="submit" class="botao botao-primario">Buscar</button>
                 </form>
-                <!-- Botão Limpar -->
-            </div>
-            <div class="botoes-acao">
-                <a href="{% url 'pag_cadernetas' %}" class="botao botao-secundario">Limpar</a>
+                <a href="{% url 'form_caderneta' %}" class="botao botao-primario" id="botao-nova-caderneta">Nova Caderneta</a>
             </div>
         </div>
         <div class="grade" id="grade-planos">
             {% for caderneta in cadernetas %}
-            <a href="{% url 'caderneta' caderneta.id %}" class="cartao"> <!-- Link que leva à página da caderneta -->
+            <a href="{% url 'caderneta' caderneta.id %}" class="cartao">
                 <div class="cartao-cabecalho">
                     <h3>
                         <span class="indicador-disciplina" style="background-color: #0070f3;"></span>
-                        {{ caderneta.titulo }}  <!-- Título da caderneta -->
+                        {{ caderneta.titulo }}
                     </h3>
                     <span>⋮</span>
                 </div>
@@ -91,28 +90,30 @@
                 </div>
                 <div class="cartao-info">
                     <span class="cartao-rotulo">Data:</span>
-                    <span>{{ caderneta.data_aula|date:"d.m.Y"  }}</span>  <!-- Data da caderneta -->
+                    <span>{{ caderneta.data_aula|date:"d.m.Y"  }}</span>
                 </div>
                 <div class="cartao-info">
                     <span class="cartao-rotulo">Turma:</span>
-                    <span>{{ caderneta.turma }}</span>  <!-- Classe da caderneta -->
+                    <span>{{ caderneta.turma }}</span>
                 </div>
                 <div class="cartao-info">
                     <span class="cartao-rotulo">Período:</span>
-                    <span>{{ caderneta.semestre }}</span>  <!-- Semestre da caderneta -->
+                    <span>{{ caderneta.semestre }}</span>
                 </div>
             </a>
             {% endfor %}
         </div>
     </main>
-    
 
+    <footer class="footer">
+        <p>&copy; 2024 EducMais. Todos os direitos reservados.</p>
+    </footer>
+    
     <script>
         function toggleMenu() {
             document.querySelector('.barra-lateral').classList.toggle('aberta');
         }
 
-        // Fechar o menu quando clicar fora dele
         document.addEventListener('click', function(event) {
             const barraLateral = document.querySelector('.barra-lateral');
             const botaoMenu = document.querySelector('.botao-menu');
@@ -122,21 +123,48 @@
             }
         });
 
-        // Adicionar evento de clique aos itens do menu
         const menuItems = document.querySelectorAll('.menu-item');
         menuItems.forEach(item => {
             item.addEventListener('click', function() {
-                // Remover a classe 'ativo' de todos os itens
                 menuItems.forEach(i => i.classList.remove('ativo'));
-                
-                // Adicionar a classe 'ativo' ao item clicado
                 this.classList.add('ativo');
-                
-                // Fechar o menu se estiver no modo dropdown (tela pequena)
                 if (window.innerWidth < 768) {
                     document.querySelector('.barra-lateral').classList.remove('aberta');
                 }
             });
+        });
+
+        function setupSearchField(inputId, clearIconId, formId) {
+            const input = document.getElementById(inputId);
+            const clearIcon = document.getElementById(clearIconId);
+            const form = document.getElementById(formId);
+
+            function toggleClearIcon() {
+                clearIcon.style.display = input.value ? 'block' : 'none';
+            }
+
+            input.addEventListener('input', toggleClearIcon);
+
+            clearIcon.addEventListener('click', function(e) {
+                e.preventDefault();
+                input.value = '';
+                toggleClearIcon();
+                form.submit();
+            });
+
+            toggleClearIcon();
+        }
+
+        setupSearchField('campo-busca-cadernetas', 'icone-limpar-cadernetas', 'formulario-busca-cadernetas');
+
+        document.getElementById('botao-nova-caderneta').addEventListener('click', function(e) {
+            e.preventDefault();
+            try {
+                window.location.href = "{% url 'form_caderneta' %}";
+            } catch (error) {
+                console.error("Erro ao redirecionar para a página de nova caderneta:", error);
+                alert("Desculpe, ocorreu um erro ao tentar criar uma nova caderneta. Por favor, tente novamente mais tarde ou contate o suporte.");
+            }
         });
     </script>
 </body>

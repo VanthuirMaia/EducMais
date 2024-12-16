@@ -1,20 +1,19 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planlab - Home</title>
+    <title>EducMais - Home</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
     <header class="cabecalho">
         <button class="botao-menu" onclick="toggleMenu()">☰</button>
-        <img class="logo" src="{% static 'img/planlab_logo_branco_p.png' %}" alt="Logo">
-        <div>
-            <span class="botao-menu"><img src="{% static 'img/avatar-1.png' %}"  alt="Avatar" class="avatar-menu"></span>
+        <img class="logo" src="{% static 'img/logo_educmais_branco.svg' %}" alt="Logo">
+        <div class="avatar-container">
+            <img src="{% static 'img/avatar-1.png' %}" alt="Avatar" class="avatar-menu">
         </div>
     </header>
     
@@ -27,26 +26,31 @@
             {% endif %}
             <h3>{{ user.username }}</h3>  <!-- Nome do usuário dinâmico -->
         </div>
-        
         <ul class="menu">
             <li class="menu-item ativo">
-                <img src="{% static 'img/home.png' %}" alt="Home"> Início
+                <a href="{% url 'home' %}">
+                    <img src="{% static 'img/home.png' %}" alt="Home" class="icon">
+                    <span>Início</span>
+                </a>
             </li>
             <li class="menu-item">
                 <a href="{% url 'pag_planos_de_aula' %}">
-                    <img src="{% static 'img/Plano.png' %}" alt="Plano">Planos de Aula
+                    <img src="{% static 'img/Plano.png' %}" alt="Plano" class="icon">
+                    <span>Planos de Aula</span>
                 </a>
             </li>
             <li class="menu-item">
                 <a href="{% url 'pag_cadernetas' %}">
-                    <img src="{% static 'img/Caderneta.png' %}" alt="Cadernetas">Cadernetas
+                    <img src="{% static 'img/Caderneta.png' %}" alt="Cadernetas" class="icon">
+                    <span>Cadernetas</span>
                 </a>
             </li>
             <li class="menu-item">
                 <form action="{% url 'logout' %}" method="post">
                     {% csrf_token %}
-                    <button type="submit">
-                        <img src="{% static 'img/sair.png' %}" alt="sair">Sair
+                    <button type="submit" class="botao-sair">
+                        <img src="{% static 'img/sair.png' %}" alt="Sair" class="icon">
+                        <span>Sair</span>
                     </button>
                 </form>
             </li>
@@ -54,77 +58,125 @@
     </nav>
     
     <main class="conteudo-principal">
-        <div class="botoes-acao">
-            <h2>Bem-vindo de volta, {{ user.username }}!</h2>
-        </div>
-
-        <div>
-            <h3>Veja abaixo um resumo das suas atividades recentes.</h3>
-        </div>
-        <br>
-        <br>        
-        <div class="grade" id="grade-planos">
-            <div class="indicadores-rapidos">
-                <div class="card-indicador">
-                    <h3>Total de Planos de Aulas</h3>
-                    <p>{{ total_aulas }}</p>
-                </div>
-                <div class="card-indicador">
-                    <h3>Total de Cadernetas</h3>
-                    <p>{{ total_cadernetas }}</p>
-                </div>
-            </div>
-        </div>
+        <section class="boas-vindas">
+            <h1>Olá, {{ user.username }}!</h1>
+            <p>Bem-vindo de volta ao seu painel de controle.</p>
+        </section>
     
-        <!-- Últimas Aulas -->
-        <div class="pag_planos_de_aula_recentes">
-            <h3>Últimos Planos de Aulas</h3>
-            <div class="grade">
-                {% for aula in ultimas_aulas %}
-                    <div class="cartao">
-                        <h4>{{ aula.titulo }}</h4>
-                        <p><strong>Disciplina:</strong> {{ aula.disciplina }}</p>
-                        <p><strong>Data da Aula:</strong> {{ aula.data_aula }}</p>
-                        <p><strong>Turma:</strong> {{ aula.turma }}</p>
-                        <p><strong>Periodo:</strong> {{ aula.semestre }}</p>
+        <div class="dashboard-grid">
+            <section class="card estatisticas">
+                <h2>Visão Geral</h2>
+                <div class="estatisticas-grid">
+                    <div class="estatistica">
+                        <div class="estatistica-icone">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                        </div>
+                        <div class="estatistica-info">
+                            <h3>Total de Planos de Aulas</h3>
+                            <p class="numero">{{ total_aulas }}</p>
+                        </div>
                     </div>
-                {% empty %}
-                    <p>Você ainda não tem aulas registradas.</p>
-                {% endfor %}
-            </div>
-        </div>
+                    <div class="estatistica">
+                        <div class="estatistica-icone">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                        </div>
+                        <div class="estatistica-info">
+                            <h3>Total de Cadernetas</h3>
+                            <p class="numero">{{ total_cadernetas }}</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
     
-        <!-- Últimas Cadernetas -->
-        <div class="calendario">
-            <h3>Últimas Cadernetas</h3>
-            <div class="grade">
-                {% for caderneta in ultimas_cadernetas %}
-                    <div class="cartao">
-                        <h4>{{ caderneta.titulo }}</h4>
-                        <p><strong>Disciplina:</strong> {{ caderneta.disciplina }}</p>
-                        <p><strong>Data da Aula:</strong> {{ caderneta.data_aula }}</p>
-                        <p><strong>Turma:</strong> {{ caderneta.turma }}</p>
-                        <p><strong>Periodo:</strong> {{ caderneta.semestre }}</p>
-                    </div>
-                {% empty %}
-                    <p>Você ainda não tem cadernetas registradas.</p>
-                {% endfor %}
-            </div>
+            <section class="card atividades planos-aula">
+                <h2>Últimos Planos de Aulas</h2>
+                <div class="lista-atividades">
+                    {% for aula in ultimas_aulas %}
+                        <div class="atividade-item">
+                            <div class="atividade-icone">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                </svg>
+                            </div>
+                            <div class="atividade-conteudo">
+                                <h4>{{ aula.titulo }}</h4>
+                                <div class="atividade-info">
+                                    <span class="atividade-rotulo">Disciplina:</span>
+                                    <span class="atividade-valor destaque">{{ aula.disciplina }}</span>
+                                </div>
+                                <div class="atividade-info">
+                                    <span class="atividade-rotulo">Data:</span>
+                                    <span class="atividade-valor">{{ aula.data_aula|date:"d/m/Y" }}</span>
+                                </div>
+                                <div class="atividade-info">
+                                    <span class="atividade-rotulo">Turma:</span>
+                                    <span class="atividade-valor">{{ aula.turma }}</span>
+                                </div>
+                                <div class="atividade-info">
+                                    <span class="atividade-rotulo">Período:</span>
+                                    <span class="atividade-valor">{{ aula.semestre }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p class="sem-atividades">Você ainda não tem aulas registradas.</p>
+                    {% endfor %}
+                </div>
+                <a href="{% url 'pag_planos_de_aula' %}" class="botao-ver-mais">Ver todos os planos</a>
+            </section>
+            
+            <section class="card atividades cadernetas">
+                <h2>Últimas Cadernetas</h2>
+                <div class="lista-atividades">
+                    {% for caderneta in ultimas_cadernetas %}
+                        <div class="atividade-item">
+                            <div class="atividade-icone">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                </svg>
+                            </div>
+                            <div class="atividade-conteudo">
+                                <h4>{{ caderneta.titulo }}</h4>
+                                <div class="atividade-info">
+                                    <span class="atividade-rotulo">Disciplina:</span>
+                                    <span class="atividade-valor destaque">{{ caderneta.disciplina }}</span>
+                                </div>
+                                <div class="atividade-info">
+                                    <span class="atividade-rotulo">Data:</span>
+                                    <span class="atividade-valor">{{ caderneta.data_aula|date:"d/m/Y" }}</span>
+                                </div>
+                                <div class="atividade-info">
+                                    <span class="atividade-rotulo">Turma:</span>
+                                    <span class="atividade-valor">{{ caderneta.turma }}</span>
+                                </div>
+                                <div class="atividade-info">
+                                    <span class="atividade-rotulo">Período:</span>
+                                    <span class="atividade-valor">{{ caderneta.semestre }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p class="sem-atividades">Você ainda não tem cadernetas registradas.</p>
+                    {% endfor %}
+                </div>
+                <a href="{% url 'pag_cadernetas' %}" class="botao-ver-mais">Ver todas as cadernetas</a>
+            </section>
         </div>
     </main>
-    
-    
-    
-    
-    
-    
 
+    <footer class="footer">
+        <p>&copy; 2024 EducMais. Todos os direitos reservados.</p>
+    </footer>
+    
     <script>
         function toggleMenu() {
             document.querySelector('.barra-lateral').classList.toggle('aberta');
         }
 
-        // Fechar o menu quando clicar fora dele
         document.addEventListener('click', function(event) {
             const barraLateral = document.querySelector('.barra-lateral');
             const botaoMenu = document.querySelector('.botao-menu');
@@ -134,17 +186,12 @@
             }
         });
 
-        // Adicionar evento de clique aos itens do menu
         const menuItems = document.querySelectorAll('.menu-item');
         menuItems.forEach(item => {
             item.addEventListener('click', function() {
-                // Remover a classe 'ativo' de todos os itens
                 menuItems.forEach(i => i.classList.remove('ativo'));
-                
-                // Adicionar a classe 'ativo' ao item clicado
                 this.classList.add('ativo');
                 
-                // Fechar o menu se estiver no modo dropdown (tela pequena)
                 if (window.innerWidth < 768) {
                     document.querySelector('.barra-lateral').classList.remove('aberta');
                 }

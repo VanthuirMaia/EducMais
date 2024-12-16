@@ -5,16 +5,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planlab</title>
+    <title>EducMais</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
     <header class="cabecalho">
         <button class="botao-menu" onclick="toggleMenu()">☰</button>
-        <img class="logo" src="{% static 'img/planlab logo branco p.png' %}" alt="">
-        <div>
-            <span class="botao-menu"><img src="{% static 'img/avatar-1.png' %}" alt="Avatar" class="avatar-menu"></span>
+        <img class="logo" src="{% static 'img/logo_educmais_branco.svg' %}" alt="Logo">
+        <div class="avatar-container">
+            <img src="{% static 'img/avatar-1.png' %}" alt="Avatar" class="avatar-menu">
         </div>
     </header>
     
@@ -29,23 +29,29 @@
         </div>
         <ul class="menu">
             <li class="menu-item">
-                <img src="{% static 'img/home.png' %}" alt="Home"> Início
+                <a href="{% url 'home' %}">
+                    <img src="{% static 'img/home.png' %}" alt="Home" class="icon">
+                    <span>Início</span>
+                </a>
             </li>
             <li class="menu-item ativo">
                 <a href="{% url 'pag_planos_de_aula' %}">
-                    <img src="{% static 'img/Plano.png' %}" alt="Plano">Planos de Aula
+                    <img src="{% static 'img/Plano.png' %}" alt="Plano" class="icon">
+                    <span>Planos de Aula</span>
                 </a>
             </li>
             <li class="menu-item">
                 <a href="{% url 'pag_cadernetas' %}">
-                    <img src="{% static 'img/Caderneta.png' %}" alt="Cadernetas">Cadernetas
+                    <img src="{% static 'img/Caderneta.png' %}" alt="Cadernetas" class="icon">
+                    <span>Cadernetas</span>
                 </a>
             </li>
             <li class="menu-item">
                 <form action="{% url 'logout' %}" method="post">
                     {% csrf_token %}
-                    <button type="submit">
-                        <img src="{% static 'img/sair.png' %}" alt="sair">Sair
+                    <button type="submit" class="botao-sair">
+                        <img src="{% static 'img/sair.png' %}" alt="Sair" class="icon">
+                        <span>Sair</span>
                     </button>
                 </form>
             </li>
@@ -59,8 +65,8 @@
 
         <form class="formulario" method="POST" action="{% url 'form_aula' %}">
             {% csrf_token %}
-            <div class="grid">
-                <div class="grupo-campo">
+            <div class="form-row">
+                <div class="form-col form-col-md-4">
                     <label class="rotulo" for="disciplina">Disciplina</label>
                     <select class="campo" name="disciplina" id="disciplina" required>
                         <option value="">Selecione a disciplina</option>
@@ -70,12 +76,12 @@
                     </select>
                 </div>
 
-                <div class="grupo-campo">
+                <div class="form-col form-col-md-4">
                     <label class="rotulo" for="data">Data</label>
                     <input type="date" class="campo" name="data" id="data" required>
                 </div>
 
-                <div class="grupo-campo">
+                <div class="form-col form-col-md-4">
                     <label class="rotulo" for="serie">Turma</label>
                     <select class="campo" name="serie" id="serie" required>
                         <option value="">Selecione a turma</option>
@@ -84,8 +90,10 @@
                         {% endfor %}
                     </select>
                 </div>
+            </div>
 
-                <div class="grupo-campo">
+            <div class="form-row">
+                <div class="form-col form-col-md-6">
                     <label class="rotulo" for="semestre">Período</label>
                     <select class="campo" name="semestre" id="semestre" required>
                         <option value="">Selecione o semestre</option>
@@ -95,52 +103,54 @@
                     </select>
                 </div>
 
-                <div class="grupo-campo">
+                <div class="form-col form-col-md-6">
                     <label class="rotulo" for="eventos_extraordinarios">Eventos Extraordinários</label>
                     <select class="campo" name="eventos_extraordinarios" id="eventos_extraordinarios" required>
                         <option value="nao">Não</option>
                         <option value="sim">Sim</option>
                     </select>
                 </div>
+            </div>
 
-                <div class="grupo-campo">
+            <div class="form-row">
+                <div class="form-col">
                     <label class="rotulo" for="titulo">Título da Aula</label>
                     <input type="text" class="campo" name="titulo" id="titulo" placeholder="Digite o título da aula" required>
                 </div>
-
-
             </div>
 
-            <div class="grid">
-                <div class="grupo-campo">
+            <div class="form-row">
+                <div class="form-col form-col-md-6">
                     <label class="rotulo" for="conteudo_programatico">Conteúdo Programático</label>
                     <textarea class="campo campo-texto" name="conteudo_programatico" id="conteudo_programatico" placeholder="Descreva o conteúdo curricular" required></textarea>
                 </div>
 
-                <div class="grupo-campo">
+                <div class="form-col form-col-md-6">
                     <label class="rotulo" for="metodologia">Metodologia</label>
                     <textarea class="campo campo-texto" name="metodologia" id="metodologia" placeholder="Descreva a metodologia" required></textarea>
                 </div>
-
-                <div class="grupo-campo">
+            </div>
+            
+            <div class="form-row">
+                <div class="form-col form-col-md-6">
                     <label class="rotulo" for="recursos_necessarios">Recursos necessários</label>
                     <textarea class="campo campo-texto" name="recursos_necessarios" id="recursos_necessarios" placeholder="Liste os recursos necessários" required></textarea>
                 </div>
-            </div>
-            
-            <div class="grid">
-                <div class="grupo-campo">
+
+                <div class="form-col form-col-md-6">
                     <label class="rotulo" for="avaliacao_observacoes">Avaliação</label>
                     <textarea class="campo campo-texto" name="avaliacao_observacoes" id="avaliacao_observacoes" placeholder="Descreva o método de avaliação" required></textarea>
                 </div>
-
-                <div class="grupo-campo">
+            </div>
+            
+            <div class="form-row">
+                <div class="form-col">
                     <label class="rotulo" for="observacao">Observação</label>
                     <textarea class="campo campo-texto" name="observacao" id="observacao" placeholder="Adicione observações relevantes" required></textarea>
                 </div>
             </div>
             
-            <div class="botoes">
+            <div class="container-botoes">
                 <button type="button" class="botao botao-secundario" onclick="cancelarFormulario()">Cancelar</button>
                 <button type="submit" class="botao botao-primario">Salvar Plano de Aula</button>
             </div>
@@ -155,6 +165,10 @@
             <button class="botao botao-primario" onclick="closeModal()">Fechar</button>
         </div>
     </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 EducMais. Todos os direitos reservados.</p>
+    </footer>
 
     <script>
         function toggleMenu() {

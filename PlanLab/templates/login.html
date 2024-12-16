@@ -12,10 +12,10 @@
 <body>
     <div class="login-conteudo">
         <div class="login-formulario">
-            <img src="{% static 'img/planlab_logo_principal_p.png' %}" alt="Logo Planlab" class="login-logo">
+            <img src="{% static 'img/logo_educmais_azul.svg' %}" alt="Logo Planlab" class="login-logo">
             <div class="login-formulario-conteudo">
                 <h1 class="login-titulo">Acesse a plataforma</h1>
-                <p class="login-descricao">Faça login ou registre-se para começar a construir seus planos de aula ainda hoje.</p>
+                <p class="login-descricao">Entre para começar a planejar suas aulas.</p>
                 <form id="loginForm" method="post" action="{% url 'login' %}">
                     {% csrf_token %}
                     <div class="login-campo">
@@ -54,11 +54,11 @@
             toggleSenhaBtn.addEventListener('click', function() {
                 if (senhaInput.type === 'password') {
                     senhaInput.type = 'text';
-                    senhaIcon.src = '../img/ocultar.png';
+                    senhaIcon.src = "{% static 'img/ocultar.png' %}";
                     toggleSenhaBtn.setAttribute('aria-label', 'Ocultar senha');
                 } else {
                     senhaInput.type = 'password';
-                    senhaIcon.src = '../img/visualizar.png';
+                    senhaIcon.src = "{% static 'img/visualizar.png' %}";
                     toggleSenhaBtn.setAttribute('aria-label', 'Mostrar senha');
                 }
             });

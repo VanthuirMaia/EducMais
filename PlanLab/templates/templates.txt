@@ -1,0 +1,1903 @@
+templates/
+  caderneta.html
+  Content:
+    {% load static %}
+    
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Planlab - Cadernetas</title>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    </head>
+    <body>
+        <header class="cabecalho">
+            <button class="botao-menu" onclick="toggleMenu()">☰</button>
+            <img class="logo" src="{% static 'img/planlab_logo_branco_p.png' %}" alt="Logo">
+            <div class="avatar-container">
+                <img src="{% static 'img/avatar-1.png' %}" alt="Avatar" class="avatar-menu">
+            </div>
+        </header>
+        
+        <nav class="barra-lateral">
+            <div class="perfil">
+                {% if user.profile.profile_picture %}
+                    <img class="avatar" src="{{ user.profile.profile_picture.url }}" alt="Profile Picture">
+                {% else %}
+                    <img class="avatar" src="{% static 'img/avatar-1.png' %}" alt="Default Profile Picture">
+                {% endif %}
+                <h3>{{ user.username }}</h3>
+            </div>
+            <ul class="menu">
+                <li class="menu-item">
+                    <a href="{% url 'home' %}">
+                        <img src="{% static 'img/home.png' %}" alt="Home" class="icon">
+                        <span>Início</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{% url 'pag_planos_de_aula' %}">
+                        <img src="{% static 'img/Plano.png' %}" alt="Plano" class="icon">
+                        <span>Planos de Aula</span>
+                    </a>
+                </li>
+                <li class="menu-item ativo">
+                    <a href="{% url 'pag_cadernetas' %}">
+                        <img src="{% static 'img/Caderneta.png' %}" alt="Cadernetas" class="icon">
+                        <span>Cadernetas</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="botao-sair">
+                            <img src="{% static 'img/sair.png' %}" alt="Sair" class="icon">
+                            <span>Sair</span>
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+    
+        <main class="conteudo-principal">
+            <div class="plano-aula">
+                <h2 class="titulo-aula">{{ caderneta.titulo }}</h2>
+                <div class="detalhes-aula">
+                    <div class="item-detalhe">
+                        <span class="rotulo-detalhe">Disciplina:</span>
+                        <span class="valor-detalhe">{{ caderneta.disciplina.nome }}</span>
+                    </div>
+                    <div class="item-detalhe">
+                        <span class="rotulo-detalhe">Data:</span>
+                        <span class="valor-detalhe">{{ caderneta.data_aula|date:"d/m/Y" }}</span>
+                    </div>
+                    <div class="item-detalhe">
+                        <span class="rotulo-detalhe">Turma:</span>
+                        <span class="valor-detalhe">{{ caderneta.turma.nome }}</span>
+                    </div>
+                    <div class="item-detalhe">
+                        <span class="rotulo-detalhe">Período:</span>
+                        <span class="valor-detalhe">{{ caderneta.semestre.descricao }}</span>
+                    </div>
+                    <div class="item-detalhe">
+                        <span class="rotulo-detalhe">Eventos Extraordinários:</span>
+                        <span class="valor-detalhe">{{ caderneta.eventos|yesno:"Sim,Não" }}</span>
+                    </div>
+                </div>
+                <div class="grade-aula">
+                    <div class="secao">
+                        <h3 class="titulo-secao">Conteúdo:</h3>
+                        <div class="conteudo-scrollable">
+                            <p>{{ caderneta.conteudo }}</p>
+                        </div>
+                    </div>
+                    <div class="secao">
+                        <h3 class="titulo-secao">Materiais Utilizados:</h3>
+                        <div class="conteudo-scrollable">
+                            <p>{{ caderneta.materiais }}</p>
+                        </div>
+                    </div>
+                    <div class="secao">
+                        <h3 class="titulo-secao">Atividade Prática:</h3>
+                        <div class="conteudo-scrollable">
+                            <p>{{ caderneta.atividade }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="acoes-caderneta">
+                    <a href="{% url 'form_editar_caderneta' caderneta.id %}" class="botao-acao botao-editar">Editar</a>
+                    <form action="{% url 'excluir_caderneta' caderneta.id %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="botao-acao botao-excluir" onclick="return confirm('Tem certeza que deseja excluir esta caderneta?');">Excluir</button>
+                    </form>
+                    <a href="{% url 'copiar_caderneta' id=caderneta.id %}" class="botao-acao botao-copiar">Copiar</a>
+                </div>
+            </div>
+        </main>
+    
+        <footer class="footer">
+            <p>&copy; 2023 Planlab. Todos os direitos reservados.</p>
+        </footer>
+    
+        <script>
+            function toggleMenu() {
+                document.querySelector('.barra-lateral').classList.toggle('aberta');
+            }
+    
+            document.addEventListener('click', function(event) {
+                const barraLateral = document.querySelector('.barra-lateral');
+                const botaoMenu = document.querySelector('.botao-menu');
+                
+                if (!barraLateral.contains(event.target) && event.target !== botaoMenu) {
+                    barraLateral.classList.remove('aberta');
+                }
+            });
+    
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    menuItems.forEach(i => i.classList.remove('ativo'));
+                    this.classList.add('ativo');
+                    
+                    if (window.innerWidth < 768) {
+                        document.querySelector('.barra-lateral').classList.remove('aberta');
+                    }
+                });
+            });
+        </script>
+    </body>
+    </html>
+
+  form_aula.html
+  Content:
+    {% load static %}
+    
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Planlab</title>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    </head>
+    <body>
+        <header class="cabecalho">
+            <button class="botao-menu" onclick="toggleMenu()">☰</button>
+            <img class="logo" src="{% static 'img/planlab_logo_branco_p.png' %}" alt="Logo">
+            <div class="avatar-container">
+                <img src="{% static 'img/avatar-1.png' %}" alt="Avatar" class="avatar-menu">
+            </div>
+        </header>
+        
+        <nav class="barra-lateral">
+            <div class="perfil">
+                {% if user.profile.profile_picture %}
+                    <img class="avatar" src="{{ user.profile.profile_picture.url }}" alt="Profile Picture">
+                {% else %}
+                    <img class="avatar" src="{% static 'img/avatar-1.png' %}" alt="Default Profile Picture">
+                {% endif %}
+                <h3>{{ user.username }}</h3>  <!-- Nome do usuário dinâmico -->
+            </div>
+            <ul class="menu">
+                <li class="menu-item">
+                    <a href="{% url 'home' %}">
+                        <img src="{% static 'img/home.png' %}" alt="Home" class="icon">
+                        <span>Início</span>
+                    </a>
+                </li>
+                <li class="menu-item ativo">
+                    <a href="{% url 'pag_planos_de_aula' %}">
+                        <img src="{% static 'img/Plano.png' %}" alt="Plano" class="icon">
+                        <span>Planos de Aula</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{% url 'pag_cadernetas' %}">
+                        <img src="{% static 'img/Caderneta.png' %}" alt="Cadernetas" class="icon">
+                        <span>Cadernetas</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="botao-sair">
+                            <img src="{% static 'img/sair.png' %}" alt="Sair" class="icon">
+                            <span>Sair</span>
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+        
+        <main class="conteudo-principal-form">
+            <div class="titulo-form">
+                <h1 style="margin-bottom: 1rem; font-weight: 600; font-size: 2rem;">Formulário Plano de Aula</h1>
+            </div>
+    
+            <form class="formulario" method="POST" action="{% url 'form_aula' %}">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="form-col form-col-md-4">
+                        <label class="rotulo" for="disciplina">Disciplina</label>
+                        <select class="campo" name="disciplina" id="disciplina" required>
+                            <option value="">Selecione a disciplina</option>
+                            {% for disciplina in disciplinas %}
+                                <option value="{{ disciplina.id }}">{{ disciplina.nome }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+    
+                    <div class="form-col form-col-md-4">
+                        <label class="rotulo" for="data">Data</label>
+                        <input type="date" class="campo" name="data" id="data" required>
+                    </div>
+    
+                    <div class="form-col form-col-md-4">
+                        <label class="rotulo" for="serie">Turma</label>
+                        <select class="campo" name="serie" id="serie" required>
+                            <option value="">Selecione a turma</option>
+                            {% for turma in turmas %}
+                                <option value="{{ turma.id }}">{{ turma.nome }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+    
+                <div class="form-row">
+                    <div class="form-col form-col-md-6">
+                        <label class="rotulo" for="semestre">Período</label>
+                        <select class="campo" name="semestre" id="semestre" required>
+                            <option value="">Selecione o semestre</option>
+                            {% for semestre in semestres %}
+                                <option value="{{ semestre.id }}">{{ semestre.descricao }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+    
+                    <div class="form-col form-col-md-6">
+                        <label class="rotulo" for="eventos_extraordinarios">Eventos Extraordinários</label>
+                        <select class="campo" name="eventos_extraordinarios" id="eventos_extraordinarios" required>
+                            <option value="nao">Não</option>
+                            <option value="sim">Sim</option>
+                        </select>
+                    </div>
+                </div>
+    
+                <div class="form-row">
+                    <div class="form-col">
+                        <label class="rotulo" for="titulo">Título da Aula</label>
+                        <input type="text" class="campo" name="titulo" id="titulo" placeholder="Digite o título da aula" required>
+                    </div>
+                </div>
+    
+                <div class="form-row">
+                    <div class="form-col form-col-md-6">
+                        <label class="rotulo" for="conteudo_programatico">Conteúdo Programático</label>
+                        <textarea class="campo campo-texto" name="conteudo_programatico" id="conteudo_programatico" placeholder="Descreva o conteúdo curricular" required></textarea>
+                    </div>
+    
+                    <div class="form-col form-col-md-6">
+                        <label class="rotulo" for="metodologia">Metodologia</label>
+                        <textarea class="campo campo-texto" name="metodologia" id="metodologia" placeholder="Descreva a metodologia" required></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-col form-col-md-6">
+                        <label class="rotulo" for="recursos_necessarios">Recursos necessários</label>
+                        <textarea class="campo campo-texto" name="recursos_necessarios" id="recursos_necessarios" placeholder="Liste os recursos necessários" required></textarea>
+                    </div>
+    
+                    <div class="form-col form-col-md-6">
+                        <label class="rotulo" for="avaliacao_observacoes">Avaliação</label>
+                        <textarea class="campo campo-texto" name="avaliacao_observacoes" id="avaliacao_observacoes" placeholder="Descreva o método de avaliação" required></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-col">
+                        <label class="rotulo" for="observacao">Observação</label>
+                        <textarea class="campo campo-texto" name="observacao" id="observacao" placeholder="Adicione observações relevantes" required></textarea>
+                    </div>
+                </div>
+                
+                <div class="container-botoes">
+                    <button type="button" class="botao botao-secundario" onclick="cancelarFormulario()">Cancelar</button>
+                    <button type="submit" class="botao botao-primario">Salvar Plano de Aula</button>
+                </div>
+            </form>
+        </main>
+    
+        <div class="modal" id="successModal" style="display:none;">
+            <div class="modal-conteudo">
+                <h2>Plano de Aula Salvo com Sucesso!</h2>
+                <button class="modal-fechar" onclick="closeModal()">&times;</button>
+                <p>Seu plano de aula foi cadastrado com sucesso.</p>
+                <button class="botao botao-primario" onclick="closeModal()">Fechar</button>
+            </div>
+        </div>
+    
+        <footer class="footer">
+            <p>&copy; 2023 Planlab. Todos os direitos reservados.</p>
+        </footer>
+    
+        <script>
+            function toggleMenu() {
+                const menu = document.querySelector('.barra-lateral');
+                menu.classList.toggle('active');
+            }
+    
+            function cancelarFormulario() {
+                const confirmar = confirm("Tem certeza que deseja cancelar? Todos os dados serão perdidos.");
+                if (confirmar) {
+                    window.location.href = "{% url 'pag_planos_de_aula' %}";
+                }
+            }
+    
+            function closeModal() {
+                const modal = document.getElementById('successModal');
+                modal.style.display = 'none';
+            }
+        </script>
+    </body>
+    </html>
+
+  form_caderneta.html
+  Content:
+    {% load static %}
+    
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Planlab - Formulário de Caderneta</title>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    </head>
+    <body>
+        <header class="cabecalho">
+            <button class="botao-menu" onclick="toggleMenu()">☰</button>
+            <img class="logo" src="{% static 'img/planlab_logo_branco_p.png' %}" alt="Logo">
+            <div class="avatar-container">
+                <img src="{% static 'img/avatar-1.png' %}" alt="Avatar" class="avatar-menu">
+            </div>
+        </header>
+        
+        <nav class="barra-lateral">
+            <div class="perfil">
+                {% if user.profile.profile_picture %}
+                    <img class="avatar" src="{{ user.profile.profile_picture.url }}" alt="Profile Picture">
+                {% else %}
+                    <img class="avatar" src="{% static 'img/avatar-1.png' %}" alt="Default Profile Picture">
+                {% endif %}
+                <h3>{{ user.username }}</h3>
+            </div>
+            <ul class="menu">
+                <li class="menu-item">
+                    <a href="{% url 'home' %}">
+                        <img src="{% static 'img/home.png' %}" alt="Home" class="icon">
+                        <span>Início</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{% url 'pag_planos_de_aula' %}">
+                        <img src="{% static 'img/Plano.png' %}" alt="Plano" class="icon">
+                        <span>Planos de Aula</span>
+                    </a>
+                </li>
+                <li class="menu-item ativo">
+                    <a href="{% url 'pag_cadernetas' %}">
+                        <img src="{% static 'img/Caderneta.png' %}" alt="Cadernetas" class="icon">
+                        <span>Cadernetas</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="botao-sair">
+                            <img src="{% static 'img/sair.png' %}" alt="Sair" class="icon">
+                            <span>Sair</span>
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+        
+        <main class="conteudo-principal-form">
+            <div class="titulo-form">
+                <h1 style="margin-bottom: 1rem; font-weight: 600; font-size: 2rem;">Formulário de Caderneta</h1>
+            </div>
+        
+            <form method="post" class="formulario" action="{% url 'form_caderneta' %}">
+                {% csrf_token %}
+        
+                <div class="form-row">
+                    <div class="form-col form-col-md-4">
+                        <label class="rotulo" for="disciplina">Disciplina</label>
+                        <select class="campo" name="disciplina" id="disciplina" required>
+                            <option value="">Selecione a disciplina</option>
+                            {% for disciplina in disciplinas %}
+                            <option value="{{ disciplina.id }}" {% if caderneta.disciplina.id == disciplina.id %}selected{% endif %}>
+                                {{ disciplina.nome }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+        
+                    <div class="form-col form-col-md-4">
+                        <label class="rotulo" for="data_aula">Data</label>
+                        <input type="date" class="campo" name="data_aula" id="data_aula" value="{{ caderneta.data_aula|date:'Y-m-d' }}" required>
+                    </div>
+        
+                    <div class="form-col form-col-md-4">
+                        <label class="rotulo" for="turma">Turma</label>
+                        <select class="campo" name="turma" id="turma" required>
+                            <option value="">Selecione a turma</option>
+                            {% for turma in turmas %}
+                            <option value="{{ turma.id }}" {% if caderneta.turma.id == turma.id %}selected{% endif %}>
+                                {{ turma.nome }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+        
+                <div class="form-row">
+                    <div class="form-col form-col-md-4">
+                        <label class="rotulo" for="semestre">Período</label>
+                        <select class="campo" name="semestre" id="semestre" required>
+                            <option value="">Selecione o semestre</option>
+                            {% for semestre in semestres %}
+                            <option value="{{ semestre.id }}" {% if caderneta.semestre.id == semestre.id %}selected{% endif %}>
+                                {{ semestre.descricao }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+        
+                    <div class="form-col form-col-md-4">
+                        <label class="rotulo" for="eventos">Eventos Extraordinários</label>
+                        <select class="campo" name="eventos" id="eventos" required>
+                            <option value="nao" {% if caderneta.eventos == 'nao' %}selected{% endif %}>Não</option>
+                            <option value="sim" {% if caderneta.eventos == 'sim' %}selected{% endif %}>Sim</option>
+                        </select>
+                    </div>
+        
+                    <div class="form-col form-col-md-4">
+                        <label class="rotulo" for="titulo">Título da Aula</label>
+                        <input type="text" class="campo" name="titulo" id="titulo" placeholder="Digite o título da aula" value="{{ caderneta.titulo }}" required>
+                    </div>
+                </div>
+        
+                <div class="form-row">
+                    <div class="form-col">
+                        <label class="rotulo" for="conteudo">Conteúdo da Caderneta</label>
+                        <textarea class="campo campo-texto" name="conteudo" id="conteudo" placeholder="Descreva o conteúdo da caderneta" required>{{ caderneta.conteudo }}</textarea>
+                    </div>
+                </div>
+        
+                <div class="form-row">
+                    <div class="form-col form-col-md-6">
+                        <label class="rotulo" for="materiais">Materiais Utilizados</label>
+                        <textarea class="campo campo-texto" name="materiais" id="materiais" placeholder="Liste os materiais utilizados (opcional)">{{ caderneta.materiais }}</textarea>
+                    </div>
+        
+                    <div class="form-col form-col-md-6">
+                        <label class="rotulo" for="atividade">Atividade Prática</label>
+                        <textarea class="campo campo-texto" name="atividade" id="atividade" placeholder="Descreva a atividade prática (opcional)">{{ caderneta.atividade }}</textarea>
+                    </div>
+                </div>
+        
+                <div class="container-botoes">
+                    <button type="button" class="botao botao-secundario" onclick="cancelarFormulario()">Cancelar</button>
+                    <button type="submit" class="botao botao-primario">Salvar Caderneta</button>
+                </div>
+            </form>
+        </main>
+        
+    
+        <div class="modal" id="successModal" style="display:none;">
+            <div class="modal-conteudo">
+                <h2>Caderneta Salva com Sucesso!</h2>
+                <button class="modal-fechar" onclick="closeModal()">&times;</button>
+                <p>Sua caderneta foi cadastrada com sucesso.</p>
+                <button class="botao botao-primario" onclick="closeModal()">Fechar</button>
+            </div>
+        </div>
+    
+        <footer class="footer">
+            <p>&copy; 2023 Planlab. Todos os direitos reservados.</p>
+        </footer>
+    
+        <script>
+            function toggleMenu() {
+                document.querySelector('.barra-lateral').classList.toggle('aberta');
+            }
+    
+            document.addEventListener('click', function(event) {
+                const barraLateral = document.querySelector('.barra-lateral');
+                const botaoMenu = document.querySelector('.botao-menu');
+                
+                if (!barraLateral.contains(event.target) && event.target !== botaoMenu) {
+                    barraLateral.classList.remove('aberta');
+                }
+            });
+    
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    menuItems.forEach(i => i.classList.remove('ativo'));
+                    this.classList.add('ativo');
+                    
+                    if (window.innerWidth < 768) {
+                        document.querySelector('.barra-lateral').classList.remove('aberta');
+                    }
+                });
+            });
+        </script>
+    </body>
+    </html>
+
+  form_editar_aula.html
+  Content:
+    {% load static %}
+    
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Planlab - Editar Plano de Aula</title>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    </head>
+    <body>
+        <header class="cabecalho">
+            <button class="botao-menu" onclick="toggleMenu()">☰</button>
+            <img class="logo" src="{% static 'img/planlab_logo_branco_p.png' %}" alt="Logo">
+            <div class="avatar-container">
+                <img src="{% static 'img/avatar-1.png' %}" alt="Avatar" class="avatar-menu">
+            </div>
+        </header>
+        
+        <nav class="barra-lateral">
+            <div class="perfil">
+                {% if user.profile.profile_picture %}
+                    <img class="avatar" src="{{ user.profile.profile_picture.url }}" alt="Profile Picture">
+                {% else %}
+                    <img class="avatar" src="{% static 'img/avatar-1.png' %}" alt="Default Profile Picture">
+                {% endif %}
+                <h3>{{ user.username }}</h3>  <!-- Nome do usuário dinâmico -->
+            </div>
+            <ul class="menu">
+                <li class="menu-item">
+                    <a href="{% url 'home' %}">
+                        <img src="{% static 'img/home.png' %}" alt="Home" class="icon">
+                        <span>Início</span>
+                    </a>
+                </li>
+                <li class="menu-item ativo">
+                    <a href="{% url 'pag_planos_de_aula' %}">
+                        <img src="{% static 'img/Plano.png' %}" alt="Plano" class="icon">
+                        <span>Planos de Aula</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{% url 'pag_cadernetas' %}">
+                        <img src="{% static 'img/Caderneta.png' %}" alt="Cadernetas" class="icon">
+                        <span>Cadernetas</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="botao-sair">
+                            <img src="{% static 'img/sair.png' %}" alt="Sair" class="icon">
+                            <span>Sair</span>
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+        
+        <main class="conteudo-principal-form">
+            <div class="titulo-form">
+                <h1 style="margin-bottom: 1rem; font-weight: 600; font-size: 2rem;">Editar Plano de Aula</h1>
+            </div>
+    
+            <form class="formulario" method="POST" action="{% url 'form_editar_aula' plano.id %}">
+                {% csrf_token %}
+    
+                <div class="form-row">
+                    <div class="form-col form-col-md-4">
+                        <label class="rotulo" for="disciplina">Disciplina</label>
+                        <select class="campo" name="disciplina" id="disciplina" required>
+                            <option value="">Selecione a disciplina</option>
+                            {% for disciplina in form.disciplina.field.queryset %}
+                                <option value="{{ disciplina.id }}" {% if disciplina.id == form.disciplina.value %}selected{% endif %}>
+                                    {{ disciplina.nome }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+            
+                    <div class="form-col form-col-md-4">
+                        <label class="rotulo" for="data_aula">Data</label>
+                        <input type="date" class="campo" name="data_aula" id="data_aula" value="{{ plano.data_aula|date:'Y-m-d' }}" required>
+                    </div>
+            
+                    <div class="form-col form-col-md-4">
+                        <label class="rotulo" for="turma">Turma</label>
+                        <select class="campo" name="turma" id="turma" required>
+                            <option value="">Selecione a turma</option>
+                            {% for turma in form.turma.field.queryset %}
+                                <option value="{{ turma.id }}" {% if turma.id == form.turma.value %}selected{% endif %}>
+                                    {{ turma.nome }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-col form-col-md-6">
+                        <label class="rotulo" for="semestre">Período</label>
+                        <select class="campo" name="semestre" id="semestre" required>
+                            <option value="">Selecione o semestre</option>
+                            {% for semestre in form.semestre.field.queryset %}
+                                <option value="{{ semestre.id }}" {% if semestre.id == form.semestre.value %}selected{% endif %}>
+                                    {{ semestre.descricao }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="form-col form-col-md-6">
+                        <label class="rotulo" for="eventos_extraordinarios">Eventos Extraordinários</label>
+                        <select class="campo" name="eventos_extraordinarios" id="eventos_extraordinarios">
+                            <option value="nao" {% if plano.eventos_extraordinarios == 'nao' %}selected{% endif %}>Não</option>
+                            <option value="sim" {% if plano.eventos_extraordinarios == 'sim' %}selected{% endif %}>Sim</option>
+                        </select>
+                    </div>
+                </div>
+    
+                <div class="form-row">
+                    <div class="form-col">
+                        <label class="rotulo" for="titulo">Título da Aula</label>
+                        <input type="text" class="campo" name="titulo" id="titulo" value="{{ plano.titulo }}" placeholder="Digite o título da aula" required>
+                    </div>
+                </div>
+            
+                <div class="form-row">
+                    <div class="form-col form-col-md-6">
+                        <label class="rotulo" for="conteudo_programatico">Conteúdo Programático</label>
+                        <textarea class="campo campo-texto" name="conteudo_programatico" id="conteudo_programatico" placeholder="Descreva o conteúdo curricular" required>{{ plano.conteudo_programatico }}</textarea>
+                    </div>
+            
+                    <div class="form-col form-col-md-6">
+                        <label class="rotulo" for="metodologia">Metodologia</label>
+                        <textarea class="campo campo-texto" name="metodologia" id="metodologia" placeholder="Descreva a metodologia" required>{{ plano.metodologia }}</textarea>
+                    </div>
+                </div>
+            
+                <div class="form-row">
+                    <div class="form-col form-col-md-6">
+                        <label class="rotulo" for="recursos_necessarios">Recursos necessários</label>
+                        <textarea class="campo campo-texto" name="recursos_necessarios" id="recursos_necessarios" placeholder="Liste os recursos necessários" required>{{ plano.recursos_necessarios }}</textarea>
+                    </div>
+    
+                    <div class="form-col form-col-md-6">
+                        <label class="rotulo" for="avaliacao_observacoes">Avaliação</label>
+                        <textarea class="campo campo-texto" name="avaliacao_observacoes" id="avaliacao_observacoes" placeholder="Descreva o método de avaliação" required >{{ plano.avaliacao_observacoes }}</textarea>
+                    </div>
+                </div>
+    
+                <div class="form-row">
+                    <div class="form-col">
+                        <label class="rotulo" for="observacoes">Observações</label>
+                        <textarea class="campo campo-texto" name="observacoes" id="observacoes" placeholder="Observações relevantes" >{{ plano.observacoes }}</textarea>
+                    </div>
+                </div>
+    
+                <div class="container-botoes">
+                    <button type="button" class="botao botao-secundario" onclick="location.href='{% url 'plano' plano.id %}'">Cancelar</button>
+                    <button class="botao botao-primario" type="submit">Salvar</button>
+                </div>
+            </form>
+    
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+        </main>
+    
+        <footer class="footer">
+            <p>&copy; 2023 Planlab. Todos os direitos reservados.</p>
+        </footer>
+    
+        <script>
+            function toggleMenu() {
+                document.querySelector('.barra-lateral').classList.toggle('aberta');
+            }
+    
+            document.addEventListener('click', function(event) {
+                const barraLateral = document.querySelector('.barra-lateral');
+                const botaoMenu = document.querySelector('.botao-menu');
+                
+                if (!barraLateral.contains(event.target) && event.target !== botaoMenu) {
+                    barraLateral.classList.remove('aberta');
+                }
+            });
+    
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    menuItems.forEach(i => i.classList.remove('ativo'));
+                    this.classList.add('ativo');
+                    
+                    if (window.innerWidth < 768) {
+                        document.querySelector('.barra-lateral').classList.remove('aberta');
+                    }
+                });
+            });
+        </script>
+    </body>
+    </html>
+
+  form_editar_caderneta.html
+  Content:
+    {% load static %}
+    
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Planlab - Editar Plano de Aula</title>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    </head>
+    <body>
+        <header class="cabecalho">
+            <button class="botao-menu" onclick="toggleMenu()">☰</button>
+            <img class="logo" src="{% static 'img/planlab_logo_branco_p.png' %}" alt="Logo">
+            <div class="avatar-container">
+                <img src="{% static 'img/avatar-1.png' %}" alt="Avatar" class="avatar-menu">
+            </div>
+        </header>
+        
+        <nav class="barra-lateral">
+            <div class="perfil">
+                {% if user.profile.profile_picture %}
+                    <img class="avatar" src="{{ user.profile.profile_picture.url }}" alt="Profile Picture">
+                {% else %}
+                    <img class="avatar" src="{% static 'img/avatar-1.png' %}" alt="Default Profile Picture">
+                {% endif %}
+                <h3>{{ user.username }}</h3>
+            </div>
+            <ul class="menu">
+                <li class="menu-item">
+                    <a href="{% url 'home' %}">
+                        <img src="{% static 'img/home.png' %}" alt="Home" class="icon">
+                        <span>Início</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{% url 'pag_planos_de_aula' %}">
+                        <img src="{% static 'img/Plano.png' %}" alt="Plano" class="icon">
+                        <span>Planos de Aula</span>
+                    </a>
+                </li>
+                <li class="menu-item ativo">
+                    <a href="{% url 'pag_cadernetas' %}">
+                        <img src="{% static 'img/Caderneta.png' %}" alt="Cadernetas" class="icon">
+                        <span>Cadernetas</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="botao-sair">
+                            <img src="{% static 'img/sair.png' %}" alt="Sair" class="icon">
+                            <span>Sair</span>
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+        
+        <main class="conteudo-principal-form">
+            <div class="titulo-form">
+                <h1 style="margin-bottom: 1rem; font-weight: 600; font-size: 2rem;">Editar Caderneta</h1>
+            </div>
+        
+            <form class="formulario" method="POST" action="{% url 'form_editar_caderneta' caderneta.id %}">
+                {% csrf_token %}
+        
+                <div class="form-row">
+                    <div class="form-col form-col-md-4">
+                        <label class="rotulo" for="disciplina">Disciplina</label>
+                        <select class="campo" name="disciplina" id="disciplina" required>
+                            <option value="">Selecione a disciplina</option>
+                            {% for disciplina in form.disciplina.field.queryset %}
+                                <option value="{{ disciplina.id }}" {% if disciplina.id == form.disciplina.value %}selected{% endif %}>
+                                    {{ disciplina.nome }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+        
+                    <div class="form-col form-col-md-4">
+                        <label class="rotulo" for="data_aula">Data</label>
+                        <input type="date" class="campo" name="data_aula" id="data_aula" value="{{ caderneta.data_aula|date:'Y-m-d' }}" required>
+                    </div>
+        
+                    <div class="form-col form-col-md-4">
+                        <label class="rotulo" for="turma">Turma</label>
+                        <select class="campo" name="turma" id="turma" required>
+                            <option value="">Selecione a turma</option>
+                            {% for turma in form.turma.field.queryset %}
+                                <option value="{{ turma.id }}" {% if turma.id == form.turma.value %}selected{% endif %}>
+                                    {{ turma.nome }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+        
+                <div class="form-row">
+                    <div class="form-col form-col-md-4">
+                        <label class="rotulo" for="semestre">Período</label>
+                        <select class="campo" name="semestre" id="semestre" required>
+                            <option value="">Selecione o semestre</option>
+                            {% for semestre in form.semestre.field.queryset %}
+                                <option value="{{ semestre.id }}" {% if semestre.id == form.semestre.value %}selected{% endif %}>
+                                    {{ semestre.descricao }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+        
+                    <div class="form-col form-col-md-4">
+                        <label class="rotulo" for="eventos">Eventos Extraordinários</label>
+                        <select class="campo" name="eventos" id="eventos" required>
+                            <option value="nao" {% if caderneta.eventos == 'nao' %}selected{% endif %}>Não</option>
+                            <option value="sim" {% if caderneta.eventos == 'sim' %}selected{% endif %}>Sim</option>
+                        </select>
+                    </div>
+        
+                    <div class="form-col form-col-md-4">
+                        <label class="rotulo" for="titulo">Título da Aula</label>
+                        <input type="text" class="campo" name="titulo" id="titulo" value="{{ caderneta.titulo }}" placeholder="Digite o título da aula" required>
+                    </div>
+                </div>
+        
+                <div class="form-row">
+                    <div class="form-col">
+                        <label class="rotulo" for="conteudo">Conteúdo da Caderneta</label>
+                        <textarea class="campo campo-texto" name="conteudo" id="conteudo" placeholder="Descreva o conteúdo da caderneta" required>{{ caderneta.conteudo }}</textarea>
+                    </div>
+                </div>
+        
+                <div class="form-row">
+                    <div class="form-col form-col-md-6">
+                        <label class="rotulo" for="materiais">Materiais Utilizados</label>
+                        <textarea class="campo campo-texto" name="materiais" id="materiais" placeholder="Liste os materiais utilizados (opcional)">{{ caderneta.materiais }}</textarea>
+                    </div>
+        
+                    <div class="form-col form-col-md-6">
+                        <label class="rotulo" for="atividade">Atividade Prática</label>
+                        <textarea class="campo campo-texto" name="atividade" id="atividade" placeholder="Descreva a atividade prática (opcional)">{{ caderneta.atividade }}</textarea>
+                    </div>
+                </div>
+        
+                <div class="container-botoes">
+                    <button type="button" class="botao botao-secundario" onclick="location.href='{% url 'pag_cadernetas' %}'">Cancelar</button>
+                    <button type="submit" class="botao botao-primario">Salvar Caderneta</button>
+                </div>
+            </form>
+        </main>
+    
+        <footer class="footer">
+            <p>&copy; 2023 Planlab. Todos os direitos reservados.</p>
+        </footer>
+    
+        <script>
+            function toggleMenu() {
+                document.querySelector('.barra-lateral').classList.toggle('aberta');
+            }
+    
+            document.addEventListener('click', function(event) {
+                const barraLateral = document.querySelector('.barra-lateral');
+                const botaoMenu = document.querySelector('.botao-menu');
+                
+                if (!barraLateral.contains(event.target) && event.target !== botaoMenu) {
+                    barraLateral.classList.remove('aberta');
+                }
+            });
+    
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    menuItems.forEach(i => i.classList.remove('ativo'));
+                    this.classList.add('ativo');
+                    
+                    if (window.innerWidth < 768) {
+                        document.querySelector('.barra-lateral').classList.remove('aberta');
+                    }
+                });
+            });
+        </script>  
+    </body>
+    </html>
+
+  home.html
+  Content:
+    {% load static %}
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Planlab - Home</title>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    </head>
+    <body>
+        <header class="cabecalho">
+            <button class="botao-menu" onclick="toggleMenu()">☰</button>
+            <img class="logo" src="{% static 'img/planlab_logo_branco_p.png' %}" alt="Logo">
+            <div class="avatar-container">
+                <img src="{% static 'img/avatar-1.png' %}" alt="Avatar" class="avatar-menu">
+            </div>
+        </header>
+        
+        <nav class="barra-lateral">
+            <div class="perfil">
+                {% if user.profile.profile_picture %}
+                    <img class="avatar" src="{{ user.profile.profile_picture.url }}" alt="Profile Picture">
+                {% else %}
+                    <img class="avatar" src="{% static 'img/avatar-1.png' %}" alt="Default Profile Picture">
+                {% endif %}
+                <h3>{{ user.username }}</h3>  <!-- Nome do usuário dinâmico -->
+            </div>
+            <ul class="menu">
+                <li class="menu-item ativo">
+                    <a href="{% url 'home' %}">
+                        <img src="{% static 'img/home.png' %}" alt="Home" class="icon">
+                        <span>Início</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{% url 'pag_planos_de_aula' %}">
+                        <img src="{% static 'img/Plano.png' %}" alt="Plano" class="icon">
+                        <span>Planos de Aula</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{% url 'pag_cadernetas' %}">
+                        <img src="{% static 'img/Caderneta.png' %}" alt="Cadernetas" class="icon">
+                        <span>Cadernetas</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="botao-sair">
+                            <img src="{% static 'img/sair.png' %}" alt="Sair" class="icon">
+                            <span>Sair</span>
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+        
+        <main class="conteudo-principal">
+            <section class="boas-vindas">
+                <h1>Olá, {{ user.username }}!</h1>
+                <p>Bem-vindo de volta ao seu painel de controle.</p>
+            </section>
+        
+            <div class="dashboard-grid">
+                <section class="card estatisticas">
+                    <h2>Visão Geral</h2>
+                    <div class="estatisticas-grid">
+                        <div class="estatistica">
+                            <div class="estatistica-icone">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                </svg>
+                            </div>
+                            <div class="estatistica-info">
+                                <h3>Total de Planos de Aulas</h3>
+                                <p class="numero">{{ total_aulas }}</p>
+                            </div>
+                        </div>
+                        <div class="estatistica">
+                            <div class="estatistica-icone">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                </svg>
+                            </div>
+                            <div class="estatistica-info">
+                                <h3>Total de Cadernetas</h3>
+                                <p class="numero">{{ total_cadernetas }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+        
+                <section class="card atividades planos-aula">
+                    <h2>Últimos Planos de Aulas</h2>
+                    <div class="lista-atividades">
+                        {% for aula in ultimas_aulas %}
+                            <div class="atividade-item">
+                                <div class="atividade-icone">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                    </svg>
+                                </div>
+                                <div class="atividade-conteudo">
+                                    <h4>{{ aula.titulo }}</h4>
+                                    <div class="atividade-info">
+                                        <span class="atividade-rotulo">Disciplina:</span>
+                                        <span class="atividade-valor destaque">{{ aula.disciplina }}</span>
+                                    </div>
+                                    <div class="atividade-info">
+                                        <span class="atividade-rotulo">Data:</span>
+                                        <span class="atividade-valor">{{ aula.data_aula|date:"d/m/Y" }}</span>
+                                    </div>
+                                    <div class="atividade-info">
+                                        <span class="atividade-rotulo">Turma:</span>
+                                        <span class="atividade-valor">{{ aula.turma }}</span>
+                                    </div>
+                                    <div class="atividade-info">
+                                        <span class="atividade-rotulo">Período:</span>
+                                        <span class="atividade-valor">{{ aula.semestre }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <p class="sem-atividades">Você ainda não tem aulas registradas.</p>
+                        {% endfor %}
+                    </div>
+                    <a href="{% url 'pag_planos_de_aula' %}" class="botao-ver-mais">Ver todos os planos</a>
+                </section>
+                
+                <section class="card atividades cadernetas">
+                    <h2>Últimas Cadernetas</h2>
+                    <div class="lista-atividades">
+                        {% for caderneta in ultimas_cadernetas %}
+                            <div class="atividade-item">
+                                <div class="atividade-icone">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                    </svg>
+                                </div>
+                                <div class="atividade-conteudo">
+                                    <h4>{{ caderneta.titulo }}</h4>
+                                    <div class="atividade-info">
+                                        <span class="atividade-rotulo">Disciplina:</span>
+                                        <span class="atividade-valor destaque">{{ caderneta.disciplina }}</span>
+                                    </div>
+                                    <div class="atividade-info">
+                                        <span class="atividade-rotulo">Data:</span>
+                                        <span class="atividade-valor">{{ caderneta.data_aula|date:"d/m/Y" }}</span>
+                                    </div>
+                                    <div class="atividade-info">
+                                        <span class="atividade-rotulo">Turma:</span>
+                                        <span class="atividade-valor">{{ caderneta.turma }}</span>
+                                    </div>
+                                    <div class="atividade-info">
+                                        <span class="atividade-rotulo">Período:</span>
+                                        <span class="atividade-valor">{{ caderneta.semestre }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <p class="sem-atividades">Você ainda não tem cadernetas registradas.</p>
+                        {% endfor %}
+                    </div>
+                    <a href="{% url 'pag_cadernetas' %}" class="botao-ver-mais">Ver todas as cadernetas</a>
+                </section>
+            </div>
+        </main>
+    
+        <footer class="footer">
+            <p>&copy; 2023 Planlab. Todos os direitos reservados.</p>
+        </footer>
+        
+        <script>
+            function toggleMenu() {
+                document.querySelector('.barra-lateral').classList.toggle('aberta');
+            }
+    
+            document.addEventListener('click', function(event) {
+                const barraLateral = document.querySelector('.barra-lateral');
+                const botaoMenu = document.querySelector('.botao-menu');
+                
+                if (!barraLateral.contains(event.target) && event.target !== botaoMenu) {
+                    barraLateral.classList.remove('aberta');
+                }
+            });
+    
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    menuItems.forEach(i => i.classList.remove('ativo'));
+                    this.classList.add('ativo');
+                    
+                    if (window.innerWidth < 768) {
+                        document.querySelector('.barra-lateral').classList.remove('aberta');
+                    }
+                });
+            });
+        </script>
+    </body>
+    </html>
+
+  login.html
+  Content:
+    {% load static %}
+    
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Planlab</title>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    </head>
+    <body>
+        <div class="login-conteudo">
+            <div class="login-formulario">
+                <img src="{% static 'img/planlab_logo_principal_p.png' %}" alt="Logo Planlab" class="login-logo">
+                <div class="login-formulario-conteudo">
+                    <h1 class="login-titulo">Acesse a plataforma</h1>
+                    <p class="login-descricao">Faça login ou registre-se para começar a construir seus planos de aula ainda hoje.</p>
+                    <form id="loginForm" method="post" action="{% url 'login' %}">
+                        {% csrf_token %}
+                        <div class="login-campo">
+                            <label for="username" class="login-label">Nome de usuário</label>
+                            <input type="text" name="username" id="username" class="login-input" placeholder="Digite seu nome de usuário" required>
+                        </div>
+                        
+                        <div class="login-campo">
+                            <label for="senha" class="login-label">Senha</label>
+                            <div class="login-senha-container">
+                                <input type="password" name="password" id="senha" class="login-input" placeholder="Digite sua senha" required>
+                                <button type="button" class="login-mostrar-senha" aria-label="Mostrar ou ocultar senha">
+                                    <img src="{% static 'img/visualizar.png' %}" alt="Ícone de olho" id="senhaIcon">
+                                </button>
+                            </div>
+                            <div class="login-esqueceu-senha">
+                                <a href="#">Esqueceu a senha?</a>
+                            </div>
+                        </div>
+                        <button type="submit" class="login-botao">Entrar</button>
+                    </form>
+                    <div class="login-link">
+                        Ainda não tem uma conta? <a href="#">Solicite ao seu gestor</a>
+                    </div>
+                </div>
+            </div>
+            <div class="login-imagem"></div>
+        </div>
+    
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const senhaInput = document.getElementById('senha');
+                const senhaIcon = document.getElementById('senhaIcon');
+                const toggleSenhaBtn = document.querySelector('.login-mostrar-senha');
+    
+                toggleSenhaBtn.addEventListener('click', function() {
+                    if (senhaInput.type === 'password') {
+                        senhaInput.type = 'text';
+                        senhaIcon.src = "{% static 'img/ocultar.png' %}";
+                        toggleSenhaBtn.setAttribute('aria-label', 'Ocultar senha');
+                    } else {
+                        senhaInput.type = 'password';
+                        senhaIcon.src = "{% static 'img/visualizar.png' %}";
+                        toggleSenhaBtn.setAttribute('aria-label', 'Mostrar senha');
+                    }
+                });
+            });
+        </script>
+    </body>
+    </html>
+
+  pag_cadernetas.html
+  Content:
+    {% load static %}
+    
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Planlab - Cadernetas</title>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    </head>
+    <body>
+        <header class="cabecalho">
+            <button class="botao-menu" onclick="toggleMenu()">☰</button>
+            <img class="logo" src="{% static 'img/planlab_logo_branco_p.png' %}" alt="Logo">
+            <div class="avatar-container">
+                <img src="{% static 'img/avatar-1.png' %}" alt="Avatar" class="avatar-menu">
+            </div>
+        </header>
+        
+        <nav class="barra-lateral">
+            <div class="perfil">
+                {% if user.profile.profile_picture %}
+                    <img class="avatar" src="{{ user.profile.profile_picture.url }}" alt="Profile Picture">
+                {% else %}
+                    <img class="avatar" src="{% static 'img/avatar-1.png' %}" alt="Default Profile Picture">
+                {% endif %}
+                <h3>{{ user.username }}</h3>
+            </div>
+            <ul class="menu">
+                <li class="menu-item">
+                    <a href="{% url 'home' %}">
+                        <img src="{% static 'img/home.png' %}" alt="Home" class="icon">
+                        <span>Início</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{% url 'pag_planos_de_aula' %}">
+                        <img src="{% static 'img/Plano.png' %}" alt="Plano" class="icon">
+                        <span>Planos de Aula</span>
+                    </a>
+                </li>
+                <li class="menu-item ativo">
+                    <a href="{% url 'pag_cadernetas' %}">
+                        <img src="{% static 'img/Caderneta.png' %}" alt="Cadernetas" class="icon">
+                        <span>Cadernetas</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="botao-sair">
+                            <img src="{% static 'img/sair.png' %}" alt="Sair" class="icon">
+                            <span>Sair</span>
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+        
+        <main class="conteudo-principal">
+            <div class="cabecalho-pagina">
+                <h1 class="titulo-pagina">Cadernetas</h1>
+                <div class="acoes-pagina">
+                    <form method="get" action="{% url 'pag_cadernetas' %}" class="formulario-busca" id="formulario-busca-cadernetas">
+                        <div class="campo-busca-container">
+                            <input type="text" name="q" placeholder="Buscar caderneta" value="{{ query }}" class="campo-busca" id="campo-busca-cadernetas">
+                            <button type="button" class="icone-limpar" id="icone-limpar-cadernetas" aria-label="Limpar busca">
+                                <img src="{% static 'img/fechar.svg' %}" alt="Limpar">
+                            </button>
+                        </div>
+                        <button type="submit" class="botao botao-primario">Buscar</button>
+                    </form>
+                    <a href="{% url 'form_caderneta' %}" class="botao botao-primario" id="botao-nova-caderneta">Nova Caderneta</a>
+                </div>
+            </div>
+            <div class="grade" id="grade-planos">
+                {% for caderneta in cadernetas %}
+                <a href="{% url 'caderneta' caderneta.id %}" class="cartao">
+                    <div class="cartao-cabecalho">
+                        <h3>
+                            <span class="indicador-disciplina" style="background-color: #0070f3;"></span>
+                            {{ caderneta.titulo }}
+                        </h3>
+                        <span>⋮</span>
+                    </div>
+                    <div class="cartao-info">
+                        <span class="cartao-rotulo">Disciplina:</span>
+                        <span>{{ caderneta.disciplina }}</span>
+                    </div>
+                    <div class="cartao-info">
+                        <span class="cartao-rotulo">Data:</span>
+                        <span>{{ caderneta.data_aula|date:"d.m.Y"  }}</span>
+                    </div>
+                    <div class="cartao-info">
+                        <span class="cartao-rotulo">Turma:</span>
+                        <span>{{ caderneta.turma }}</span>
+                    </div>
+                    <div class="cartao-info">
+                        <span class="cartao-rotulo">Período:</span>
+                        <span>{{ caderneta.semestre }}</span>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </main>
+    
+        <footer class="footer">
+            <p>&copy; 2023 Planlab. Todos os direitos reservados.</p>
+        </footer>
+        
+        <script>
+            function toggleMenu() {
+                document.querySelector('.barra-lateral').classList.toggle('aberta');
+            }
+    
+            document.addEventListener('click', function(event) {
+                const barraLateral = document.querySelector('.barra-lateral');
+                const botaoMenu = document.querySelector('.botao-menu');
+                
+                if (!barraLateral.contains(event.target) && event.target !== botaoMenu) {
+                    barraLateral.classList.remove('aberta');
+                }
+            });
+    
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    menuItems.forEach(i => i.classList.remove('ativo'));
+                    this.classList.add('ativo');
+                    if (window.innerWidth < 768) {
+                        document.querySelector('.barra-lateral').classList.remove('aberta');
+                    }
+                });
+            });
+    
+            function setupSearchField(inputId, clearIconId, formId) {
+                const input = document.getElementById(inputId);
+                const clearIcon = document.getElementById(clearIconId);
+                const form = document.getElementById(formId);
+    
+                function toggleClearIcon() {
+                    clearIcon.style.display = input.value ? 'block' : 'none';
+                }
+    
+                input.addEventListener('input', toggleClearIcon);
+    
+                clearIcon.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    input.value = '';
+                    toggleClearIcon();
+                    form.submit();
+                });
+    
+                toggleClearIcon();
+            }
+    
+            setupSearchField('campo-busca-cadernetas', 'icone-limpar-cadernetas', 'formulario-busca-cadernetas');
+    
+            document.getElementById('botao-nova-caderneta').addEventListener('click', function(e) {
+                e.preventDefault();
+                try {
+                    window.location.href = "{% url 'form_caderneta' %}";
+                } catch (error) {
+                    console.error("Erro ao redirecionar para a página de nova caderneta:", error);
+                    alert("Desculpe, ocorreu um erro ao tentar criar uma nova caderneta. Por favor, tente novamente mais tarde ou contate o suporte.");
+                }
+            });
+        </script>
+    </body>
+    </html>
+
+  pag_planos_de_aula.html
+  Content:
+    {% load static %}
+    
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Planlab - Planos de Aula</title>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    </head>
+    <body>
+        <header class="cabecalho">
+            <button class="botao-menu" onclick="toggleMenu()">☰</button>
+            <img class="logo" src="{% static 'img/planlab_logo_branco_p.png' %}" alt="Logo">
+            <div class="avatar-container">
+                <img src="{% static 'img/avatar-1.png' %}" alt="Avatar" class="avatar-menu">
+            </div>
+        </header>
+        
+        <nav class="barra-lateral">
+            <div class="perfil">
+                {% if user.profile.profile_picture %}
+                    <img class="avatar" src="{{ user.profile.profile_picture.url }}" alt="Profile Picture">
+                {% else %}
+                    <img class="avatar" src="{% static 'img/avatar-1.png' %}" alt="Default Profile Picture">
+                {% endif %}
+                <h3>{{ user.username }}</h3>  <!-- Nome do usuário dinâmico -->
+            </div>
+            <ul class="menu">
+                <li class="menu-item">
+                    <a href="{% url 'home' %}">
+                        <img src="{% static 'img/home.png' %}" alt="Home" class="icon">
+                        <span>Início</span>
+                    </a>
+                </li>
+                <li class="menu-item ativo">
+                    <a href="{% url 'pag_planos_de_aula' %}">
+                        <img src="{% static 'img/Plano.png' %}" alt="Plano" class="icon">
+                        <span>Planos de Aula</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{% url 'pag_cadernetas' %}">
+                        <img src="{% static 'img/Caderneta.png' %}" alt="Cadernetas" class="icon">
+                        <span>Cadernetas</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="botao-sair">
+                            <img src="{% static 'img/sair.png' %}" alt="Sair" class="icon">
+                            <span>Sair</span>
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+        
+        <main class="conteudo-principal">
+            <div class="cabecalho-pagina">
+                <h1 class="titulo-pagina">Planos de Aula</h1>
+                <div class="acoes-pagina">
+                    <form method="get" action="{% url 'pag_planos_de_aula' %}" class="formulario-busca" id="formulario-busca-planos">
+      <div class="campo-busca-container">
+        <input type="text" name="q" placeholder="Buscar plano de aula" value="{{ query }}" class="campo-busca" id="campo-busca-planos">
+        <button type="button" class="icone-limpar" id="icone-limpar-planos" aria-label="Limpar busca">
+          <img src="{% static 'img/fechar.svg' %}" alt="Limpar">
+        </button>
+      </div>
+      <button type="submit" class="botao botao-primario">Buscar</button>
+    </form>
+                    <a href="{% url 'form_aula' %}" class="botao botao-primario">Novo Plano de Aula</a>
+                </div>
+            </div>
+            <div class="grade" id="grade-planos">
+                {% for aula in aulas %}
+                <a href="{% url 'plano' aula.id %}" class="cartao">  <!-- Link que leva à página do plano -->
+                    <div class="cartao-cabecalho">
+                        <h3>
+                            <span class="indicador-disciplina" style="background-color: #0070f3;"></span>
+                            {{ aula.titulo }}  <!-- Exibe o título da aula -->
+                        </h3>
+                        <span>⋮</span>
+                    </div>
+                    <div class="cartao-info">
+                        <span class="cartao-rotulo">Disciplina:</span>
+                        <span>{{ aula.disciplina.nome }}</span>  <!-- Exibe a disciplina da aula -->
+                    </div>
+                    <div class="cartao-info">
+                        <span class="cartao-rotulo">Data:</span>
+                        <span>{{ aula.data_aula|date:"d.m.Y" }}</span>  <!-- Exibe a data formatada -->
+                    </div>
+                    <div class="cartao-info">
+                        <span class="cartao-rotulo">Turma:</span>
+                        <span>{{ aula.turma.nome }}</span>  <!-- Exibe a classe -->
+                    </div>
+                    <div class="cartao-info">
+                        <span class="cartao-rotulo">Período:</span>
+                        <span>{{ aula.semestre.descricao }}</span>  <!-- Exibe o semestre -->
+                    </div>
+                </a>  <!-- Fecha o link do card -->
+                {% endfor %}
+            </div>
+        </main>
+    
+        <footer class="footer">
+            <p>&copy; 2023 Planlab. Todos os direitos reservados.</p>
+        </footer>
+        
+        <script>
+      function toggleMenu() {
+        document.querySelector('.barra-lateral').classList.toggle('aberta');
+      }
+    
+      // Fechar o menu quando clicar fora dele
+      document.addEventListener('click', function(event) {
+        const barraLateral = document.querySelector('.barra-lateral');
+        const botaoMenu = document.querySelector('.botao-menu');
+        
+        if (!barraLateral.contains(event.target) && event.target !== botaoMenu) {
+          barraLateral.classList.remove('aberta');
+        }
+      });
+    
+      // Adicionar evento de clique aos itens do menu
+      const menuItems = document.querySelectorAll('.menu-item');
+      menuItems.forEach(item => {
+        item.addEventListener('click', function() {
+          menuItems.forEach(i => i.classList.remove('ativo'));
+          this.classList.add('ativo');
+          if (window.innerWidth < 768) {
+            document.querySelector('.barra-lateral').classList.remove('aberta');
+          }
+        });
+      });
+    
+      // Novo código para o campo de busca
+      function setupSearchField(inputId, clearIconId, formId) {
+        const input = document.getElementById(inputId);
+        const clearIcon = document.getElementById(clearIconId);
+        const form = document.getElementById(formId);
+    
+        function toggleClearIcon() {
+          clearIcon.style.display = input.value ? 'block' : 'none';
+        }
+    
+        input.addEventListener('input', toggleClearIcon);
+    
+        clearIcon.addEventListener('click', function(e) {
+          e.preventDefault();
+          input.value = '';
+          toggleClearIcon();
+          form.submit();
+        });
+    
+        // Inicialização
+        toggleClearIcon();
+      }
+    
+      setupSearchField('campo-busca-planos', 'icone-limpar-planos', 'formulario-busca-planos');
+    </script>
+    </body>
+    </html>
+    
+
+  plano.html
+  Content:
+    {% load static %}
+    
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Planlab - Detalhes da Aula</title>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600,700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    </head>
+    <body>
+        <header class="cabecalho">
+            <button class="botao-menu" onclick="toggleMenu()">☰</button>
+            <img class="logo" src="{% static 'img/planlab_logo_branco_p.png' %}" alt="Logo">
+            <div class="avatar-container">
+                <img src="{% static 'img/avatar-1.png' %}" alt="Avatar" class="avatar-menu">
+            </div>
+        </header>
+        
+        <nav class="barra-lateral">
+            <div class="perfil">
+                {% if user.profile.profile_picture %}
+                    <img class="avatar" src="{{ user.profile.profile_picture.url }}" alt="Profile Picture">
+                {% else %}
+                    <img class="avatar" src="{% static 'img/avatar-1.png' %}" alt="Default Profile Picture">
+                {% endif %}
+                <h3>{{ user.username }}</h3>
+            </div>
+            <ul class="menu">
+                <li class="menu-item">
+                    <a href="{% url 'home' %}">
+                        <img src="{% static 'img/home.png' %}" alt="Home" class="icon">
+                        <span>Início</span>
+                    </a>
+                </li>
+                <li class="menu-item ativo">
+                    <a href="{% url 'pag_planos_de_aula' %}">
+                        <img src="{% static 'img/Plano.png' %}" alt="Plano" class="icon">
+                        <span>Planos de Aula</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{% url 'pag_cadernetas' %}">
+                        <img src="{% static 'img/Caderneta.png' %}" alt="Cadernetas" class="icon">
+                        <span>Cadernetas</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="botao-sair">
+                            <img src="{% static 'img/sair.png' %}" alt="Sair" class="icon">
+                            <span>Sair</span>
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+        
+        <main class="conteudo-principal">
+            <div class="plano-aula">
+                <h2 class="titulo-aula">{{ plano.titulo }}</h2>
+                <div class="detalhes-aula">
+                    <div class="item-detalhe">
+                        <span class="rotulo-detalhe">Disciplina:</span>
+                        <span class="valor-detalhe">{{ plano.disciplina.nome }}</span>
+                    </div>
+                    <div class="item-detalhe">
+                        <span class="rotulo-detalhe">Data da Aula:</span>
+                        <span class="valor-detalhe">{{ plano.data_aula|date:"d/m/Y" }}</span>
+                    </div>
+                    <div class="item-detalhe">
+                        <span class="rotulo-detalhe">Turma:</span>
+                        <span class="valor-detalhe">{{ plano.turma.nome }}</span>
+                    </div>
+                    <div class="item-detalhe">
+                        <span class="rotulo-detalhe">Período:</span>
+                        <span class="valor-detalhe">{{ plano.semestre.descricao }}</span>
+                    </div>
+                    <div class="item-detalhe">
+                        <span class="rotulo-detalhe">Eventos Extraordinários:</span>
+                        <span class="valor-detalhe">{{ plano.eventos_extraordinarios }}</span>
+                    </div>
+                </div>
+                <div class="grade-aula">
+                    <div class="secao">
+                        <h3 class="titulo-secao">Conteúdo Programático:</h3>
+                        <div class="conteudo-scrollable">
+                            <p>{{ plano.conteudo_programatico }}</p>
+                        </div>
+                    </div>
+                    <div class="secao">
+                        <h3 class="titulo-secao">Metodologia:</h3>
+                        <div class="conteudo-scrollable">
+                            <p>{{ plano.metodologia }}</p>
+                        </div>
+                    </div>
+                    <div class="secao">
+                        <h3 class="titulo-secao">Recursos Necessários:</h3>
+                        <div class="conteudo-scrollable">
+                            <p>{{ plano.recursos_necessarios }}</p>
+                        </div>
+                    </div>
+                    <div class="secao">
+                        <h3 class="titulo-secao">Avaliação:</h3>
+                        <div class="conteudo-scrollable">
+                            <p>{{ plano.avaliacao_observacoes }}</p>
+                        </div>
+                    </div>
+                    <div class="secao">
+                        <h3 class="titulo-secao">Observações:</h3>
+                        <div class="conteudo-scrollable">
+                            <p>{{ plano.observacoes }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="acoes-plano">
+                    <a href="{% url 'form_editar_aula' plano.id %}" class="botao-acao botao-editar">Editar</a>
+                    <form action="{% url 'excluir_plano' plano.id %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="botao-acao botao-excluir" onclick="return confirm('Tem certeza que deseja excluir este Plano de Aula?');">Excluir</button>
+                    </form>
+                    <a href="{% url 'copiar_plano' plano.id %}" class="botao-acao botao-copiar">Copiar</a>
+                </div>
+            </div>
+        </main>
+    
+        <footer class="footer">
+            <p>&copy; 2023 Planlab. Todos os direitos reservados.</p>
+        </footer>
+    
+        <script>
+            function toggleMenu() {
+                document.querySelector('.barra-lateral').classList.toggle('aberta');
+            }
+    
+            document.addEventListener('click', function(event) {
+                const barraLateral = document.querySelector('.barra-lateral');
+                const botaoMenu = document.querySelector('.botao-menu');
+                
+                if (!barraLateral.contains(event.target) && event.target !== botaoMenu) {
+                    barraLateral.classList.remove('aberta');
+                }
+            });
+    
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    menuItems.forEach(i => i.classList.remove('ativo'));
+                    this.classList.add('ativo');
+                    
+                    if (window.innerWidth < 768) {
+                        document.querySelector('.barra-lateral').classList.remove('aberta');
+                    }
+                });
+            });
+        </script>
+    </body>
+    </html>
+
+  templates_with_quill.html
+  Content:
+    <!-- templates/ -->
+      caderneta.html
+    
+    
+    <!-- {% load static %} -->
+        
+        <!DOCTYPE html>
+        <html lang="pt-BR">
+        <head>
+        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+        
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Planlab - Detalhes da Aula</title>
+            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600,700&display=swap" rel="stylesheet">
+            <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        </head>
+        <body>
+            <header class="cabecalho">
+                <button class="botao-menu" onclick="toggleMenu()">☰</button>
+                <img class="logo" src="{% static 'img/planlab_logo_branco_p.png' %}" alt="Logo">
+                <div class="avatar-container">
+                    <img src="{% static 'img/avatar-1.png' %}" alt="Avatar" class="avatar-menu">
+                </div>
+            </header>
+            
+            <nav class="barra-lateral">
+                <div class="perfil">
+                    {% if user.profile.profile_picture %}
+                        <img class="avatar" src="{{ user.profile.profile_picture.url }}" alt="Profile Picture">
+                    {% else %}
+                        <img class="avatar" src="{% static 'img/avatar-1.png' %}" alt="Default Profile Picture">
+                    {% endif %}
+                    <h3>{{ user.username }}</h3>
+                </div>
+                <ul class="menu">
+                    <li class="menu-item">
+                        <a href="{% url 'home' %}">
+                            <img src="{% static 'img/home.png' %}" alt="Home" class="icon">
+                            <span>Início</span>
+                        </a>
+                    </li>
+                    <li class="menu-item ativo">
+                        <a href="{% url 'pag_planos_de_aula' %}">
+                            <img src="{% static 'img/Plano.png' %}" alt="Plano" class="icon">
+                            <span>Planos de Aula</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{% url 'pag_cadernetas' %}">
+                            <img src="{% static 'img/Caderneta.png' %}" alt="Cadernetas" class="icon">
+                            <span>Cadernetas</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <form action="{% url 'logout' %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="botao-sair">
+                                <img src="{% static 'img/sair.png' %}" alt="Sair" class="icon">
+                                <span>Sair</span>
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </nav>
+            
+            <main class="conteudo-principal">
+                <div class="plano-aula">
+                    <h2 class="titulo-aula">{{ plano.titulo }}</h2>
+                    <div class="detalhes-aula">
+                        <div class="item-detalhe">
+                            <span class="rotulo-detalhe">Disciplina:</span>
+                            <span class="valor-detalhe">{{ plano.disciplina.nome }}</span>
+                        </div>
+                        <div class="item-detalhe">
+                            <span class="rotulo-detalhe">Data da Aula:</span>
+                            <span class="valor-detalhe">{{ plano.data_aula|date:"d/m/Y" }}</span>
+                        </div>
+                        <div class="item-detalhe">
+                            <span class="rotulo-detalhe">Turma:</span>
+                            <span class="valor-detalhe">{{ plano.turma.nome }}</span>
+                        </div>
+                        <div class="item-detalhe">
+                            <span class="rotulo-detalhe">Período:</span>
+                            <span class="valor-detalhe">{{ plano.semestre.descricao }}</span>
+                        </div>
+                        <div class="item-detalhe">
+                            <span class="rotulo-detalhe">Eventos Extraordinários:</span>
+                            <span class="valor-detalhe">{{ plano.eventos_extraordinarios }}</span>
+                        </div>
+                    </div>
+                    <div class="grade-aula">
+                        <div class="secao">
+                            <h3 class="titulo-secao">Conteúdo Programático:</h3>
+                            <div class="conteudo-scrollable">
+                                <p>{{ plano.conteudo_programatico }}</p>
+                            </div>
+                        </div>
+                        <div class="secao">
+                            <h3 class="titulo-secao">Metodologia:</h3>
+                            <div class="conteudo-scrollable">
+                                <p>{{ plano.metodologia }}</p>
+                            </div>
+                        </div>
+                        <div class="secao">
+                            <h3 class="titulo-secao">Recursos Necessários:</h3>
+                            <div class="conteudo-scrollable">
+                                <p>{{ plano.recursos_necessarios }}</p>
+                            </div>
+                        </div>
+                        <div class="secao">
+                            <h3 class="titulo-secao">Avaliação:</h3>
+                            <div class="conteudo-scrollable">
+                                <p>{{ plano.avaliacao_observacoes }}</p>
+                            </div>
+                        </div>
+                        <div class="secao">
+                            <h3 class="titulo-secao">Observações:</h3>
+                            <div class="conteudo-scrollable">
+                                <p>{{ plano.observacoes }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="acoes-plano">
+                        <a href="{% url 'form_editar_aula' plano.id %}" class="botao-acao botao-editar">Editar</a>
+                        <form action="{% url 'excluir_plano' plano.id %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="botao-acao botao-excluir" onclick="return confirm('Tem certeza que deseja excluir este Plano de Aula?');">Excluir</button>
+                        </form>
+                        <a href="{% url 'copiar_plano' plano.id %}" class="botao-acao botao-copiar">Copiar</a>
+                    </div>
+                </div>
+            </main>
+        
+            <footer class="footer">
+                <p>&copy; 2023 Planlab. Todos os direitos reservados.</p>
+            </footer>
+        
+            <script>
+                function toggleMenu() {
+                    document.querySelector('.barra-lateral').classList.toggle('aberta');
+                }
+        
+                document.addEventListener('click', function(event) {
+                    const barraLateral = document.querySelector('.barra-lateral');
+                    const botaoMenu = document.querySelector('.botao-menu');
+                    
+                    if (!barraLateral.contains(event.target) && event.target !== botaoMenu) {
+                        barraLateral.classList.remove('aberta');
+                    }
+                });
+        
+                const menuItems = document.querySelectorAll('.menu-item');
+                menuItems.forEach(item => {
+                    item.addEventListener('click', function() {
+                        menuItems.forEach(i => i.classList.remove('ativo'));
+                        this.classList.add('ativo');
+                        
+                        if (window.innerWidth < 768) {
+                            document.querySelector('.barra-lateral').classList.remove('aberta');
+                        }
+                    });
+                });
+            </script>
+        
+        <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var quillFields = document.querySelectorAll('.quill-editor');
+                quillFields.forEach(field => {
+                    var quill = new Quill(field, {
+                        theme: 'snow',
+                        placeholder: 'Digite aqui...',
+                    });
+                });
+            });
+        </script>
+        </body>
+        </html>
+    
+    

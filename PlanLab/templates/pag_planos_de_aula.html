@@ -5,16 +5,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planlab - Planos de Aula</title>
+    <title>EducMais - Planos de Aula</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
     <header class="cabecalho">
         <button class="botao-menu" onclick="toggleMenu()">☰</button>
-        <img class="logo" src="{% static 'img/planlab_logo_branco_p.png' %}" alt="Logo">
-        <div>
-            <span class="botao-menu"><img src="{% static 'img/avatar-1.png' %}" alt="Avatar" class="avatar-menu"></span>
+        <img class="logo" src="{% static 'img/logo_educmais_branco.svg' %}" alt="Logo">
+        <div class="avatar-container">
+            <img src="{% static 'img/avatar-1.png' %}" alt="Avatar" class="avatar-menu">
         </div>
     </header>
     
@@ -30,115 +30,137 @@
         <ul class="menu">
             <li class="menu-item">
                 <a href="{% url 'home' %}">
-                    <img src="{% static 'img/home.png' %}" alt="Home"> Início
+                    <img src="{% static 'img/home.png' %}" alt="Home" class="icon">
+                    <span>Início</span>
                 </a>
             </li>
-            
             <li class="menu-item ativo">
                 <a href="{% url 'pag_planos_de_aula' %}">
-                    <img src="{% static 'img/Plano.png' %}" alt="Plano">Planos de Aula
+                    <img src="{% static 'img/Plano.png' %}" alt="Plano" class="icon">
+                    <span>Planos de Aula</span>
                 </a>
             </li>
-
             <li class="menu-item">
                 <a href="{% url 'pag_cadernetas' %}">
-                    <img src="{% static 'img/Caderneta.png' %}" alt="Plano">Cadernetas
+                    <img src="{% static 'img/Caderneta.png' %}" alt="Cadernetas" class="icon">
+                    <span>Cadernetas</span>
                 </a>
             </li>
-
             <li class="menu-item">
                 <form action="{% url 'logout' %}" method="post">
                     {% csrf_token %}
-                    <button type="submit">
-                        <img src="{% static 'img/sair.png' %}" alt="sair">Sair
+                    <button type="submit" class="botao-sair">
+                        <img src="{% static 'img/sair.png' %}" alt="Sair" class="icon">
+                        <span>Sair</span>
                     </button>
                 </form>
             </li>
-            
         </ul>
     </nav>
     
     <main class="conteudo-principal">
-        <div class="botoes-acao">
-            <!-- Botão de Criar Plano de Aula -->
-            <a href="{% url 'form_aula' %}" class="botao botao-primario">Novo Plano de Aula</a>
-        </div>
-        <div class="campo-busca">
-            <!-- Alinhamento dos Botões com Flexbox -->
-            <div class="campo-busca-wrapper">
-                <form method="get" action="{% url 'pag_planos_de_aula' %}">
-                    <input type="text" name="q" placeholder="Digite o Titulo da Aula" value="{{ query }}">
-                    <button type="submit" class="botao botao-primario">Buscar</button>
-                </form>
-                <!-- Botão Limpar -->
-            </div>
-            <div class="botoes-acao">
-                <a href="{% url 'pag_planos_de_aula' %}" class="botao botao-secundario">Limpar</a>
+        <div class="cabecalho-pagina">
+            <h1 class="titulo-pagina">Planos de Aula</h1>
+            <div class="acoes-pagina">
+                <form method="get" action="{% url 'pag_planos_de_aula' %}" class="formulario-busca" id="formulario-busca-planos">
+  <div class="campo-busca-container">
+    <input type="text" name="q" placeholder="Buscar plano de aula" value="{{ query }}" class="campo-busca" id="campo-busca-planos">
+    <button type="button" class="icone-limpar" id="icone-limpar-planos" aria-label="Limpar busca">
+      <img src="{% static 'img/fechar.svg' %}" alt="Limpar">
+    </button>
+  </div>
+  <button type="submit" class="botao botao-primario">Buscar</button>
+</form>
+                <a href="{% url 'form_aula' %}" class="botao botao-primario">Novo Plano de Aula</a>
             </div>
         </div>
         <div class="grade" id="grade-planos">
             {% for aula in aulas %}
-            <a href="{% url 'plano' aula.id %}" class="cartao">
+            <a href="{% url 'plano' aula.id %}" class="cartao">  <!-- Link que leva à página do plano -->
                 <div class="cartao-cabecalho">
                     <h3>
                         <span class="indicador-disciplina" style="background-color: #0070f3;"></span>
-                        {{ aula.titulo }}
+                        {{ aula.titulo }}  <!-- Exibe o título da aula -->
                     </h3>
                     <span>⋮</span>
                 </div>
                 <div class="cartao-info">
                     <span class="cartao-rotulo">Disciplina:</span>
-                    <span>{{ aula.disciplina.nome }}</span>
+                    <span>{{ aula.disciplina.nome }}</span>  <!-- Exibe a disciplina da aula -->
                 </div>
                 <div class="cartao-info">
                     <span class="cartao-rotulo">Data:</span>
-                    <span>{{ aula.data_aula|date:"d.m.Y" }}</span>
+                    <span>{{ aula.data_aula|date:"d.m.Y" }}</span>  <!-- Exibe a data formatada -->
                 </div>
                 <div class="cartao-info">
                     <span class="cartao-rotulo">Turma:</span>
-                    <span>{{ aula.turma.nome }}</span>
+                    <span>{{ aula.turma.nome }}</span>  <!-- Exibe a classe -->
                 </div>
                 <div class="cartao-info">
                     <span class="cartao-rotulo">Período:</span>
-                    <span>{{ aula.semestre.descricao }}</span>
+                    <span>{{ aula.semestre.descricao }}</span>  <!-- Exibe o semestre -->
                 </div>
-            </a>
+            </a>  <!-- Fecha o link do card -->
             {% endfor %}
         </div>
     </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 EducMais. Todos os direitos reservados.</p>
+    </footer>
     
-
     <script>
-        function toggleMenu() {
-            document.querySelector('.barra-lateral').classList.toggle('aberta');
-        }
+  function toggleMenu() {
+    document.querySelector('.barra-lateral').classList.toggle('aberta');
+  }
 
-        // Fechar o menu quando clicar fora dele
-        document.addEventListener('click', function(event) {
-            const barraLateral = document.querySelector('.barra-lateral');
-            const botaoMenu = document.querySelector('.botao-menu');
-            
-            if (!barraLateral.contains(event.target) && event.target !== botaoMenu) {
-                barraLateral.classList.remove('aberta');
-            }
-        });
+  // Fechar o menu quando clicar fora dele
+  document.addEventListener('click', function(event) {
+    const barraLateral = document.querySelector('.barra-lateral');
+    const botaoMenu = document.querySelector('.botao-menu');
+    
+    if (!barraLateral.contains(event.target) && event.target !== botaoMenu) {
+      barraLateral.classList.remove('aberta');
+    }
+  });
 
-        // Adicionar evento de clique aos itens do menu
-        const menuItems = document.querySelectorAll('.menu-item');
-        menuItems.forEach(item => {
-            item.addEventListener('click', function() {
-                // Remover a classe 'ativo' de todos os itens
-                menuItems.forEach(i => i.classList.remove('ativo'));
-                
-                // Adicionar a classe 'ativo' ao item clicado
-                this.classList.add('ativo');
-                
-                // Fechar o menu se estiver no modo dropdown (tela pequena)
-                if (window.innerWidth < 768) {
-                    document.querySelector('.barra-lateral').classList.remove('aberta');
-                }
-            });
-        });
-    </script>
+  // Adicionar evento de clique aos itens do menu
+  const menuItems = document.querySelectorAll('.menu-item');
+  menuItems.forEach(item => {
+    item.addEventListener('click', function() {
+      menuItems.forEach(i => i.classList.remove('ativo'));
+      this.classList.add('ativo');
+      if (window.innerWidth < 768) {
+        document.querySelector('.barra-lateral').classList.remove('aberta');
+      }
+    });
+  });
+
+  // Novo código para o campo de busca
+  function setupSearchField(inputId, clearIconId, formId) {
+    const input = document.getElementById(inputId);
+    const clearIcon = document.getElementById(clearIconId);
+    const form = document.getElementById(formId);
+
+    function toggleClearIcon() {
+      clearIcon.style.display = input.value ? 'block' : 'none';
+    }
+
+    input.addEventListener('input', toggleClearIcon);
+
+    clearIcon.addEventListener('click', function(e) {
+      e.preventDefault();
+      input.value = '';
+      toggleClearIcon();
+      form.submit();
+    });
+
+    // Inicialização
+    toggleClearIcon();
+  }
+
+  setupSearchField('campo-busca-planos', 'icone-limpar-planos', 'formulario-busca-planos');
+</script>
 </body>
 </html>
+

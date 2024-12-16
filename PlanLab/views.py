@@ -193,6 +193,19 @@ def form_caderneta(request, id=None):
 
 
 @login_required
+def pag_cadernetas(request):
+    query = request.GET.get('q', '')
+    cadernetas = Caderneta.objects.filter(usuario=request.user)
+    
+    if query:
+        cadernetas = cadernetas.filter(titulo__icontains=query)
+    
+    return render(request, 'pag_cadernetas.html', {
+        'cadernetas': cadernetas,
+        'query': query
+    })
+
+@login_required
 def form_editar_caderneta(request, caderneta_id):
     caderneta = get_object_or_404(Caderneta, id=caderneta_id)  # Obtém a caderneta existente
 
